@@ -27,7 +27,7 @@ var Temp; //충돌처리
 var temp;
 var imgData;
 
-var gamestate = 0;
+var gamestate = 1;
 var STATE_START = 0;
 var STATE_PLAY = 1;
 var STATE_OPEN = 2;
@@ -98,7 +98,7 @@ function onPageLoadComplete() {
 
 //시작페이지
 function start_load(){
-    
+    start_game();
 }
 
 //본게임
