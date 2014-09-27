@@ -269,15 +269,16 @@ function Render() {
                         bg_x -= 3;
                         check(3, 0, false);
                     }
-                    check(3, 0, false);
+                    else check(3, 0, true);
                 }        
                 else if(char_status.right){
                     player_x += 3;
                     if(bg_x < MAP[MAP_CODE].width-width && bg_x+width/2<player_x){
+                        framework.Context.translate(-3, 0);
                         bg_x+=3;
                         check(-3, 0, false);
-                    }
-                    else check(-3, 0, false);
+                    }   
+                    else check(-3, 0, true);
                 }
             }
 
