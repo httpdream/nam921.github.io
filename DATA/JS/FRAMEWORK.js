@@ -269,7 +269,7 @@ function Render() {
                         bg_x -= 3;
                         check(3, 0, false);
                     }
-                    check(3, 0, true);
+                    check(3, 0, false);
                 }        
                 else if(char_status.right){
                     player_x += 3;
@@ -277,7 +277,7 @@ function Render() {
                         bg_x+=3;
                         check(-3, 0, false);
                     }
-                    else check(-3, 0, true);
+                    else check(-3, 0, false);
                 }
             }
 
