@@ -29,14 +29,21 @@ var Temp; //충돌처리
 var temp;
 var imgData;
 
-var gamestate = 1;
 var STATE_START = 0;
 var STATE_PLAY = 1;
-var STATE_OPEN = 2;
-var STATE_CUSTOM = 3;
+var STATE_LOAD = 2;
+var STATE_CONFIG = 3;
 var STATE_GALALY = 4;
 var STATE_MAKER = 5;
 var STATE_PAUSE = 6;
+var STATE_INVENTORY = 7;
+var STATE_SAVE = 8;
+
+var gamestate = STATE_START;
+
+var menu = 0;
+var sub_menu = 0;
+
 var potal;
 var potaling = 0;
 
@@ -55,7 +62,8 @@ var moveable = true;
 
 var width = 0;
 var height = 0;
-var loader;
+var loader;                    
+
 
 function draw_load() {
     loader = 0;
@@ -77,16 +85,17 @@ function draw_load() {
     framework.addText('이미지 리소스 로딩중 (' + loader + '/' + (framework.Image.length + framework.Sprite.length + Temp.Image.length) + ')...', '20px nanumgothiccoding', 150, 180, '#000');
 
     if (loader == (framework.Image.length + framework.Sprite.length + Temp.Image.length)) {
-        start_load();
+        //start_load();
         setInterval(gameLoop, 1000 / 60);
         clearInterval(loadInterval);
+        start_game();
     }
 }
 
 function onPageLoadComplete() {
     var FPS = 60;
-    width = $(window).innerWidth()-32;
-    height = $(window).innerHeight()-32;
+    width = $(window).innerWidth()-20;
+    height = $(window).innerHeight()-20;
     
     Temp = new ALTIS('Temp', 2000, 2000, false);
     framework = new ALTIS('ALTIS', width, height, true);
@@ -97,6 +106,16 @@ function onPageLoadComplete() {
     framework.loadSprite('DATA/IMAGE/CHARACTER/spp.png', 'char', 31, 48, 10);
 
     loadInterval = setInterval(draw_load, 1000 / FPS);
+}
+
+function do_newGame(){
+    MAP_CODE = 0;
+    CURRENT_MAP = MAP[0];
+    player_y = 0;
+    player_x = 0;
+    //framework.Context.translate(bg_x, bg_y);
+    bg_x = 0;
+    bg_y = 0;
 }
 
 //시작페이지
@@ -144,6 +163,12 @@ function start_game() {
             char_status.up = true;
             framework.setSprite('char', 'up');
         }
+        else if (gamestate == STATE_START){
+            if(menu != 0) menu--;
+        }
+        else if (gamestate == STATE_PAUSE){
+            if(sub_menu != 0) sub_menu--;
+        }
     });
 
     framework.addKeyDown('DOWN', function () {
@@ -151,6 +176,56 @@ function start_game() {
             char_status.down = true;
             framework.setSprite('char', 'down');
         }
+        else if (gamestate == STATE_START){
+            if(menu != 4) menu++;
+        }
+        else if (gamestate == STATE_PAUSE){
+            if(sub_menu != 3) sub_menu++;
+        }
+    });
+    
+    framework.addKeyDown('ENTER', function(){
+        if(gamestate == STATE_START){
+            switch(menu){
+                case 0:
+                    gamestate = STATE_PLAY;
+                    do_newGame();
+                    break;
+                case 1:
+                    gamestate = STATE_LOAD;
+                    break;
+                case 2:
+                    gamestate = STATE_CONFIG;
+                    break;
+                case 3:
+                    gamestate = STATE_GALALY;
+                    break;
+                case 4:
+                    gamestate = STATE_MAKER;
+                    break;
+            }
+        }
+        
+        else if(gamestate == STATE_PAUSE){
+            switch(sub_menu){
+                case 0:
+                    gamestate = STATE_SAVE;
+                    break;
+                case 1:
+                    gamestate = STATE_LOAD;
+                    break;
+                case 2:
+                    gamestate = STATE_INVENTORY;
+                    break;
+                case 3:
+                    gamestate = STATE_START;
+                    framework.Context.translate(bg_x, bg_y);
+                    break;
+            }
+        }
+        
+        menu = 0;
+        sub_menu = 0;
     });
 
     framework.addKeyUp('LEFT', function () {
@@ -329,13 +404,73 @@ function Render() {
                 if(MAP[MAP_CODE].height>height) tmp_height = height;
                 else tmp_height = MAP[MAP_CODE].height;
                 framework.addRect(bg_x+tmp_width/2-100, bg_y+tmp_height/2-75, 200, 150, '#ffcc00', 1);
+                
+                switch(sub_menu){
+                case 0:
+                    framework.addRect(bg_x+tmp_width/2-100, bg_y+tmp_height/2-60, 200, 30, '#f0f', 0.7);
+                    break;
+                    
+                case 1:
+                    framework.addRect(bg_x+tmp_width/2-100, bg_y+tmp_height/2-30, 200, 30, '#f0f', 0.7);
+                    break;
+                    
+                case 2:
+                    framework.addRect(bg_x+tmp_width/2-100, bg_y+tmp_height/2, 200, 30, '#f0f', 0.7);
+                    break;
+                    
+                case 3:
+                    framework.addRect(bg_x+tmp_width/2-100, bg_y+tmp_height/2+30, 200, 30, '#f0f', 0.7);
+                    break;
+                    
+                case 4:
+                    framework.addRect(bg_x+tmp_width/2-100, bg_y+tmp_height/2+60, 200, 30, '#f0f', 0.7);
+                    break;
+            }
+            
+            framework.addText('저장', '20px gulim', bg_x+tmp_width/2-20, bg_y+tmp_height/2-40, '#000');
+            framework.addText('불러오기', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2-10, '#000');
+            framework.addText('인벤토리', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2+20, '#000');
+            framework.addText('메인화면', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2+50, '#000');
             }
             break;
             
-        case STATE_OPEN:
+        case STATE_LOAD:
+            break;
+        case STATE_CONFIG:
+            break;
+        case STATE_MAKER:
             break;
         case STATE_START:
-            framework.addRect(0,0,width, height, '#0f0');
+            framework.addRect(0,0,width, height, '#000', 1);
+            framework.addRect(width/2-100,height/2-100, 200, 200, '#fff', 0.7);
+            switch(menu){
+                case 0:
+                    framework.addRect(width/2-100,height/2-70, 200, 30, '#f0f', 0.7);
+                    break;
+                    
+                case 1:
+                    framework.addRect(width/2-100,height/2-40, 200, 30, '#f0f', 0.7);
+                    break;
+                    
+                case 2:
+                    framework.addRect(width/2-100,height/2-10, 200, 30, '#f0f', 0.7);
+                    break;
+                    
+                case 3:
+                    framework.addRect(width/2-100,height/2+20, 200, 30, '#f0f', 0.7);
+                    break;
+                    
+                case 4:
+                    framework.addRect(width/2-100,height/2+50, 200, 30, '#f0f', 0.7);
+                    break;
+            }
+            
+            framework.addText('게임시작', '20px gulim', width/2-37, height/2-50, '#000');
+            framework.addText('불러오기', '20px gulim', width/2-37, height/2-20, '#000');
+            framework.addText('사용자 설정', '20px gulim', width/2-50, height/2+10, '#000');
+            framework.addText('갤러리', '20px gulim', width/2-25, height/2+40, '#000');
+            framework.addText('제작자', '20px gulim', width/2-25, height/2+70, '#000');
+            
             break;
     }
 }
