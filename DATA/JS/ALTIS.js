@@ -10,12 +10,17 @@ ALTIS FRAMEWORK
             키입력 관련 함수 keyCode, addKeyDown, addKeyUp 구현.
 2014.09.23: v0.03
             데이터를 저장할 수단인 saveData, getData, delData 구현
-2014.09.24: v0.04
+2014.09.27: v0.04
             버튼 관련 함수 addButton 구현
 ***********/
 
 
 var keyCode = {
+    9: 'TAB',
+    13: 'ENTER',
+    27: 'ESC',
+    32: 'SPACE',
+    
     //Arrow
     37: 'LEFT',
     38: 'UP',
@@ -157,9 +162,11 @@ ALTIS.prototype.addText = function (text, font, x, y, color) {
     this.Context.fillText(text, x, y);
 }
 
-ALTIS.prototype.addRect = function (x, y, width, height, color) {
+ALTIS.prototype.addRect = function (x, y, width, height, color, alpha) {
+    this.Context.globalAlpha = alpha;
     this.Context.fillStyle = color;
     this.Context.fillRect(x, y, width, height);
+    this.Context.globalAlpha = 1;
 }
 
 ALTIS.prototype.addImage = function (src_name, x, y, width, height, callback) {

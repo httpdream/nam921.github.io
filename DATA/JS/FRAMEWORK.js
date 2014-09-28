@@ -1,3 +1,4 @@
+
 /******************
 TEST GAME
 2014.09.21: v0.01
@@ -17,6 +18,7 @@ TEST GAME
             getImageData함수를 이용하여 장애물 충돌시 멈추기, 노란부분, 파란부분일 때 다른 맵 이동
 2014.09.27: v0.06
             시작페이지의 프로토타입 구현.
+            ESC키를 누를 경우 메뉴가 나옴.
 ******************/
 
 window.addEventListener("load", onPageLoadComplete, false);
@@ -34,6 +36,7 @@ var STATE_OPEN = 2;
 var STATE_CUSTOM = 3;
 var STATE_GALALY = 4;
 var STATE_MAKER = 5;
+var STATE_PAUSE = 6;
 var potal;
 var potaling = 0;
 
@@ -123,23 +126,31 @@ function start_game() {
     framework.setSprite('char', 'stand_down');
 
     framework.addKeyDown('LEFT', function () {
-        char_status.left = true;
-        framework.setSprite('char', 'left');
+        if(gamestate == STATE_PLAY){
+            char_status.left = true;
+            framework.setSprite('char', 'left');
+        }
     });
 
     framework.addKeyDown('RIGHT', function () {
-        char_status.right = true;
-        framework.setSprite('char', 'right');
+        if(gamestate == STATE_PLAY){
+            char_status.right = true;
+            framework.setSprite('char', 'right');
+        }
     });
 
     framework.addKeyDown('UP', function () {
-        char_status.up = true;
-        framework.setSprite('char', 'up');
+        if(gamestate == STATE_PLAY){
+            char_status.up = true;
+            framework.setSprite('char', 'up');
+        }
     });
 
     framework.addKeyDown('DOWN', function () {
-        char_status.down = true;
-        framework.setSprite('char', 'down');
+        if(gamestate == STATE_PLAY){
+            char_status.down = true;
+            framework.setSprite('char', 'down');
+        }
     });
 
     framework.addKeyUp('LEFT', function () {
@@ -148,18 +159,29 @@ function start_game() {
     });
 
     framework.addKeyUp('RIGHT', function () {
-        char_status.right = false;
-        framework.setSprite('char', 'stand_right');
+        if(gamestate == STATE_PLAY){
+            char_status.right = false;
+            framework.setSprite('char', 'stand_right');
+        }
     });
 
     framework.addKeyUp('UP', function () {
-        char_status.up = false;
-        framework.setSprite('char', 'stand_up');
+        if(gamestate == STATE_PLAY){
+            char_status.up = false;
+            framework.setSprite('char', 'stand_up');
+        }
     });
 
     framework.addKeyUp('DOWN', function () {
-        char_status.down = false;
-        framework.setSprite('char', 'stand_down');
+        if(gamestate == STATE_PLAY){
+            char_status.down = false;
+            framework.setSprite('char', 'stand_down');
+        }
+    });
+    
+    framework.addKeyDown('ESC', function(){
+        if(gamestate == STATE_PLAY) gamestate = STATE_PAUSE;
+        else if (gamestate == STATE_PAUSE) gamestate = STATE_PLAY;
     });
     
     ///COOKIE TEST
@@ -281,7 +303,8 @@ function Render() {
                     else check(-3, 0, true);
                 }
             }
-
+            
+        case STATE_PAUSE:
             framework.clear();
             Temp.clear();
 
@@ -290,6 +313,23 @@ function Render() {
             MAP[MAP_CODE].map.play(0, 0);
 
             framework.showSprite('char', player_x, player_y, 4);
+            
+            if(gamestate == STATE_PAUSE){
+                framework.addRect(bg_x, bg_y, MAP[MAP_CODE].width+bg_x, MAP[MAP_CODE].height+bg_y, '#000', 0.7);
+                
+                char_status.up = false;
+                char_status.down = false;
+                char_status.left = false;
+                char_status.right = false;
+                
+                var tmp_width, tmp_height;
+                if(MAP[MAP_CODE].width>width) tmp_width = width;
+                else tmp_width = MAP[MAP_CODE].width;
+                
+                if(MAP[MAP_CODE].height>height) tmp_height = height;
+                else tmp_height = MAP[MAP_CODE].height;
+                framework.addRect(bg_x+tmp_width/2-100, bg_y+tmp_height/2-75, 200, 150, '#ffcc00', 1);
+            }
             break;
             
         case STATE_OPEN:
@@ -304,3 +344,4 @@ function gameLoop() {
     Update();
     Render();
 }
+
