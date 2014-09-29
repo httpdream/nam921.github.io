@@ -267,7 +267,8 @@ function start_game() {
     });
     
     framework.addKeyDown('ESC', function(){
-        if(gamestate == STATE_PLAY) gamestate = STATE_PAUSE;
+        if (gamestate == STATE_PLAY) 
+            gamestate = STATE_PAUSE;
         else if (gamestate == STATE_PAUSE) gamestate = STATE_PLAY;
     });
     
@@ -402,7 +403,7 @@ function Render() {
             framework.showSprite('char', player_x, player_y, 4);
             
             if (gamestate == STATE_PAUSE) {
-                setIn
+                
                 framework.addRect(bg_x, bg_y, MAP[MAP_CODE].width+bg_x, MAP[MAP_CODE].height+bg_y, '#000', 0.7);
                 
                 char_status.up = false;
