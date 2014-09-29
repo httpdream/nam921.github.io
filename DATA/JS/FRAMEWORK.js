@@ -178,9 +178,11 @@ function start_game() {
         }
         else if (gamestate == STATE_START){
             if(menu != 0) menu--;
+            else menu = 4;
         }
         else if (gamestate == STATE_PAUSE){
             if(sub_menu != 0) sub_menu--;
+            else sub_menu = 3;
         }
     });
 
@@ -191,9 +193,11 @@ function start_game() {
         }
         else if (gamestate == STATE_START){
             if(menu != 4) menu++;
+            else menu = 0;
         }
         else if (gamestate == STATE_PAUSE){
             if(sub_menu != 3) sub_menu++;
+            else sub_menu = 0;
         }
     });
     
@@ -334,7 +338,7 @@ function check(x, y, moved){
             player_x+=x;
             player_y+=y;
             
-            console.log('r: ' + r + 'g: ' + g + 'b: ' + b);
+            console.log('r: ' + r + 'g: ' + g + 'b: ' + b + 'a: ' +imgData.data[i+3]);
 
             switch(MAP_CODE){
                 case 0:
@@ -354,7 +358,6 @@ var potaling = 0;
 function Update() { }
 function Render() {
     framework.clear();
-    Temp.clear();
     switch(gamestate){
         case STATE_PLAY:
             if(moveable){
@@ -398,9 +401,7 @@ function Render() {
             }
             
         case STATE_PAUSE:
-            
-
-    
+            Temp.clear();
             TEMP_MAP[MAP_CODE].map.play(0, 0);
             MAP[MAP_CODE].map.play(0, 0);
 
@@ -460,7 +461,7 @@ function Render() {
         case STATE_CONFIG:
             framework.addRect(0, 0, width, height, '#ff0', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('CONFIG', '20px gothic', width / 2 - 70, height / 2, '#000');
+            framework.addText('해상도', '20px gothic', width / 2 - 70, height / 2, '#000');
             break;
         case STATE_GALALY:
             framework.addRect(0, 0, width, height, '#00f', 1);
