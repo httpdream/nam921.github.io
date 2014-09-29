@@ -21,6 +21,7 @@ TEST GAME
             ESC키를 누를 경우 메뉴가 나옴.
 2014.09.29: v0.07
             화면을 바꿀경우 자동으로 캔버스의 크기가 조정됨.
+            임시창 만ㄷ듬..
 ******************/
 
 window.addEventListener("load", onPageLoadComplete, false);
@@ -197,8 +198,8 @@ function start_game() {
     });
     
     framework.addKeyDown('ENTER', function(){
-        if(gamestate == STATE_START){
-            switch(menu){
+        if (gamestate == STATE_START) {
+            switch (menu) {
                 case 0:
                     gamestate = STATE_PLAY;
                     do_newGame();
@@ -217,9 +218,9 @@ function start_game() {
                     break;
             }
         }
-        
-        else if(gamestate == STATE_PAUSE){
-            switch(sub_menu){
+
+        else if (gamestate == STATE_PAUSE) {
+            switch (sub_menu) {
                 case 0:
                     gamestate = STATE_SAVE;
                     break;
@@ -235,6 +236,7 @@ function start_game() {
                     break;
             }
         }
+        
         
         menu = 0;
         sub_menu = 0;
@@ -270,6 +272,7 @@ function start_game() {
         if (gamestate == STATE_PLAY) 
             gamestate = STATE_PAUSE;
         else if (gamestate == STATE_PAUSE) gamestate = STATE_PLAY;
+        else gamestate = STATE_START;
     });
     
     ///COOKIE TEST
@@ -350,6 +353,8 @@ function check(x, y, moved){
 var potaling = 0;
 function Update() { }
 function Render() {
+    framework.clear();
+    Temp.clear();
     switch(gamestate){
         case STATE_PLAY:
             if(moveable){
@@ -393,8 +398,7 @@ function Render() {
             }
             
         case STATE_PAUSE:
-            framework.clear();
-            Temp.clear();
+            
 
     
             TEMP_MAP[MAP_CODE].map.play(0, 0);
@@ -449,10 +453,24 @@ function Render() {
             break;
             
         case STATE_LOAD:
+            framework.addRect(0, 0, width, height, '#0ff', 1);
+            framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
+            framework.addText('LOAD', '20px gothic', width / 2-50, height / 2, '#000');
             break;
         case STATE_CONFIG:
+            framework.addRect(0, 0, width, height, '#ff0', 1);
+            framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
+            framework.addText('CONFIG', '20px gothic', width / 2 - 70, height / 2, '#000');
+            break;
+        case STATE_GALALY:
+            framework.addRect(0, 0, width, height, '#00f', 1);
+            framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
+            framework.addText('GALALY', '20px githic', width / 2 - 70, height / 2, '#000');
             break;
         case STATE_MAKER:
+            framework.addRect(0, 0, width, height, '#0f0', 1);
+            framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
+            framework.addText('다같이', '20px gothic', width / 2 - 50, height / 2, '#000');
             break;
         case STATE_START:
             framework.addRect(0,0,width, height, '#000', 1);
