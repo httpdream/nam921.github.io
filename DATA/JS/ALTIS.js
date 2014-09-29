@@ -93,7 +93,8 @@ function ALTIS(id, width, height, visible) {
     else
         document.body.innerHTML += '<canvas id = ' + id + ' width=' + width + ' height=' + height + ' style="position: absoulte; display:none;">캔버스도 안되</canvas>';
     
-    this.Context = document.getElementById(id).getContext("2d");
+    this.Canvas = document.getElementById(id);
+    this.Context = this.Canvas.getContext("2d");
 
     return this;
 }
