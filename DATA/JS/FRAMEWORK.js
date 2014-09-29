@@ -19,6 +19,8 @@ TEST GAME
 2014.09.27: v0.06
             시작페이지의 프로토타입 구현.
             ESC키를 누를 경우 메뉴가 나옴.
+2014.09.29: v0.07
+            화면을 바꿀경우 자동으로 캔버스의 크기가 조정됨.
 ******************/
 
 window.addEventListener("load", onPageLoadComplete, false);
@@ -95,7 +97,17 @@ function draw_load() {
 function onPageLoadComplete() {
     var FPS = 60;
     width = $(window).innerWidth()-20;
-    height = $(window).innerHeight()-20;
+    height = $(window).innerHeight() - 20;
+
+    $(window).resize(function () {
+        framework.Canvas.width = $(window).innerWidth()-20;
+        framework.Canvas.height = $(window).innerHeight() - 20;
+        width = $(window).innerWidth() - 20;
+        height = $(window).innerHeight() - 20;
+        framework.setWidth(width);
+        framework.setHeight(height);
+        //console.log('size change: ' + ($(window).innerWidth() - 20) +", "+ ($(window).innerHeight() - 20));
+    });
     
     Temp = new ALTIS('Temp', 2000, 2000, false);
     framework = new ALTIS('ALTIS', width, height, true);
@@ -389,7 +401,8 @@ function Render() {
 
             framework.showSprite('char', player_x, player_y, 4);
             
-            if(gamestate == STATE_PAUSE){
+            if (gamestate == STATE_PAUSE) {
+                setIn
                 framework.addRect(bg_x, bg_y, MAP[MAP_CODE].width+bg_x, MAP[MAP_CODE].height+bg_y, '#000', 0.7);
                 
                 char_status.up = false;
