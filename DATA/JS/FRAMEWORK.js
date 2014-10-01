@@ -65,8 +65,10 @@ var moveable = true;
 
 var width = 0;
 var height = 0;
-var loader;                    
+var loader;
+var movement = 10;
 
+var scale = 1;
 
 function draw_load() {
     loader = 0;
@@ -101,21 +103,22 @@ function onPageLoadComplete() {
     height = $(window).innerHeight() - 20;
 
     $(window).resize(function () {
+        /*
         framework.Canvas.width = $(window).innerWidth()-20;
         framework.Canvas.height = $(window).innerHeight() - 20;
         width = $(window).innerWidth() - 20;
         height = $(window).innerHeight() - 20;
         framework.setWidth(width);
         framework.setHeight(height);
-        //console.log('size change: ' + ($(window).innerWidth() - 20) +", "+ ($(window).innerHeight() - 20));
+        framework.Context.translate(-bg_x, -bg_y);*/
     });
     
     Temp = new ALTIS('Temp', 2000, 2000, false);
     framework = new ALTIS('ALTIS', width, height, true);
-    framework.loadImage('DATA/IMAGE/MAP/bg_npcnpc.png', 'MAP1');
-    Temp.loadImage('DATA/IMAGE/MAP/bg_temp.png', 'MAP1');
-    Temp.loadImage('DATA/IMAGE/MAP/picture.jpg', 'MAP2');
-    framework.loadImage('DATA/IMAGE/MAP/picture.jpg', 'MAP2');
+    framework.loadImage('DATA/IMAGE/MAP/Map_Room.png', 'MAP1');
+    framework.loadImage('DATA/IMAGE/MAP/picture.png', 'MAP2');
+    Temp.loadImage('DATA/IMAGE/MAP/Temp_Map_Room.png', 'MAP1');
+    Temp.loadImage('DATA/IMAGE/MAP/Temp_picture.png', 'MAP2');
     framework.loadSprite('DATA/IMAGE/CHARACTER/spp.png', 'char', 31, 48, 10);
 
     loadInterval = setInterval(draw_load, 1000 / FPS);
@@ -124,11 +127,18 @@ function onPageLoadComplete() {
 function do_newGame(){
     MAP_CODE = 0;
     CURRENT_MAP = MAP[0];
-    player_y = 0;
-    player_x = 0;
-    //framework.Context.translate(bg_x, bg_y);
+    player_y = 700;
+    player_x = 500;
+    //framework.Context.translate(0, 0);
     bg_x = 0;
     bg_y = 0;
+    //bg_x += MAP[MAP_CODE].width-width;
+    //bg_x += width;
+    
+    if(width>600) bg_y += 200;
+    else bg_y += 500;
+    bg_x += 130;
+    framework.Context.translate(-bg_x, -bg_y);
 }
 
 //시작페이지
@@ -140,10 +150,10 @@ function start_load(){
 function start_game() {
     framework.clear();
 
-    MAP.push({map: framework.addImage('MAP1', 0, 0, 1024, 768), width: 1024, height: 768});
+    MAP.push({map: framework.addImage('MAP1', 0, 0, 1920, 1280), width: 1920, height: 1280});
     MAP.push({map: framework.addImage('MAP2', 0, 0, 1920, 1280), width: 1920, height: 1280});
-    TEMP_MAP.push({map: Temp.addImage('MAP1', 0, 0, 1024, 768), width: 1024, height: 768});
     TEMP_MAP.push({map: Temp.addImage('MAP1', 0, 0, 1920, 1280), width: 1920, height: 1280});
+    TEMP_MAP.push({map: Temp.addImage('MAP2', 0, 0, 1920, 1080), width: 1920, height: 1280});
     
 
     framework.addSprite('char', 'left', [4, 5, 6, 7]);
@@ -273,6 +283,8 @@ function start_game() {
     });
     
     framework.addKeyDown('ESC', function(){
+        menu = 0;
+        sub_menu = 0;
         if (gamestate == STATE_PLAY) 
             gamestate = STATE_PAUSE;
         else if (gamestate == STATE_PAUSE) gamestate = STATE_PLAY;
@@ -295,6 +307,22 @@ function start_game() {
     framework.addKeyDown('D', function(){
         framework.delData('save');
     });
+    /*
+    framework.addKeyDown('P', function(){
+        framework.Context.scale(2, 2);
+        width = width/2;
+        height = height/2;
+        framework.setHeight(height);
+        framework.setWidth(width);
+    });
+    
+    framework.addKeyDown('I', function(){
+        framework.Context.scale(0.5, 0.5);
+        width = width/0.5;
+        height = height/0.5;
+        framework.setHeight(height);
+        framework.setWidth(width);
+    });*/
 }
 
 //Potal(MAP_CODE, player_x, player_y, bg_x, bg_y);
@@ -342,7 +370,7 @@ function check(x, y, moved){
 
             switch(MAP_CODE){
                 case 0:
-                    if(r==115 && g==78 && b==69){
+                    if(r==119 && g==149 && b==217){
                         Potal(1, 0, 0, 0, 0);
                         console.log('hi~');
                     }
@@ -362,41 +390,41 @@ function Render() {
         case STATE_PLAY:
             if(moveable){
                 if (char_status.up) {
-                    player_y -= 3;
+                    player_y -= movement;
                     if(bg_y > 0 && bg_y+height/2>player_y){
-                        bg_y -= 3;
-                        framework.Context.translate(0, 3);
-                        check(0, 3, false);
+                        bg_y -= movement;
+                        framework.Context.translate(0, movement);
+                        check(0, movement, false);
                     }
-                    else check(0, 3, true);
+                    else check(0, movement, true);
                 }
 
                 else if (char_status.down) {
-                    player_y += 3;
+                    player_y += movement;
                     if(bg_y < MAP[MAP_CODE].height-height && bg_y+height/2<player_y){
-                        bg_y += 3;
-                        framework.Context.translate(0, -3);
-                        check(0, -3, false);
+                        bg_y += movement;
+                        framework.Context.translate(0, -movement);
+                        check(0, -movement, false);
                     }
-                    else check(0, -3, true);
+                    else check(0, -movement, true);
                 }
                 else if (char_status.left) {
-                    player_x -= 3;
+                    player_x -= movement;
                     if(bg_x > 0 && bg_x+width/2>player_x){
-                        framework.Context.translate(3, 0);
-                        bg_x -= 3;
-                        check(3, 0, false);
+                        framework.Context.translate(movement, 0);
+                        bg_x -= movement;
+                        check(movement, 0, false);
                     }
-                    else check(3, 0, true);
+                    else check(movement, 0, true);
                 }        
                 else if(char_status.right){
-                    player_x += 3;
+                    player_x += movement;
                     if(bg_x < MAP[MAP_CODE].width-width && bg_x+width/2<player_x){
-                        framework.Context.translate(-3, 0);
-                        bg_x+=3;
-                        check(-3, 0, false);
+                        framework.Context.translate(-movement, 0);
+                        bg_x+=movement;
+                        check(-movement, 0, false);
                     }   
-                    else check(-3, 0, true);
+                    else check(-movement, 0, true);
                 }
             }
             
