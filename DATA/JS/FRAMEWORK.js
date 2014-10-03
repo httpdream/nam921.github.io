@@ -20,8 +20,10 @@ TEST GAME
             시작페이지의 프로토타입 구현.
             ESC키를 누를 경우 메뉴가 나옴.
 2014.09.29: v0.07
-            화면을 바꿀경우 자동으로 캔버스의 크기가 조정됨.
+            화면을 바꿀경우 자동으로 캔버스의 크기가 조정됨. //파괴
             임시창 만ㄷ듬..
+2014.10.04: v0.08
+            전체화면 ㅇ
 ******************/
 
 window.addEventListener("load", onPageLoadComplete, false);
@@ -487,9 +489,10 @@ function Render() {
             framework.addText('LOAD', '20px gothic', width / 2-50, height / 2, '#000');
             break;
         case STATE_CONFIG:
-            framework.addRect(0, 0, width, height, '#ff0', 1);
+            /*framework.addRect(0, 0, width, height, '#ff0', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('해상도', '20px gothic', width / 2 - 70, height / 2, '#000');
+            framework.addText('전체화면하기', '20px gothic', width / 2 - 70, height / 2, '#000');*/
+            framework.fullScreen();
             break;
         case STATE_GALALY:
             framework.addRect(0, 0, width, height, '#00f', 1);
@@ -526,9 +529,11 @@ function Render() {
                     break;
             }
             
+            //5글자 50
+            
             framework.addText('게임시작', '20px gulim', width/2-37, height/2-50, '#000');
             framework.addText('불러오기', '20px gulim', width/2-37, height/2-20, '#000');
-            framework.addText('사용자 설정', '20px gulim', width/2-50, height/2+10, '#000');
+            framework.addText('전체화면', '20px gulim', width/2-37, height/2+10, '#000');
             framework.addText('갤러리', '20px gulim', width/2-25, height/2+40, '#000');
             framework.addText('제작자', '20px gulim', width/2-25, height/2+70, '#000');
             

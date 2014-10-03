@@ -12,6 +12,8 @@ ALTIS FRAMEWORK
             데이터를 저장할 수단인 saveData, getData, delData 구현
 2014.09.27: v0.04
             버튼 관련 함수 addButton 구현
+2014.10.03: v0.05
+            전체화면으로 만드는 fullScreen 구현
 ***********/
 
 
@@ -145,6 +147,29 @@ ALTIS.prototype.setSprite = function (src_name, sprite_name) {
         }
     }
     if (!find) console.log('헐 못찾음');
+}
+
+ALTIS.prototype.fullScreen(){
+    var canvas = this.canvas;
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+	canvas.width = width;
+	canvas.height = height;
+    
+ 	if(canvas.webkitRequestFullScreen) {
+       canvas.webkitRequestFullScreen();
+         }
+    else {
+       canvas.mozRequestFullScreen();
+    }
+}
+
+function resizeCanvas() {
+	
+}
+
+function fullScreen() {
+	            
 }
 
 ALTIS.prototype.getSprite = function (src_name) {
