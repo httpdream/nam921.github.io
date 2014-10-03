@@ -105,14 +105,13 @@ function onPageLoadComplete() {
     height = $(window).innerHeight() - 20;
 
     $(window).resize(function () {
-        /*
         framework.Canvas.width = $(window).innerWidth()-20;
         framework.Canvas.height = $(window).innerHeight() - 20;
         width = $(window).innerWidth() - 20;
         height = $(window).innerHeight() - 20;
         framework.setWidth(width);
         framework.setHeight(height);
-        framework.Context.translate(-bg_x, -bg_y);*/
+        framework.Context.translate(-bg_x, -bg_y);
     });
     
     Temp = new ALTIS('Temp', 2000, 2000, false);
@@ -225,6 +224,8 @@ function start_game() {
                     break;
                 case 2:
                     framework.fullScreen();
+                    //framework.fullScreen();
+                    framework.Context.translate(-bg_x, -bg_y);
                     break;
                 case 3:
                     gamestate = STATE_GALALY;
