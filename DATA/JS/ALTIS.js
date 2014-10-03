@@ -150,10 +150,10 @@ ALTIS.prototype.setSprite = function (src_name, sprite_name) {
 }
 
 ALTIS.prototype.fullScreen = function(){
+	var width = $(window).innerWidth();
+	var height = $(window).innerHeight();
     this.Canvas.width = width;
     this.Canvas.height = height;
-	var width = $(window).innerWidth()
-	var height = $(window).innerHeight()
     this.setWidth(width);
     this.setHeight(height);
     
