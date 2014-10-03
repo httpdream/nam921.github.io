@@ -224,7 +224,7 @@ function start_game() {
                     gamestate = STATE_LOAD;
                     break;
                 case 2:
-                    gamestate = STATE_CONFIG;
+                    framework.fullScreen();
                     break;
                 case 3:
                     gamestate = STATE_GALALY;
@@ -492,7 +492,7 @@ function Render() {
             /*framework.addRect(0, 0, width, height, '#ff0', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
             framework.addText('전체화면하기', '20px gothic', width / 2 - 70, height / 2, '#000');*/
-            framework.fullScreen();
+            //framework.fullScreen();
             break;
         case STATE_GALALY:
             framework.addRect(0, 0, width, height, '#00f', 1);

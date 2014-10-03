@@ -153,14 +153,15 @@ ALTIS.prototype.fullScreen = function(){
     var canvas = this.Canvas;
 	var width = window.innerWidth;
 	var height = window.innerHeight;
-	canvas.width = width;
-	canvas.height = height;
+    this.setWidth(width);
+    this.setHeight(height);
     
- 	if(canvas.webkitRequestFullScreen) {
-       canvas.webkitRequestFullScreen();
-         }
+ 	if(this.Canvas.webkitRequestFullScreen) {
+       this.Canvas.webkitRequestFullScreen();
+    }
+    
     else {
-       canvas.mozRequestFullScreen();
+       this.Canvas.mozRequestFullScreen();
     }
 }
 
