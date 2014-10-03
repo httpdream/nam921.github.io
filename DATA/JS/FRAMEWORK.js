@@ -105,6 +105,15 @@ function onPageLoadComplete() {
     height = $(window).innerHeight() - 20;
 
     $(window).resize(function () {
+        var degreeW = width-$(window).innerWidth()-20;
+        var degreeH = height-$(window).innerHeight()-20;
+        if(degreeW>0){
+            framework.Context.translate(degreeW, 0);
+            console.log(degreeW);
+            console.log(degreeH);
+        }
+        if(degreeH>0) framework.Context.translate(0, degreeH);
+        
         framework.Canvas.width = $(window).innerWidth()-20;
         framework.Canvas.height = $(window).innerHeight() - 20;
         width = $(window).innerWidth() - 20;
