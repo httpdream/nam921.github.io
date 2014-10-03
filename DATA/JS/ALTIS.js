@@ -149,7 +149,7 @@ ALTIS.prototype.setSprite = function (src_name, sprite_name) {
     if (!find) console.log('헐 못찾음');
 }
 
-ALTIS.prototype.fullScreen(){
+ALTIS.prototype.fullScreen = function(){
     var canvas = this.canvas;
 	var width = window.innerWidth;
 	var height = window.innerHeight;
@@ -162,14 +162,6 @@ ALTIS.prototype.fullScreen(){
     else {
        canvas.mozRequestFullScreen();
     }
-}
-
-function resizeCanvas() {
-	
-}
-
-function fullScreen() {
-	            
 }
 
 ALTIS.prototype.getSprite = function (src_name) {
