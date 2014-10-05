@@ -24,6 +24,8 @@ TEST GAME
             임시창 만ㄷ듬..
 2014.10.04: v0.08
             전체화면 ㅇ
+2014:10.05: v0.09
+            동굴 기능 추가!
 ******************/
 
 window.addEventListener("load", onPageLoadComplete, false);
@@ -70,6 +72,8 @@ var height = 0;
 var loader;
 var movement = 10;
 
+var around = 0;
+
 var scale = 1;
 
 function draw_load() {
@@ -108,11 +112,20 @@ function onPageLoadComplete() {
         var degreeW = width-$(window).innerWidth()-20;
         var degreeH = height-$(window).innerHeight()-20;
         if(degreeW>0){
-            framework.Context.translate(degreeW, 0);
+            //framework.Context.translate(degreeW, 0);
             console.log(degreeW);
-            console.log(degreeH);
+            if(bg_x < MAP[MAP_CODE].width-width && bg_x+width/2<player_x){
+                bg_x += degreeW;
+                if(degreeW<500) bg_x += degreeW;
+            }
         }
-        if(degreeH>0) framework.Context.translate(0, degreeH);
+        if(degreeH>0){
+            //framework.Context.translate(0, degreeH);
+            if(bg_y < MAP[MAP_CODE].height-height && bg_y+height/2<player_y){
+                bg_y += degreeH;
+                if(degreeH<300) bg_y += degreeH;
+            }
+        }
         
         framework.Canvas.width = $(window).innerWidth()-20;
         framework.Canvas.height = $(window).innerHeight() - 20;
@@ -384,7 +397,7 @@ function check(x, y, moved){
                 case 0:
                     if(r==119 && g==149 && b==217){
                         Potal(1, 0, 0, 0, 0);
-                        console.log('hi~');
+                        around = 1;
                     }
                     break;
             }
@@ -441,10 +454,39 @@ function Render() {
             }
             
         case STATE_PAUSE:
+            framework.clear();
+            if(!potaling) framework.addRect(0,0,2000,2000,'#000', 1);
+            else 
+                framework.addRect(0,0,width,height,'#000', potal);
+            
+            framework.Context.save();
+            
             Temp.clear();
             TEMP_MAP[MAP_CODE].map.play(0, 0);
+            //MAP[MAP_CODE].map.play(0, 0);
+            framework.Context.beginPath();
+            framework.Context.arc(1+player_x,1+player_y,140,140,10*Math.PI,true);
+            framework.Context.stroke();
+            
+            framework.Context.clip();
             MAP[MAP_CODE].map.play(0, 0);
-
+            framework.Context.restore();
+            
+            //framework.Context.resetClip();
+            framework.Context.closePath();
+            
+            /*framework.Context.beginPath();
+            framework.Context.arc(player_x+19,player_y+20,70,0,2*Math.PI,false);
+            
+            framework.Context.fillStyle = 'black';
+            framework.Context.globalAlpha = '0.1';
+            framework.Context.fill();
+            
+            framework.Context.globalAlpha = '0.5';
+            framework.Context.arc(player_x+19,player_y+20,100,0,2*Math.PI,false);
+            framework.Context.fill();
+            framework.Context.globalAlpha = '1';*/
+            
             framework.showSprite('char', player_x, player_y, 4);
             
             if (gamestate == STATE_PAUSE) {

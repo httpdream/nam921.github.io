@@ -275,5 +275,5 @@ ALTIS.prototype.setHeight = function(h){
 }
 
 ALTIS.prototype.clear = function () {
-    this.Context.clearRect(0, 0, this.width, this.height);
+    this.Context.clearRect(0, 0, 5000, 5000);
 }
