@@ -392,12 +392,21 @@ function check(x, y, moved){
             player_y+=y;
             
             console.log('r: ' + r + 'g: ' + g + 'b: ' + b + 'a: ' +imgData.data[i+3]);
+            var current = MAP_CODE;
+            var _x = player_x;
+            var _y = player_y;
 
             switch(MAP_CODE){
                 case 0:
                     if(r==119 && g==149 && b==217){
-                        Potal(1, 0, 0, 0, 0);
-                        around = 1;
+                        framework.addKeyDown('SPACE', function(){
+                            if(player_x==_x && player_y == _y && MAP_CODE == current){
+                                Potal(1,0,0,0,0);
+                                around = 1;
+                            }
+                            
+                        });
+                        
                     }
                     break;
             }
@@ -455,17 +464,15 @@ function Render() {
             
         case STATE_PAUSE:
             framework.clear();
-            if(!potaling) framework.addRect(0,0,2000,2000,'#000', 1);
-            else 
-                framework.addRect(0,0,width,height,'#000', potal);
-            
-            framework.Context.save();
-            
             Temp.clear();
             TEMP_MAP[MAP_CODE].map.play(0, 0);
-            //MAP[MAP_CODE].map.play(0, 0);
+            if(around==1){
+                framework.Context.save();
+                if(!potaling) framework.addRect(0,0,2000,2000,'#000', 1);
+            else 
+                framework.addRect(0,0,width,height,'#000', potal);
             framework.Context.beginPath();
-            framework.Context.arc(1+player_x,1+player_y,140,140,10*Math.PI,true);
+            framework.Context.arc(player_x,player_y,140,140,10*Math.PI,true);
             framework.Context.stroke();
             
             framework.Context.clip();
@@ -474,6 +481,9 @@ function Render() {
             
             //framework.Context.resetClip();
             framework.Context.closePath();
+            }
+            else MAP[MAP_CODE].map.play(0,0);
+    
             
             /*framework.Context.beginPath();
             framework.Context.arc(player_x+19,player_y+20,70,0,2*Math.PI,false);

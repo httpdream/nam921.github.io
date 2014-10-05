@@ -226,6 +226,7 @@ ALTIS.prototype.showSprite = function (src_name, x, y, other_frame) {
     }
 }
 
+
 ALTIS.prototype.addKeyDown = function (key, callback) {
     var code;
     for (var i in keyCode) {
