@@ -24,8 +24,10 @@ TEST GAME
             임시창 만ㄷ듬..
 2014.10.04: v0.08
             전체화면 ㅇ
-2014:10.05: v0.09
+2014.10.05: v0.09
             동굴 기능 추가!
+2014.10.06: v0.10
+            resize관련 버그를 모두 해결했다. 이제 정상적으로 resize할 때 bg_x, bg_y가 자동으로 바뀌어 가운데로 온다.
 ******************/
 
 window.addEventListener("load", onPageLoadComplete, false);
@@ -109,24 +111,15 @@ function onPageLoadComplete() {
     height = $(window).innerHeight() - 20;
 
     $(window).resize(function () {
-        var degreeW = width-$(window).innerWidth()-20;
-        var degreeH = height-$(window).innerHeight()-20;
-        if(degreeW>0){
-            //framework.Context.translate(degreeW, 0);
-            console.log(degreeW);
-            if(bg_x < MAP[MAP_CODE].width-width && bg_x+width/2<player_x){
-                bg_x += degreeW;
-                if(degreeW<500) bg_x += degreeW;
-            }
-        }
-        if(degreeH>0){
-            //framework.Context.translate(0, degreeH);
-            if(bg_y < MAP[MAP_CODE].height-height && bg_y+height/2<player_y){
-                bg_y += degreeH;
-                if(degreeH<300) bg_y += degreeH;
-            }
-        }
-        
+        console.log("resize");
+        //if(height>$(window).innerHeight()-20){
+            if(player_y>height/2)
+                bg_y = player_y-height/2;
+        //}
+        //if(width>$(window).innerWidth()-20){
+            if(player_x>width/2)
+                bg_x = player_x-width/2;
+        //}
         framework.Canvas.width = $(window).innerWidth()-20;
         framework.Canvas.height = $(window).innerHeight() - 20;
         width = $(window).innerWidth() - 20;
@@ -148,19 +141,24 @@ function onPageLoadComplete() {
 }
 
 function do_newGame(){
+                    
     MAP_CODE = 0;
     CURRENT_MAP = MAP[0];
     player_y = 700;
     player_x = 500;
     //framework.Context.translate(0, 0);
-    bg_x = 0;
-    bg_y = 0;
     //bg_x += MAP[MAP_CODE].width-width;
     //bg_x += width;
     
-    if(width>600) bg_y += 200;
-    else bg_y += 500;
-    bg_x += 130;
+    bg_y = player_y-height/2;
+    bg_x = player_x-width/2;
+    
+    //if(width>600) bg_y += 200;
+    //else bg_y += 500;
+    //bg_x += 130;
+    
+    
+    
     framework.Context.translate(-bg_x, -bg_y);
 }
 
@@ -174,9 +172,9 @@ function start_game() {
     framework.clear();
 
     MAP.push({map: framework.addImage('MAP1', 0, 0, 1920, 1280), width: 1920, height: 1280});
-    MAP.push({map: framework.addImage('MAP2', 0, 0, 1920, 1280), width: 1920, height: 1280});
+    MAP.push({map: framework.addImage('MAP2', 0, 0, 1920, 1080), width: 1920, height: 1080});
     TEMP_MAP.push({map: Temp.addImage('MAP1', 0, 0, 1920, 1280), width: 1920, height: 1280});
-    TEMP_MAP.push({map: Temp.addImage('MAP2', 0, 0, 1920, 1080), width: 1920, height: 1280});
+    TEMP_MAP.push({map: Temp.addImage('MAP2', 0, 0, 1920, 1080), width: 1920, height: 1080});
     
 
     framework.addSprite('char', 'left', [4, 5, 6, 7]);
@@ -359,6 +357,7 @@ function Potal(MAP_Code, pl_x, pl_y, bgx, bgy){
     framework.Context.translate(bg_x, bg_y);
     bg_x = bgx;
     bg_y = bgy;
+    framework.Context.translate(-bg_x, -bg_y);
     
     moveable = false;
     var potal = setInterval(function () {
@@ -399,14 +398,22 @@ function check(x, y, moved){
             switch(MAP_CODE){
                 case 0:
                     if(r==119 && g==149 && b==217){
-                        framework.addKeyDown('SPACE', function(){
-                            if(player_x==_x && player_y == _y && MAP_CODE == current){
-                                Potal(1,0,0,0,0);
-                                around = 1;
-                            }
-                            
+                        addSpaceDown(_x, _y, current, function(){
+                            Potal(1,100,100,0,0);
+                            around = 1;
                         });
-                        
+                    }
+                    break;
+                case 1:
+                    if(r==236 && g==20 && b==219){
+                        addSpaceDown(_x,_y,current,function(){
+                            var by;
+                            if(width>600) by = 200;
+                            else by = 500;
+                            var bx = 130;
+                            Potal(0,700,500,bx,by);
+                            around=0;
+                        });
                     }
                     break;
             }
@@ -472,8 +479,8 @@ function Render() {
             else 
                 framework.addRect(0,0,width,height,'#000', potal);
             framework.Context.beginPath();
-            framework.Context.arc(player_x,player_y,140,140,10*Math.PI,true);
-            framework.Context.stroke();
+            framework.Context.arc(player_x+15,player_y+24,140,140,10*Math.PI,true);
+            
             
             framework.Context.clip();
             MAP[MAP_CODE].map.play(0, 0);
@@ -606,5 +613,13 @@ function Render() {
 function gameLoop() {
     Update();
     Render();
+}
+
+function addSpaceDown(x,y,current,callback){
+    framework.addKeyDown('SPACE', function(){
+        if(player_x==x && player_y == y && MAP_CODE == current){
+            callback();
+        }
+    });
 }
 
