@@ -111,6 +111,7 @@ function onPageLoadComplete() {
     height = $(window).innerHeight() - 20;
 
     $(window).resize(function () {
+        //alert('oo');
         console.log("resize");
         //if(height>$(window).innerHeight()-20){
             if(player_y>height/2)
@@ -394,6 +395,8 @@ function check(x, y, moved){
             var current = MAP_CODE;
             var _x = player_x;
             var _y = player_y;
+            
+            
 
             switch(MAP_CODE){
                 case 0:
@@ -407,10 +410,8 @@ function check(x, y, moved){
                 case 1:
                     if(r==236 && g==20 && b==219){
                         addSpaceDown(_x,_y,current,function(){
-                            var by;
-                            if(width>600) by = 200;
-                            else by = 500;
-                            var bx = 130;
+                            var by = player_y-height/2;
+                            var bx = player_x-width/2;
                             Potal(0,700,500,bx,by);
                             around=0;
                         });
@@ -473,11 +474,11 @@ function Render() {
             framework.clear();
             Temp.clear();
             TEMP_MAP[MAP_CODE].map.play(0, 0);
+            MAP[MAP_CODE].map.play(0, 0);
             if(around==1){
                 framework.Context.save();
-                if(!potaling) framework.addRect(0,0,2000,2000,'#000', 1);
-            else 
-                framework.addRect(0,0,width,height,'#000', potal);
+                if(!potaling) framework.addRect(0,0,2000,2000,'#000', 0.7);
+                else framework.addRect(0,0,2000,2000, '#000', 0.7*potaling);
             framework.Context.beginPath();
             framework.Context.arc(player_x+15,player_y+24,140,140,10*Math.PI,true);
             
