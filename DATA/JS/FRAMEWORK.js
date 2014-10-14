@@ -28,25 +28,28 @@ TEST GAME
             동굴 기능 추가!
 2014.10.06: v0.10
             resize관련 버그를 모두 해결했다. 이제 정상적으로 resize할 때 bg_x, bg_y가 자동으로 바뀌어 가운데로 온다.
+            
+            
 ******************/
 
 window.addEventListener("load", onPageLoadComplete, false);
-var framework;
+var framework; //메인
 var Temp; //충돌처리
-//var Interface;
+var imgData; //충돌처리
 
-var temp;
-var imgData;
+var STATE_START = 0; //처음창
+var STATE_PLAY = 1; //게임플레이
+var STATE_LOAD = 2; //로딩
+var STATE_CONFIG = 3; //설정
+var STATE_GALALY = 4; //갤러리
+var STATE_MAKER = 5; //제작자
+var STATE_PAUSE = 6; //정지
+var STATE_INVENTORY = 7; //인벤토리
+var STATE_SAVE = 8; //저장
+var STATE_DIALOGUE = 9; //대화중
 
-var STATE_START = 0;
-var STATE_PLAY = 1;
-var STATE_LOAD = 2;
-var STATE_CONFIG = 3;
-var STATE_GALALY = 4;
-var STATE_MAKER = 5;
-var STATE_PAUSE = 6;
-var STATE_INVENTORY = 7;
-var STATE_SAVE = 8;
+var dialogue;
+var dialogue_index = 0;
 
 var gamestate = STATE_START;
 
@@ -55,6 +58,9 @@ var sub_menu = 0;
 
 var potal;
 var potaling = 0;
+
+var sp = true; //중복대화 방지
+var after_action; //대화후
 
 var loadInterval;
 var char_status = { up: false, down: false, left: false, right: false };
@@ -66,13 +72,17 @@ var player_y = 0;
 var player_x = 0;
 var loadInterval;
 var MAP_CODE = 0;
-var CURRENT_MAP;
 var moveable = true;
 
 var width = 0;
 var height = 0;
 var loader;
 var movement = 10;
+var current_npc;
+
+var resize;
+
+var fullscreen = false;
 
 var around = 0;
 
@@ -107,20 +117,16 @@ function draw_load() {
 
 function onPageLoadComplete() {
     var FPS = 60;
-    width = $(window).innerWidth()-20;
-    height = $(window).innerHeight() - 20;
+    width = 800;
+    height = 600;
 
     $(window).resize(function () {
-        //alert('oo');
+        if(fullscreen){
         console.log("resize");
-        //if(height>$(window).innerHeight()-20){
             if(player_y>height/2)
                 bg_y = player_y-height/2;
-        //}
-        //if(width>$(window).innerWidth()-20){
             if(player_x>width/2)
                 bg_x = player_x-width/2;
-        //}
         framework.Canvas.width = $(window).innerWidth()-20;
         framework.Canvas.height = $(window).innerHeight() - 20;
         width = $(window).innerWidth() - 20;
@@ -128,12 +134,15 @@ function onPageLoadComplete() {
         framework.setWidth(width);
         framework.setHeight(height);
         framework.Context.translate(-bg_x, -bg_y);
+        }
     });
     
     Temp = new ALTIS('Temp', 2000, 2000, false);
     framework = new ALTIS('ALTIS', width, height, true);
     framework.loadImage('DATA/IMAGE/MAP/Map_Room.png', 'MAP1');
     framework.loadImage('DATA/IMAGE/MAP/picture.png', 'MAP2');
+    framework.loadImage('DATA/IMAGE/ILLUST/alpha.png', 'ILLUST1');
+    framework.loadImage('DATA/IMAGE/ILLUST/beta.png', 'ILLUST2');
     Temp.loadImage('DATA/IMAGE/MAP/Temp_Map_Room.png', 'MAP1');
     Temp.loadImage('DATA/IMAGE/MAP/Temp_picture.png', 'MAP2');
     framework.loadSprite('DATA/IMAGE/CHARACTER/spp.png', 'char', 31, 48, 10);
@@ -141,10 +150,23 @@ function onPageLoadComplete() {
     loadInterval = setInterval(draw_load, 1000 / FPS);
 }
 
+function makeScript(script){
+    dialogue = script;
+    gamestate = STATE_DIALOGUE;
+    dialogue.push("");
+    after_action = undefined;
+}
+
+function makeScriptAction(script, Action){
+    dialogue = script;
+    gamestate = STATE_DIALOGUE;
+    dialogue.push("");
+    after_action = Action;
+}
+
 function do_newGame(){
                     
     MAP_CODE = 0;
-    CURRENT_MAP = MAP[0];
     player_y = 700;
     player_x = 500;
     //framework.Context.translate(0, 0);
@@ -172,10 +194,11 @@ function start_load(){
 function start_game() {
     framework.clear();
 
-    MAP.push({map: framework.addImage('MAP1', 0, 0, 1920, 1280), width: 1920, height: 1280});
-    MAP.push({map: framework.addImage('MAP2', 0, 0, 1920, 1080), width: 1920, height: 1080});
-    TEMP_MAP.push({map: Temp.addImage('MAP1', 0, 0, 1920, 1280), width: 1920, height: 1280});
-    TEMP_MAP.push({map: Temp.addImage('MAP2', 0, 0, 1920, 1080), width: 1920, height: 1080});
+
+    MAP.push({map: framework.addImage('MAP1', 1920, 1280), width: 1920, height: 1280, npc: [0]});
+    MAP.push({map: framework.addImage('MAP2', 1920, 1080), width: 1920, height: 1080, npc: [1]});
+    TEMP_MAP.push({map: Temp.addImage('MAP1', 1920, 1280), width: 1920, height: 1280});
+    TEMP_MAP.push({map: Temp.addImage('MAP2', 1920, 1080), width: 1920, height: 1080});
     
 
     framework.addSprite('char', 'left', [4, 5, 6, 7]);
@@ -200,6 +223,13 @@ function start_game() {
         if(gamestate == STATE_PLAY){
             char_status.right = true;
             framework.setSprite('char', 'right');
+        }
+    });
+    
+    
+    framework.addKeyDown('SPACE', function(){
+        if(gamestate == STATE_DIALOGUE){
+            if(dialogue_index < dialogue.length-1) dialogue_index++;
         }
     });
 
@@ -245,6 +275,7 @@ function start_game() {
                     break;
                 case 2:
                     framework.fullScreen();
+                    fullscreen = true;
                     //framework.fullScreen();
                     framework.Context.translate(-bg_x, -bg_y);
                     break;
@@ -281,8 +312,10 @@ function start_game() {
     });
 
     framework.addKeyUp('LEFT', function () {
-        char_status.left = false;
-        framework.setSprite('char', 'stand_left');
+        if(gamestate == STATE_PLAY){
+            char_status.left = false;
+            framework.setSprite('char', 'stand_left');
+        }
     });
 
     framework.addKeyUp('RIGHT', function () {
@@ -350,14 +383,16 @@ function start_game() {
 }
 
 //Potal(MAP_CODE, player_x, player_y, bg_x, bg_y);
-function Potal(MAP_Code, pl_x, pl_y, bgx, bgy){
+function Potal(MAP_Code, pl_x, pl_y){
     MAP_CODE = MAP_Code;
-    CURRENT_MAP = MAP[MAP_Code];
     player_y = pl_x;
     player_x = pl_y;
     framework.Context.translate(bg_x, bg_y);
-    bg_x = bgx;
-    bg_y = bgy;
+    if(player_y>height/2) bg_y = player_y-height/2;
+    else bg_y = 0;
+    if(player_x>width/2) bg_x = player_x-width/2;
+    else bg_x = 0;
+    
     framework.Context.translate(-bg_x, -bg_y);
     
     moveable = false;
@@ -396,31 +431,22 @@ function check(x, y, moved){
             var _x = player_x;
             var _y = player_y;
             
-            
-
-            switch(MAP_CODE){
-                case 0:
-                    if(r==119 && g==149 && b==217){
-                        addSpaceDown(_x, _y, current, function(){
-                            Potal(1,100,100,0,0);
-                            around = 1;
-                        });
+            for(var j=0; j<MAP[MAP_CODE].npc.length; j++){
+                
+                var npc = Action_Array[MAP[MAP_CODE].npc[j]];
+                if(r==npc.r && g==npc.g && npc.b==b){
+                    
+                    
+                    if(sp == true){
+                        addSpaceDown(_x, _y, current, npc.callback);
+                        current_npc = npc;
+                        sp = false;
+                        console.log('추우가');
                     }
-                    break;
-                case 1:
-                    if(r==236 && g==20 && b==219){
-                        addSpaceDown(_x,_y,current,function(){
-                            var by = player_y-height/2;
-                            var bx = player_x-width/2;
-                            Potal(0,700,500,bx,by);
-                            around=0;
-                        });
-                    }
-                    break;
+                }
             }
             break;
-        }
-        
+        }else sp = true;
     }
 }
 
@@ -429,6 +455,19 @@ function Update() { }
 function Render() {
     framework.clear();
     switch(gamestate){
+        case STATE_DIALOGUE:
+            var cur_map = MAP[MAP_CODE];
+            MAP[MAP_CODE].map.play(0, 0);
+            framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#000', 0.5);
+            framework.addText(dialogue[dialogue_index], '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
+            framework.showSprite('char', player_x, player_y, 4);
+            if(current_npc.illust){
+                framework.flipStart();
+                var illust = framework.addImage(current_npc.illust, current_npc.width,  current_npc.height);
+                illust.play(bg_x+width-current_npc.x,bg_y+height-current_npc.y);
+                framework.flipEnd();
+            }
+            break;
         case STATE_PLAY:
             if(moveable){
                 if (char_status.up) {
@@ -487,25 +526,12 @@ function Render() {
             MAP[MAP_CODE].map.play(0, 0);
             framework.Context.restore();
             
-            //framework.Context.resetClip();
             framework.Context.closePath();
             }
             else MAP[MAP_CODE].map.play(0,0);
-    
-            
-            /*framework.Context.beginPath();
-            framework.Context.arc(player_x+19,player_y+20,70,0,2*Math.PI,false);
-            
-            framework.Context.fillStyle = 'black';
-            framework.Context.globalAlpha = '0.1';
-            framework.Context.fill();
-            
-            framework.Context.globalAlpha = '0.5';
-            framework.Context.arc(player_x+19,player_y+20,100,0,2*Math.PI,false);
-            framework.Context.fill();
-            framework.Context.globalAlpha = '1';*/
             
             framework.showSprite('char', player_x, player_y, 4);
+            
             
             if (gamestate == STATE_PAUSE) {
                 
@@ -616,11 +642,29 @@ function gameLoop() {
     Render();
 }
 
+
 function addSpaceDown(x,y,current,callback){
     framework.addKeyDown('SPACE', function(){
-        if(player_x==x && player_y == y && MAP_CODE == current){
-            callback();
+        if(dialogue){
+        if(dialogue_index >= dialogue.length-1){
+            gamestate = STATE_PLAY;
+            dialogue_index = 0;
+            console.log('대화 엔드');
+            sp = true;
+            if(after_action) after_action();
         }
+            else if(player_x==x && player_y == y && MAP_CODE == current && gamestate == STATE_PLAY&&sp==false){
+                callback();
+                console.log('p1');
+        }
+        }
+        else{
+            callback();
+            console.log('p2');
+        }
+        
+        
+        
     });
+    
 }
-

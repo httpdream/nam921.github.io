@@ -189,7 +189,16 @@ ALTIS.prototype.addRect = function (x, y, width, height, color, alpha) {
     this.Context.globalAlpha = 1;
 }
 
-ALTIS.prototype.addImage = function (src_name, x, y, width, height, callback) {
+ALTIS.prototype.flipStart = function(){
+    this.Context.save();
+    this.Context.scale(-1, 1);
+}
+
+ALTIS.prototype.flipEnd = function(){
+    this.Context.restore();
+}
+
+ALTIS.prototype.addImage = function (src_name, width, height) {
     var found;
     for (var i = 0; i < this.Image.length; i++) {
         if (src_name == this.Image[i].name) {
@@ -237,7 +246,10 @@ ALTIS.prototype.addKeyDown = function (key, callback) {
     if (!code) console.log('not found');
 
     window.addEventListener('keydown', function (e) {
-        if (e.keyCode == code) callback();
+        if (e.keyCode == code){
+            callback();
+            e.preventDefault();
+        }
     }, false);
 }
 
