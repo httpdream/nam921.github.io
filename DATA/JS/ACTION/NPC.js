@@ -25,9 +25,9 @@ Action_Array.push({r: 78, g: 255, b: 0, status:0, //혼잣말
 
 Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
                   callback: function(){
-                      var this_status = Action_Array[0].status;
+                      var this_status = Action_Array[1].status;
                       
-                      if(this_status==1){
+                      if(this_status==0){
                           makeScriptAction(["문이 열린다아"], function(){
                               Potal(0,500,500);
                               around=1;
@@ -78,3 +78,9 @@ Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:
                     
                    }
                   });
+
+
+Action_Array.push({r: 214, g: 66, b: 171, //혼잣말
+                  callback: function(){
+                      ViewIllust('RESEARCH', 0, 0, 800, 600);
+                  }});

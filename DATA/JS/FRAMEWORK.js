@@ -47,6 +47,7 @@ var STATE_PAUSE = 6; //정지
 var STATE_INVENTORY = 7; //인벤토리
 var STATE_SAVE = 8; //저장
 var STATE_DIALOGUE = 9; //대화중
+var STATE_ILLUST = 10; //일러스트 표시중
 
 var dialogue;
 var dialogue_index = 0;
@@ -58,6 +59,7 @@ var sub_menu = 0;
 
 var potal;
 var potaling = 0;
+var illuster;
 
 var sp = true; //중복대화 방지
 var after_action; //대화후
@@ -81,12 +83,16 @@ var movement = 10;
 var current_npc;
 
 var resize;
+var illust_load = 0;
 
 var fullscreen = false;
-
 var around = 0;
-
 var scale = 1;
+
+function ViewIllust(_name, _x, _y, _width, _height){
+    gamestate = STATE_ILLUST;
+    illuster = {ILL: framework.addImage(_name, _width, _height), x: _x, y: _y};
+}
 
 function draw_load() {
     loader = 0;
@@ -262,15 +268,16 @@ function start_game() {
     
     
     framework.addKeyDown('SPACE', function(){
-        nextDlg();
-    });
-    
-    framework.addKeyDown('ENTER', function(){
-        nextDlg();
+        if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
+        else if(gamestate == STATE_DIALOGUE)
+            nextDlg();
+        
     });
     
     $(window).click(function(){
-        nextDlg();
+        if(gamestate == STATE_DIALOGUE)
+            nextDlg();
+        else if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
     });
 
     framework.addKeyDown('UP', function () {
@@ -345,6 +352,10 @@ function start_game() {
                     break;
             }
         }
+        
+        if(gamestate == STATE_DIALOGUE)
+            nextDlg();
+        else if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
         
         
         menu = 0;
@@ -433,6 +444,11 @@ function Potal(MAP_Code, pl_x, pl_y){
     if(player_x>width/2) bg_x = player_x-width/2;
     else bg_x = 0;
     
+    char_status.down = false;
+    char_status.left = false;
+    char_status.right = false;
+    char_status.up = false;
+    
     framework.Context.translate(-bg_x, -bg_y);
     
     moveable = false;
@@ -501,6 +517,10 @@ function Update() { }
 function Render() {
     framework.clear();
     switch(gamestate){
+            case STATE_ILLUST:
+            MAP[MAP_CODE].map.play(0,0);
+            illuster.ILL.play(illuster.x+bg_x,illuster.y+bg_y);
+            break;
         case STATE_DIALOGUE:
             var cur_map = MAP[MAP_CODE];
             MAP[MAP_CODE].map.play(0, 0);
