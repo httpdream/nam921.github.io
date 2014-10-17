@@ -142,7 +142,7 @@ function onPageLoadComplete() {
     
     
     framework.loadImage('DATA/IMAGE/MAP/Map_Room.png', 'MAP1');
-    framework.loadImage('DATA/IMAGE/MAP/picture.png', 'MAP2');
+    framework.loadImage('DATA/IMAGE/MAP/picture.jpg', 'MAP2');
     framework.loadImage('DATA/IMAGE/ILLUST/alpha.png', 'ILLUST1');
     framework.loadImage('DATA/IMAGE/ILLUST/beta.png', 'ILLUST2');
     framework.loadImage('DATA/IMAGE/ILLUST/lucid.png', 'LUCID');
