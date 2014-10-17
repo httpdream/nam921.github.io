@@ -23,7 +23,7 @@ Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
                   }});
 
 Action_Array.push({r: 236, g: 20, b: 219, status:0, //말하는걸 들음
-                  illust: 'ILLUST1', width:218, height:288, x:250, y:300,
+                  illust: 'ILLUST1', width:218, height:288, x:250, y:250,
                   callback: function(){
                       var this_status = Action_Array[1].status;
                       if(this_status==0){
@@ -48,16 +48,10 @@ Action_Array.push({r: 236, g: 20, b: 219, status:0, //말하는걸 들음
                   });
 
 
-Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:300, delay:500,  //AUTO
+Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:250,  //AUTO
                    callback: function(){
                        if(Action_Array[2].status == 0){
-                            makeScript(['....', [],'여긴 어디지?', 
-                                        function(){leftright();},
-                                        function(){Action_Array[2].illust='LUCID'; Action_Array[2].delay = 2000;},
-                                        '제로님, 깨셨어요?',
-                                        function(){Action_Array[2].illust='ILLUST1'; Action_Array[2].delay = 500;},
-                                        '(젊은 여자 목소리가 부른다. 설마 .... 내 이름?)'
-                                       ]);
+                            makeScript(['....', '여긴 어디지?', function(){leftright();}, '응']);
                            Action_Array[2].status=1;
                        }
                     

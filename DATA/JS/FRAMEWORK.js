@@ -139,13 +139,18 @@ function onPageLoadComplete() {
     
     Temp = new ALTIS('Temp', 2000, 2000, false);
     framework = new ALTIS('ALTIS', width, height, true);
+    
+    
     framework.loadImage('DATA/IMAGE/MAP/Map_Room.png', 'MAP1');
     framework.loadImage('DATA/IMAGE/MAP/picture.png', 'MAP2');
     framework.loadImage('DATA/IMAGE/ILLUST/alpha.png', 'ILLUST1');
     framework.loadImage('DATA/IMAGE/ILLUST/beta.png', 'ILLUST2');
+    framework.loadImage('DATA/IMAGE/ILLUST/lucid.png', 'LUCID');
     Temp.loadImage('DATA/IMAGE/MAP/Temp_Map_Room.png', 'MAP1');
     Temp.loadImage('DATA/IMAGE/MAP/Temp_picture.png', 'MAP2');
     framework.loadSprite('DATA/IMAGE/CHARACTER/spp.png', 'char', 31, 48, 10);
+    
+
 
     loadInterval = setInterval(draw_load, 1000 / FPS);
 }
@@ -164,23 +169,20 @@ function makeScriptAction(script, Action){
     after_action = Action;
 }
 
-function do_newGame(){
-                    
+function do_newGame(){               
     MAP_CODE = 0;
-    player_y = 700;
     player_x = 500;
-    //framework.Context.translate(0, 0);
-    //bg_x += MAP[MAP_CODE].width-width;
-    //bg_x += width;
+    player_y = 700;
     
     bg_y = player_y-height/2;
     bg_x = player_x-width/2;
     
-    //if(width>600) bg_y += 200;
-    //else bg_y += 500;
-    //bg_x += 130;
-    
-    
+    if(MAP[MAP_CODE].auto){
+        current_npc = Action_Array[MAP[MAP_CODE].auto];
+        current_npc.callback();
+        addSpaceDown(500, 700, MAP_CODE, current_npc.callback);
+        sp = false;
+    }
     
     framework.Context.translate(-bg_x, -bg_y);
 }
@@ -190,12 +192,19 @@ function start_load(){
     start_game();
 }
 
+function leftright(){
+    framework.setSprite('char', 'stand_left');
+    setTimeout(function(){
+        framework.setSprite('char', 'stand_right');
+               }, 1000);
+}
+
 //본게임
 function start_game() {
     framework.clear();
 
 
-    MAP.push({map: framework.addImage('MAP1', 1920, 1280), width: 1920, height: 1280, npc: [0]});
+    MAP.push({map: framework.addImage('MAP1', 1920, 1280), width: 1920, height: 1280, npc: [0], auto:2});
     MAP.push({map: framework.addImage('MAP2', 1920, 1080), width: 1920, height: 1080, npc: [1]});
     TEMP_MAP.push({map: Temp.addImage('MAP1', 1920, 1280), width: 1920, height: 1280});
     TEMP_MAP.push({map: Temp.addImage('MAP2', 1920, 1080), width: 1920, height: 1080});
@@ -229,7 +238,14 @@ function start_game() {
     
     framework.addKeyDown('SPACE', function(){
         if(gamestate == STATE_DIALOGUE){
-            if(dialogue_index < dialogue.length-1) dialogue_index++;
+            if(dialogue_index < dialogue.length-1){
+                
+                if(current_dialogue<dialogue[dialogue_index].length) current_dialogue = dialogue[dialogue_index].length;
+                else{
+                    dialogue_index++;
+                current_dialogue = 0;
+                }
+            }
         }
     });
 
@@ -450,6 +466,12 @@ function check(x, y, moved){
     }
 }
 
+var auto = 0; //auto_중복대화 방지
+var current_dialogue = 0; //현재 숫자
+var dialogue_delay = 0;
+var end_delay = 0;
+var end_visible = false;
+
 var potaling = 0;
 function Update() { }
 function Render() {
@@ -458,15 +480,47 @@ function Render() {
         case STATE_DIALOGUE:
             var cur_map = MAP[MAP_CODE];
             MAP[MAP_CODE].map.play(0, 0);
-            framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#000', 0.5);
-            framework.addText(dialogue[dialogue_index], '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
-            framework.showSprite('char', player_x, player_y, 4);
-            if(current_npc.illust){
-                framework.flipStart();
-                var illust = framework.addImage(current_npc.illust, current_npc.width,  current_npc.height);
+            if(typeof dialogue[dialogue_index] == "string"){
+                framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#000', 0.5);
+                
+                dialogue_delay++;
+                end_delay++;
+                if(end_delay>40){ end_visible = !end_visible; end_delay=0; }
+                if(dialogue_delay>=3){
+                    current_dialogue++;
+                    dialogue_delay=0;
+                }
+                framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
+                if(current_dialogue>=dialogue[dialogue_index].length && end_visible){
+                    framework.addText('▼', '24px gulim', width+bg_x-300, height+bg_y-40, '#0f0');
+                }
+                
+                if(current_npc.illust){
+                    var illust = framework.addImage(current_npc.illust, current_npc.width, current_npc.height);
                 illust.play(bg_x+width-current_npc.x,bg_y+height-current_npc.y);
-                framework.flipEnd();
+                }
             }
+            else{
+                if(typeof dialogue[dialogue_index] == "function")
+                    dialogue[dialogue_index]();
+                if(auto == 0){
+                setTimeout(function(){
+                    console.log('실_행');
+                    auto=0;
+                    dialogue_index++;
+                    if(dialogue_index >= dialogue.length-1){
+                gamestate = STATE_PLAY;
+                dialogue_index = 0;
+                sp = true;
+                //(after_action) after_action();
+            }
+                }, current_npc.delay);
+                    auto=1;
+                }
+                
+                
+            }
+            framework.showSprite('char', player_x, player_y, 4);
             break;
         case STATE_PLAY:
             if(moveable){
@@ -643,7 +697,7 @@ function gameLoop() {
 }
 
 
-function addSpaceDown(x,y,current,callback){
+function addSpaceDown(x,y,current,callback){                                                                                   
     framework.addKeyDown('SPACE', function(){
         if(dialogue){
         if(dialogue_index >= dialogue.length-1){
