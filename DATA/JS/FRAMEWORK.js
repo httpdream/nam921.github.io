@@ -431,7 +431,7 @@ function Potal(MAP_Code, pl_x, pl_y){
 //Temp와 현재 캐릭터의 위치를 비교
 function check(x, y, moved){
     //character width: 31, width: 48
-    var imgData = Temp.Context.getImageData(player_x, player_y, 31, 48);
+    var imgData = Temp.Context.getImageData(player_x, player_y, 80, 120);
     for(var i=0; i<imgData.data.length; i+=4){
         var r = imgData.data[i];
         var g = imgData.data[i+1];
