@@ -6,7 +6,8 @@ var Action_Array = new Array();
                   }});*/
 
 
-Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
+
+Action_Array.push({r: 78, g: 255, b: 0, status:0, //혼잣말
                   callback: function(){
                       var this_status = Action_Array[0].status;
                       if(this_status==0){
@@ -15,14 +16,28 @@ Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
                       }
                       else if(this_status==1){
                           makeScriptAction(["lalalala"], function(){
-                              Potal(1,100,100);
+                              Potal(1,700,500);
                               around=1;
                           });
                           Action_Array[0].status=2;
                       }
                   }});
 
-Action_Array.push({r: 236, g: 20, b: 219, status:0, //말하는걸 들음
+Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
+                  callback: function(){
+                      var this_status = Action_Array[0].status;
+                      
+                      if(this_status==1){
+                          makeScriptAction(["문이 열린다아"], function(){
+                              Potal(0,500,500);
+                              around=1;
+                          });
+                          Action_Array[0].status=2;
+                      }
+                  }});
+
+
+/*Action_Array.push({r: 236, g: 20, b: 219, status:0, //말하는걸 들음
                   illust: 'ILLUST1', width:218, height:288, x:250, y:300,
                   callback: function(){
                       var this_status = Action_Array[1].status;
@@ -45,7 +60,7 @@ Action_Array.push({r: 236, g: 20, b: 219, status:0, //말하는걸 들음
                           console.log('abcd');
                       }
                   }
-                  });
+                  });*/
 
 
 Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:300, delay:500,  //AUTO

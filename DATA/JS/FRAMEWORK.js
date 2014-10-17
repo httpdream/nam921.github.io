@@ -140,15 +140,18 @@ function onPageLoadComplete() {
     Temp = new ALTIS('Temp', 2000, 2000, false);
     framework = new ALTIS('ALTIS', width, height, true);
     
+    for(var i=0; i<Map_Array.length; i++){
+        framework.loadImage('DATA/IMAGE/'+Map_Array[i].src, Map_Array[i].name);
+        Temp.loadImage('DATA/IMAGE/'+Map_Tmp_Array[i].src, Map_Tmp_Array[i].name);
+    }
     
-    framework.loadImage('DATA/IMAGE/MAP/Map_Room.png', 'MAP1');
-    framework.loadImage('DATA/IMAGE/MAP/picture.jpg', 'MAP2');
-    framework.loadImage('DATA/IMAGE/ILLUST/alpha.png', 'ILLUST1');
-    framework.loadImage('DATA/IMAGE/ILLUST/beta.png', 'ILLUST2');
-    framework.loadImage('DATA/IMAGE/ILLUST/lucid.png', 'LUCID');
-    Temp.loadImage('DATA/IMAGE/MAP/Temp_Map_Room.png', 'MAP1');
-    Temp.loadImage('DATA/IMAGE/MAP/Temp_picture.png', 'MAP2');
-    framework.loadSprite('DATA/IMAGE/CHARACTER/spp.png', 'char', 31, 48, 10);
+    for(var i=0; i<Illust_Array.length; i++)
+        framework.loadImage('DATA/IMAGE/'+Illust_Array[i].src, Illust_Array[i].name);
+    
+    for(var i=0; i<Sprite_Array.length; i++)
+        framework.loadSprite('DATA/IMAGE/'+Sprite_Array[i].src, Sprite_Array[i].name, Sprite_Array[i].width, Sprite_Array[i].height, Sprite_Array[i].delay);
+    
+   
     
 
 
@@ -172,7 +175,7 @@ function makeScriptAction(script, Action){
 function do_newGame(){               
     MAP_CODE = 0;
     player_x = 500;
-    player_y = 700;
+    player_y = 500;
     
     bg_y = player_y-height/2;
     bg_x = player_x-width/2;
@@ -202,12 +205,13 @@ function leftright(){
 //본게임
 function start_game() {
     framework.clear();
+    
+    for(var i=0; i<Map_Array.length; i++){
+        MAP.push({map: framework.addImage(Map_Array[i].name, Map_Array[i].width, Map_Array[i].height), width: Map_Array[i].width, height: Map_Array[i].height, npc: Map_Array[i].npc, auto: Map_Array[i].auto});
+        TEMP_MAP.push({map: Temp.addImage(Map_Tmp_Array[i].name, Map_Tmp_Array[i].width, Map_Tmp_Array[i].height), width: Map_Tmp_Array[i].width, height: Map_Tmp_Array[i].height});
+    }
 
 
-    MAP.push({map: framework.addImage('MAP1', 1920, 1280), width: 1920, height: 1280, npc: [0], auto:2});
-    MAP.push({map: framework.addImage('MAP2', 1920, 1080), width: 1920, height: 1080, npc: [1]});
-    TEMP_MAP.push({map: Temp.addImage('MAP1', 1920, 1280), width: 1920, height: 1280});
-    TEMP_MAP.push({map: Temp.addImage('MAP2', 1920, 1080), width: 1920, height: 1080});
     
 
     framework.addSprite('char', 'left', [4, 5, 6, 7]);
@@ -481,7 +485,7 @@ function Render() {
             var cur_map = MAP[MAP_CODE];
             MAP[MAP_CODE].map.play(0, 0);
             if(typeof dialogue[dialogue_index] == "string"){
-                framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#000', 0.5);
+                framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#345', 0.5);
                 
                 dialogue_delay++;
                 end_delay++;

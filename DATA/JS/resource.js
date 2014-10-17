@@ -1,59 +1,17 @@
-var Action_Array = new Array();
-/*Action_Array.push({r: 119, g: 149, b: 217,
-                  callback: function(){
-                      Potal(1,100,100);
-                      around=1;
-                  }});*/
+var Map_Array = new Array();
+var Map_Tmp_Array = new Array();
+var Illust_Array = new Array();
+var Sprite_Array = new Array();
 
+Map_Array.push({src: 'MAP/Room.png', name: 'MAP1', width: 1600, height: 900, npc: [0], auto: 2});
+Map_Array.push({src: 'MAP/Map_Room.png', name: 'MAP2', width: 1920, height: 1080, npc: [1]});
 
-Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
-                  callback: function(){
-                      var this_status = Action_Array[0].status;
-                      if(this_status==0){
-                          makeScript([ "문이 안열리잖아", "다시한번 열어볼까?  " ]);
-                          Action_Array[0].status=1;
-                      }
-                      else if(this_status==1){
-                          makeScriptAction(["lalalala"], function(){
-                              Potal(1,100,100);
-                              around=1;
-                          });
-                          Action_Array[0].status=2;
-                      }
-                  }});
+Map_Tmp_Array.push({src: 'MAP/Temp_Room.png', name: 'MAP1', width: 1600, height: 900});
+Map_Tmp_Array.push({src: 'MAP/Temp_Map_Room.png', name: 'MAP2', width: 1920, height: 1080});
 
-Action_Array.push({r: 236, g: 20, b: 219, status:0, //말하는걸 들음
-                  illust: 'ILLUST1', width:218, height:288, x:250, y:250,
-                  callback: function(){
-                      var this_status = Action_Array[1].status;
-                      if(this_status==0){
-                          makeScript(["난 알파다", "알파"]);
-                          Action_Array[1].status=1;
-                      }
-                      else if(this_status==1){
-                          Action_Array[1].status = 1;
-                          Action_Array[1].illust = 'ILLUST2';
-                          Action_Array[1].width = 209;
-                          Action_Array[1].height = 258;
-                          makeScriptAction(["포탈로 이동해볼까?", "ㅇㅇ"], function(){
-                              Potal(0,700,500);
-                              around=0;
-                          });
-                            
-                      }
-                      else{
-                          console.log('abcd');
-                      }
-                  }
-                  });
+Illust_Array.push({src: 'ILLUST/alpha.png', name: 'ILLUST1'});
+Illust_Array.push({src: 'ILLUST/beta.png', name: 'ILLUST2'});
+Illust_Array.push({src: 'ILLUST/lucid.png', name: 'LUCID'});
 
+Sprite_Array.push({src: 'CHARACTER/spp.png', name: 'char', width: 31, height: 48, delay: 10})
 
-Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:250,  //AUTO
-                   callback: function(){
-                       if(Action_Array[2].status == 0){
-                            makeScript(['....', '여긴 어디지?', function(){leftright();}, '응']);
-                           Action_Array[2].status=1;
-                       }
-                    
-                   }
-                  });
