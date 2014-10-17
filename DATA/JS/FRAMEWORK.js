@@ -158,6 +158,27 @@ function onPageLoadComplete() {
     loadInterval = setInterval(draw_load, 1000 / FPS);
 }
 
+function nextDlg(){
+    if(gamestate == STATE_DIALOGUE){
+            if(dialogue_index < dialogue.length-1){
+                
+                if(current_dialogue<dialogue[dialogue_index].length) current_dialogue = dialogue[dialogue_index].length;
+                else{
+                    dialogue_index++;
+                current_dialogue = 0;
+                }
+            }
+        }
+    
+    if(dialogue_index >= dialogue.length-1){
+            gamestate = STATE_PLAY;
+            dialogue_index = 0;
+            console.log('대화 엔드');
+            sp = true;
+            if(after_action) after_action();
+        }
+}
+
 function makeScript(script){
     dialogue = script;
     gamestate = STATE_DIALOGUE;
@@ -241,16 +262,15 @@ function start_game() {
     
     
     framework.addKeyDown('SPACE', function(){
-        if(gamestate == STATE_DIALOGUE){
-            if(dialogue_index < dialogue.length-1){
-                
-                if(current_dialogue<dialogue[dialogue_index].length) current_dialogue = dialogue[dialogue_index].length;
-                else{
-                    dialogue_index++;
-                current_dialogue = 0;
-                }
-            }
-        }
+        nextDlg();
+    });
+    
+    framework.addKeyDown('ENTER', function(){
+        nextDlg();
+    });
+    
+    $(window).click(function(){
+        nextDlg();
     });
 
     framework.addKeyDown('UP', function () {
@@ -431,7 +451,7 @@ function Potal(MAP_Code, pl_x, pl_y){
 //Temp와 현재 캐릭터의 위치를 비교
 function check(x, y, moved){
     //character width: 31, width: 48
-    var imgData = Temp.Context.getImageData(player_x, player_y, 53, 40);
+    var imgData = Temp.Context.getImageData(player_x, player_y+40, 53, 40);
     for(var i=0; i<imgData.data.length; i+=4){
         var r = imgData.data[i];
         var g = imgData.data[i+1];
@@ -577,7 +597,7 @@ function Render() {
                 if(!potaling) framework.addRect(0,0,2000,2000,'#000', 0.7);
                 else framework.addRect(0,0,2000,2000, '#000', 0.7*potaling);
             framework.Context.beginPath();
-            framework.Context.arc(player_x+15,player_y+24,140,140,10*Math.PI,true);
+            framework.Context.arc(player_x+22,player_y+40,140,140,10*Math.PI,true);
             
             
             framework.Context.clip();
