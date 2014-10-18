@@ -28,6 +28,10 @@ TEST GAME
             동굴 기능 추가!
 2014.10.06: v0.10
             resize관련 버그를 모두 해결했다. 이제 정상적으로 resize할 때 bg_x, bg_y가 자동으로 바뀌어 가운데로 온다.
+            
+            대화할수있다.
+            저장이 된다.
+            일러가 나온다.
 
 패치노트 쓰기가 귀찮아졌다...
             
@@ -592,7 +596,7 @@ function Potal(MAP_Code, pl_x, pl_y){
 //Temp와 현재 캐릭터의 위치를 비교
 function check(x, y, moved){
     //character width: 31, width: 48
-    var imgData = Temp.Context.getImageData(player_x, player_y+24, 32, 24);
+    var imgData = Temp.Context.getImageData(player_x, player_y+48, 64, 48);
     for(var i=0; i<imgData.data.length; i+=4){
         var r = imgData.data[i];
         var g = imgData.data[i+1];
