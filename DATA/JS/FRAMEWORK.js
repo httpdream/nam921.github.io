@@ -28,7 +28,8 @@ TEST GAME
             동굴 기능 추가!
 2014.10.06: v0.10
             resize관련 버그를 모두 해결했다. 이제 정상적으로 resize할 때 bg_x, bg_y가 자동으로 바뀌어 가운데로 온다.
-            
+
+패치노트 쓰기가 귀찮아졌다...
             
 ******************/
 
@@ -82,7 +83,7 @@ var full_width=0;
 var full_height=0;
 
 var loader;
-var movement = 10;
+var movement = 3;
 var current_npc;
 
 var resize;
@@ -94,8 +95,7 @@ var scale = 1;
 
 function ViewIllust(_name, _x, _y, _width, _height){
     gamestate = STATE_ILLUST;
-    illuster = {ILL: framework.addImage(_name, _width, _height), x: _x, y: _y, width: _width, height: _height};
-    framework.Context.scale(width/illuster.width, height/_height);
+    illuster = {ILL: framework.addImage(_name, width, height), x: _x, y: _y, width: _width, height: _height};
 }
 
 function draw_load() {
@@ -162,7 +162,6 @@ function onPageLoadComplete() {
             fullscreen=0;
             framework.Context.scale(1, 1);
             framework.Context.translate(-bg_x, -bg_y);
-            console.log('#');
         }
     });
     
@@ -311,7 +310,9 @@ function start_game() {
     
     
     framework.addKeyDown('SPACE', function(){
-        if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
+        if(gamestate == STATE_ILLUST){
+            gamestate = STATE_PLAY;
+        }
         else if(gamestate == STATE_DIALOGUE)
             nextDlg();
         
@@ -320,7 +321,9 @@ function start_game() {
     $(window).click(function(){
         if(gamestate == STATE_DIALOGUE)
             nextDlg();
-        else if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
+        else if(gamestate == STATE_ILLUST){
+            gamestate = STATE_PLAY;
+        }
     });
 
     framework.addKeyDown('UP', function () {
@@ -407,9 +410,47 @@ function start_game() {
             }
         }
         
-        if(gamestate == STATE_DIALOGUE)
+        else if(gamestate == STATE_DIALOGUE)
             nextDlg();
-        else if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
+        
+        else if(gamestate == STATE_SAVE){
+            framework.saveData('data_x', player_x);
+            framework.saveData('data_y', player_y);
+            framework.saveData('data_bgx', bg_x);
+            framework.saveData('data_bgy', bg_y);
+            framework.saveData('data_map', MAP_CODE);
+            
+            var status = new Array();
+            for(var i=0; i<Action_Array.length; i++)
+                status.push(Action_Array[i].status);
+            framework.saveData('data_status', status);
+        }
+        
+        else if(gamestate == STATE_ILLUST){
+            gamestate = STATE_PLAY;
+        }
+            
+        
+        else if(gamestate == STATE_LOAD){
+            player_x = framework.getData('data_x');
+            player_y = framework.getData('data_y');
+            bg_x = framework.getData('data_bgx');
+            bg_y = framework.getData('data_bgy');
+            MAP_CODE = framework.getData('data_map');
+            
+            for(var i=0; i<Action_Array.length; i++)
+                Action_Array[i].status = framework.getData('data_status');
+                status.push(Action_Array[i].status);
+            
+            if(MAP[MAP_CODE].auto){
+                current_npc = Action_Array[MAP[MAP_CODE].auto];
+                current_npc.callback();
+                addSpaceDown(500, 700, MAP_CODE, current_npc.callback);
+                sp = false;
+            }
+    
+            framework.Context.translate(-bg_x, -bg_y);
+        }
         
         
         menu = 0;
@@ -481,20 +522,20 @@ function start_game() {
         framework.Canvas.height = 600;
     });
     framework.addKeyDown('ONE', function(){
-        width = 1024-20;
-        height = 768-20;
-        framework.setWidth(1024-20);
-        framework.setHeight(768-20);
-        framework.Canvas.width = 1024-20;
-        framework.Canvas.height = 768-20;
+        width = 1024;
+        height = 768;
+        framework.setWidth(1024);
+        framework.setHeight(768);
+        framework.Canvas.width = 1024;
+        framework.Canvas.height = 768;
     });
     framework.addKeyDown('TWO', function(){
-        width = 1366-20;
-        height = 768-20;
-        framework.setWidth(1366-20);
-        framework.setHeight(768-20);
-        framework.Canvas.width = 1366-20;
-        framework.Canvas.height = 768-20;
+        width = 1366;
+        height = 768;
+        framework.setWidth(1366);
+        framework.setHeight(768);
+        framework.Canvas.width = 1366;
+        framework.Canvas.height = 768;
     });
     /*
     framework.addKeyDown('P', function(){
@@ -603,6 +644,8 @@ function Render() {
     switch(gamestate){
             case STATE_ILLUST:
             MAP[MAP_CODE].map.play(0,0);
+            //if(illuster.width != width || illuster.height != height)
+              //  illuster.ILL.play(illuster.x,illuster.y);
             illuster.ILL.play(illuster.x+bg_x,illuster.y+bg_y);
             
             break;
@@ -612,34 +655,19 @@ function Render() {
             
             if(cur_select != -1){
                 framework.addRect(30+bg_x , height-230+bg_y, width-60, 200, '#960', 0.5);
-                
-                dialogue_delay++;
-                end_delay++;
-                if(end_delay>40){ end_visible = !end_visible; end_delay=0; }
-                if(dialogue_delay>=3){
-                    current_dialogue++;
-                    dialogue_delay=0;
-                }
-                framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-200+bg_y, '#0f0');
-                
                 for(var t = 0; t<selection.length; t++){
                     if(t == cur_select) framework.addText('►', '24px gulim', 60+bg_x, height-100+bg_y+25*t, '#0f0');
                     framework.addText(selection[t], '24px gulim', 80+bg_x, height-100+bg_y+25*t, '#0f0');
                 }
-                
-                if(current_dialogue>=dialogue[dialogue_index].length && end_visible){
-                    if(current_npc.illust)
-                        framework.addText('▼', '24px gulim', width+bg_x-300, height+bg_y-40, '#0f0');
-                    else framework.addText('▼', '24px gulim', width+bg_x-75, height+bg_y-40, '#0f0');
-                }
-                
-                if(current_npc.illust){
-                    var illust = framework.addImage(current_npc.illust, current_npc.width, current_npc.height);
-                illust.play(bg_x+width-current_npc.x,bg_y+height-current_npc.y);
-                }
+                framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-200+bg_y, '#0f0');
             }
             else if(typeof dialogue[dialogue_index] == "string"){
                 framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#960', 0.5);
+                framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
+            }
+    
+            if(typeof dialogue[dialogue_index] == "string"){
+                
                 
                 dialogue_delay++;
                 end_delay++;
@@ -648,7 +676,7 @@ function Render() {
                     current_dialogue++;
                     dialogue_delay=0;
                 }
-                framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
+                
                 if(current_dialogue>=dialogue[dialogue_index].length && end_visible){
                     if(current_npc.illust)
                         framework.addText('▼', '24px gulim', width+bg_x-300, height+bg_y-40, '#0f0');
@@ -798,6 +826,11 @@ function Render() {
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
             framework.addText('LOAD', '20px gothic', width / 2-50, height / 2, '#000');
             break;
+        case STATE_SAVE:
+            framework.addRect(0, 0, width, height, '#369', 1);
+            framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
+            framework.addText('정말로 저장하시겠습니까?', '20px gothic', width / 2-50, height / 2, '#fff');
+            break;
         case STATE_CONFIG:
             /*framework.addRect(0, 0, width, height, '#ff0', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
@@ -860,8 +893,9 @@ function gameLoop(){
 
 function addSpaceDown(x,y,current,callback){                                                                                   
     framework.addKeyDown('SPACE', function(){
+        if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
         
-        if(dialogue){
+        else if(dialogue){
         if(dialogue_index >= dialogue.length-1){
             gamestate = STATE_PLAY;
             dialogue_index = 0;
@@ -871,7 +905,6 @@ function addSpaceDown(x,y,current,callback){
         }
             else if(player_x==x && player_y == y && MAP_CODE == current && gamestate == STATE_PLAY&&sp==false){
                 callback();
-                if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
         }
         }
         else{
