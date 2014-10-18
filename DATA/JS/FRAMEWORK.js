@@ -77,6 +77,10 @@ var moveable = true;
 
 var width = 0;
 var height = 0;
+
+var full_width=0;
+var full_height=0;
+
 var loader;
 var movement = 10;
 var current_npc;
@@ -90,7 +94,8 @@ var scale = 1;
 
 function ViewIllust(_name, _x, _y, _width, _height){
     gamestate = STATE_ILLUST;
-    illuster = {ILL: framework.addImage(_name, _width, _height), x: _x, y: _y};
+    illuster = {ILL: framework.addImage(_name, _width, _height), x: _x, y: _y, width: _width, height: _height};
+    framework.Context.scale(width/illuster.width, height/_height);
 }
 
 function draw_load() {
@@ -128,17 +133,36 @@ function onPageLoadComplete() {
     $(window).resize(function () {
         if(fullscreen){
         console.log("resize");
+        if(player_y>height/2)
+            bg_y = player_y-height/2;
+        if(player_x>width/2)
+            bg_x = player_x-width/2;
+            if($(window).innerWidth() - 20>full_width)
+                full_width = $(window).innerWidth() - 20;
+            if($(window).innerHeight() - 20>full_height)
+                full_height = $(window).innerHeight() - 20;
+            framework.setHeight(height);
+            framework.setWidth(width);
+            framework.Canvas.width = full_width;
+            framework.Canvas.height = full_height;
+        framework.Context.scale(full_width/width, full_height/height);
+            fullscreen++;
+            console.log(fullscreen);
+        }
+        
+        if(fullscreen>2){
             if(player_y>height/2)
-                bg_y = player_y-height/2;
-            if(player_x>width/2)
-                bg_x = player_x-width/2;
-        framework.Canvas.width = $(window).innerWidth()-20;
-        framework.Canvas.height = $(window).innerHeight() - 20;
-        width = $(window).innerWidth() - 20;
-        height = $(window).innerHeight() - 20;
-        framework.setWidth(width);
-        framework.setHeight(height);
-        framework.Context.translate(-bg_x, -bg_y);
+            bg_y = player_y-height/2;
+        if(player_x>width/2)
+            bg_x = player_x-width/2;
+            
+            
+            framework.Canvas.width = width;
+            framework.Canvas.height = height;
+            fullscreen=0;
+            framework.Context.scale(1, 1);
+            framework.Context.translate(-bg_x, -bg_y);
+            console.log('#');
         }
     });
     
@@ -221,8 +245,10 @@ function do_newGame(){
     player_x = 500;
     player_y = 500;
     
-    bg_y = player_y-height/2;
-    bg_x = player_x-width/2;
+    if(player_y>height/2)
+            bg_y = player_y-height/2;
+        if(player_x>width/2)
+            bg_x = player_x-width/2;
     
     if(MAP[MAP_CODE].auto){
         current_npc = Action_Array[MAP[MAP_CODE].auto];
@@ -335,6 +361,9 @@ function start_game() {
         }
     });
     
+    //framework.addKeyDown('F12', function(){});
+    framework.addKeyDown('F11', function(){});
+    
     framework.addKeyDown('ENTER', function(){
         if (gamestate == STATE_START) {
             switch (menu) {
@@ -422,6 +451,8 @@ function start_game() {
             gamestate = STATE_PAUSE;
         else if (gamestate == STATE_PAUSE) gamestate = STATE_PLAY;
         
+        
+        
     });
     
     ///COOKIE TEST
@@ -439,6 +470,31 @@ function start_game() {
     });
     framework.addKeyDown('D', function(){
         framework.delData('save');
+    });
+    
+    framework.addKeyDown('ZERO', function(){
+        width = 800;
+        height = 600;
+        framework.setWidth(800);
+        framework.setHeight(600);
+        framework.Canvas.width = 800;
+        framework.Canvas.height = 600;
+    });
+    framework.addKeyDown('ONE', function(){
+        width = 1024-20;
+        height = 768-20;
+        framework.setWidth(1024-20);
+        framework.setHeight(768-20);
+        framework.Canvas.width = 1024-20;
+        framework.Canvas.height = 768-20;
+    });
+    framework.addKeyDown('TWO', function(){
+        width = 1366-20;
+        height = 768-20;
+        framework.setWidth(1366-20);
+        framework.setHeight(768-20);
+        framework.Canvas.width = 1366-20;
+        framework.Canvas.height = 768-20;
     });
     /*
     framework.addKeyDown('P', function(){
@@ -495,7 +551,7 @@ function Potal(MAP_Code, pl_x, pl_y){
 //Temp와 현재 캐릭터의 위치를 비교
 function check(x, y, moved){
     //character width: 31, width: 48
-    var imgData = Temp.Context.getImageData(player_x, player_y+40, 53, 40);
+    var imgData = Temp.Context.getImageData(player_x, player_y+24, 32, 24);
     for(var i=0; i<imgData.data.length; i+=4){
         var r = imgData.data[i];
         var g = imgData.data[i+1];
@@ -548,6 +604,7 @@ function Render() {
             case STATE_ILLUST:
             MAP[MAP_CODE].map.play(0,0);
             illuster.ILL.play(illuster.x+bg_x,illuster.y+bg_y);
+            
             break;
         case STATE_DIALOGUE:
             var cur_map = MAP[MAP_CODE];
