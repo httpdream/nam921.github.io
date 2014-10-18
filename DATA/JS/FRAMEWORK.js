@@ -87,7 +87,7 @@ var full_width=0;
 var full_height=0;
 
 var loader;
-var movement = 3;
+var movement = 5;
 var current_npc;
 
 var resize;
@@ -777,7 +777,9 @@ function Render() {
             else MAP[MAP_CODE].map.play(0,0);
             
             framework.showSprite('char', player_x, player_y, 4);
-            
+            if(!sp){
+                framework.addText('!', '30px Arial', player_x+20, player_y-30, '#f00');
+            }
             
             if (gamestate == STATE_PAUSE) {
                 
