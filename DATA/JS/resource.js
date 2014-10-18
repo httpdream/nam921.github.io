@@ -3,7 +3,7 @@ var Map_Tmp_Array = new Array();
 var Illust_Array = new Array();
 var Sprite_Array = new Array();
 
-Map_Array.push({src: 'MAP/Room.png', name: 'MAP1', width: 1600, height: 900, npc: [0,3], auto: 2});
+Map_Array.push({src: 'MAP/NEW_Room.png', name: 'MAP1', width: 1600, height: 900, npc: [0,3], auto: 2});
 Map_Array.push({src: 'MAP/Map_Room.png', name: 'MAP2', width: 1920, height: 1080, npc: [1]});
 
 Map_Tmp_Array.push({src: 'MAP/TMP_Room.png', name: 'MAP1', width: 1600, height: 900});

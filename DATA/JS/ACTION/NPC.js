@@ -7,20 +7,25 @@ var Action_Array = new Array();
 
 
 
-Action_Array.push({r: 78, g: 255, b: 0, status:0, //혼잣말
+Action_Array.push({r: 78, g: 255, b: 0, status:0, //선택문
                   callback: function(){
                       var this_status = Action_Array[0].status;
+                      
                       if(this_status==0){
-                          makeScript([ "문이 안열리잖아", "다시한번 열어볼까?  " ]);
+                          
+                          makeScriptAction(["!!"], function(){
+                              makeScript_Selection( ["책상위에 책이 있다. 읽어볼까?"], ["읽어본다", "그냥 나간다."],
+                                                   [ function(){ViewIllust('RESEARCH', 0, 0, 800, 600);},
+                                                   function(){Potal(1,700,500); around=1;} ] );
+                          });
                           Action_Array[0].status=1;
                       }
                       else if(this_status==1){
-                          makeScriptAction(["lalalala"], function(){
-                              Potal(1,700,500);
-                              around=1;
-                          });
-                          Action_Array[0].status=2;
+                          Potal(1,700,500);
+                          around=1;
                       }
+                      
+                      
                   }});
 
 Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
@@ -29,10 +34,10 @@ Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
                       
                       if(this_status==0){
                           makeScriptAction(["문이 열린다아"], function(){
+                              
                               Potal(0,500,500);
-                              around=1;
+                              around = 0;
                           });
-                          Action_Array[0].status=2;
                       }
                   }});
 

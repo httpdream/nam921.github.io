@@ -182,6 +182,30 @@ ALTIS.prototype.addText = function (text, font, x, y, color) {
     this.Context.fillText(text, x, y);
 }
 
+ALTIS.prototype.underline = function(text, x, y, font, size, color, thickness ,offset){
+    var ctx = this.Context;
+  var width = ctx.measureText(text).width;
+
+  switch(ctx.textAlign){
+    case "center":
+    x -= (width/2); break;
+    case "right":
+    x -= width; break;
+  }
+
+  y += size+offset;
+    this.Context.font = font;
+    this.Context.fillText(text, x, y);
+
+  ctx.beginPath();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = thickness;
+  ctx.moveTo(x,y);
+  ctx.lineTo(x+width,y);
+  ctx.stroke();
+
+}
+
 ALTIS.prototype.addRect = function (x, y, width, height, color, alpha) {
     this.Context.globalAlpha = alpha;
     this.Context.fillStyle = color;

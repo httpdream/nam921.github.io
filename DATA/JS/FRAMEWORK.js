@@ -72,7 +72,6 @@ var bg_y = 0;
 var bg_x = 0;
 var player_y = 0;
 var player_x = 0;
-var loadInterval;
 var MAP_CODE = 0;
 var moveable = true;
 
@@ -114,11 +113,11 @@ function draw_load() {
     framework.addText('이미지 리소스 로딩중 (' + loader + '/' + (framework.Image.length + framework.Sprite.length + Temp.Image.length) + ')...', '20px nanumgothiccoding', 150, 180, '#000');
 
     if (loader == (framework.Image.length + framework.Sprite.length + Temp.Image.length)) {
-        //start_load();
-        setInterval(gameLoop, 1000 / 60);
-        clearInterval(loadInterval);
+        requestAnimationFrame(gameLoop);
+        cancelAnimationFrame(loadInterval);
         start_game();
     }
+    else loadInterval = requestAnimationFrame(draw_load);
 }
 
 function onPageLoadComplete() {
@@ -160,11 +159,11 @@ function onPageLoadComplete() {
    
     
 
-
-    loadInterval = setInterval(draw_load, 1000 / FPS);
+    loadInterval = requestAnimationFrame(draw_load);
 }
 
 function nextDlg(){
+    if(typeof dialogue[dialogue_index] == "string"){
     if(gamestate == STATE_DIALOGUE){
             if(dialogue_index < dialogue.length-1){
                 
@@ -183,6 +182,22 @@ function nextDlg(){
             sp = true;
             if(after_action) after_action();
         }
+    }
+}
+
+var selection;//선택문
+var cur_select = -1; //현재 선택
+
+
+function makeScript_Selection(script, select, func){
+    dialogue = script;
+    gamestate = STATE_DIALOGUE;
+    dialogue.push("");
+    selection = select;
+    cur_select = 0;
+    after_action = function(){
+        func[cur_select]();
+    }
 }
 
 function makeScript(script){
@@ -190,6 +205,7 @@ function makeScript(script){
     gamestate = STATE_DIALOGUE;
     dialogue.push("");
     after_action = undefined;
+    cur_select = -1;
 }
 
 function makeScriptAction(script, Action){
@@ -197,6 +213,7 @@ function makeScriptAction(script, Action){
     gamestate = STATE_DIALOGUE;
     dialogue.push("");
     after_action = Action;
+    cur_select = -1;
 }
 
 function do_newGame(){               
@@ -293,6 +310,10 @@ function start_game() {
             if(sub_menu != 0) sub_menu--;
             else sub_menu = 3;
         }
+        else if (gamestate == STATE_DIALOGUE && cur_select != -1){
+            if(cur_select != 0) cur_select--;
+            else cur_select = selection.length-1;
+        }
     });
 
     framework.addKeyDown('DOWN', function () {
@@ -307,6 +328,10 @@ function start_game() {
         else if (gamestate == STATE_PAUSE){
             if(sub_menu != 3) sub_menu++;
             else sub_menu = 0;
+        }
+        else if (gamestate == STATE_DIALOGUE && cur_select != -1){
+            if(cur_select != selection.length-1) cur_select++;
+            else cur_select = 0;
         }
     });
     
@@ -393,10 +418,10 @@ function start_game() {
     framework.addKeyDown('ESC', function(){
         menu = 0;
         sub_menu = 0;
-        if (gamestate == STATE_PLAY) 
+        if (gamestate == STATE_PLAY)
             gamestate = STATE_PAUSE;
         else if (gamestate == STATE_PAUSE) gamestate = STATE_PLAY;
-        else gamestate = STATE_START;
+        
     });
     
     ///COOKIE TEST
@@ -433,6 +458,17 @@ function start_game() {
     });*/
 }
 
+function doPotal(){
+        potaling += 0.01;
+        framework.Context.globalAlpha = potaling;
+        if (potaling > 1) {
+            potaling = 0;
+            moveable = true;
+            cancelAnimationFrame(potal);
+        }
+        else potal = requestAnimationFrame(doPotal);
+    }
+
 //Potal(MAP_CODE, player_x, player_y, bg_x, bg_y);
 function Potal(MAP_Code, pl_x, pl_y){
     MAP_CODE = MAP_Code;
@@ -452,16 +488,8 @@ function Potal(MAP_Code, pl_x, pl_y){
     framework.Context.translate(-bg_x, -bg_y);
     
     moveable = false;
-    var potal = setInterval(function () {
-        potaling += 0.01;
-        framework.Context.globalAlpha = potaling;
-        if (potaling > 1) {
-            potaling = 0;
-            moveable = true;
-            clearInterval(potal);
-        }
-            
-    }, 1000 / 60);
+    
+    potal = requestAnimationFrame(doPotal);
 }
 
 //Temp와 현재 캐릭터의 위치를 비교
@@ -524,8 +552,37 @@ function Render() {
         case STATE_DIALOGUE:
             var cur_map = MAP[MAP_CODE];
             MAP[MAP_CODE].map.play(0, 0);
-            if(typeof dialogue[dialogue_index] == "string"){
-                framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#345', 0.5);
+            
+            if(cur_select != -1){
+                framework.addRect(30+bg_x , height-230+bg_y, width-60, 200, '#960', 0.5);
+                
+                dialogue_delay++;
+                end_delay++;
+                if(end_delay>40){ end_visible = !end_visible; end_delay=0; }
+                if(dialogue_delay>=3){
+                    current_dialogue++;
+                    dialogue_delay=0;
+                }
+                framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-200+bg_y, '#0f0');
+                
+                for(var t = 0; t<selection.length; t++){
+                    if(t == cur_select) framework.addText('►', '24px gulim', 60+bg_x, height-100+bg_y+25*t, '#0f0');
+                    framework.addText(selection[t], '24px gulim', 80+bg_x, height-100+bg_y+25*t, '#0f0');
+                }
+                
+                if(current_dialogue>=dialogue[dialogue_index].length && end_visible){
+                    if(current_npc.illust)
+                        framework.addText('▼', '24px gulim', width+bg_x-300, height+bg_y-40, '#0f0');
+                    else framework.addText('▼', '24px gulim', width+bg_x-75, height+bg_y-40, '#0f0');
+                }
+                
+                if(current_npc.illust){
+                    var illust = framework.addImage(current_npc.illust, current_npc.width, current_npc.height);
+                illust.play(bg_x+width-current_npc.x,bg_y+height-current_npc.y);
+                }
+            }
+            else if(typeof dialogue[dialogue_index] == "string"){
+                framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#960', 0.5);
                 
                 dialogue_delay++;
                 end_delay++;
@@ -536,7 +593,9 @@ function Render() {
                 }
                 framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
                 if(current_dialogue>=dialogue[dialogue_index].length && end_visible){
-                    framework.addText('▼', '24px gulim', width+bg_x-300, height+bg_y-40, '#0f0');
+                    if(current_npc.illust)
+                        framework.addText('▼', '24px gulim', width+bg_x-300, height+bg_y-40, '#0f0');
+                    else framework.addText('▼', '24px gulim', width+bg_x-75, height+bg_y-40, '#0f0');
                 }
                 
                 if(current_npc.illust){
@@ -735,14 +794,16 @@ function Render() {
     }
 }
 
-function gameLoop() {
+function gameLoop(){
     Update();
     Render();
+    requestAnimationFrame(gameLoop);
 }
 
 
 function addSpaceDown(x,y,current,callback){                                                                                   
     framework.addKeyDown('SPACE', function(){
+        
         if(dialogue){
         if(dialogue_index >= dialogue.length-1){
             gamestate = STATE_PLAY;
@@ -753,7 +814,7 @@ function addSpaceDown(x,y,current,callback){
         }
             else if(player_x==x && player_y == y && MAP_CODE == current && gamestate == STATE_PLAY&&sp==false){
                 callback();
-                console.log('p1');
+                if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
         }
         }
         else{
