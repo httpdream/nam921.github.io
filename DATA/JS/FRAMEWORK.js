@@ -54,6 +54,7 @@ var STATE_SAVE = 8; //저장
 var STATE_DIALOGUE = 9; //대화중
 var STATE_ILLUST = 10; //일러스트 표시중
 
+var spl = false;
 var dialogue;
 var dialogue_index = 0;
 
@@ -620,8 +621,6 @@ function check(x, y, moved){
                 
                 var npc = Action_Array[MAP[MAP_CODE].npc[j]];
                 if(r==npc.r && g==npc.g && npc.b==b){
-                    
-                    
                     if(sp == true){
                         addSpaceDown(_x, _y, current, npc.callback);
                         current_npc = npc;
@@ -632,6 +631,23 @@ function check(x, y, moved){
             }
             break;
         }else sp = true;
+    }
+    
+    var splash = Temp.Context.getImageData(player_x-5, player_y-5, 64, 53);
+    
+    for(var i = 0; i<imgData.data.length; i+=4){
+        var r = imgData.data[i];
+        var g = imgData.data[i+1];
+        var b = imgData.data[i+2];
+        spl = false;
+        if(r!=255 || g!=255 || b!=255){
+            for(var j=0; j<MAP[MAP_CODE].npc.length; j++){
+                var npc = Action_Array[MAP[MAP_CODE].npc[j]];
+                if(r==npc.r && g==npc.g && npc.b==b){
+                        spl = true;
+                }
+            }
+        }
     }
 }
 
@@ -645,7 +661,9 @@ var potaling = 0;
 function Update() { }
 function Render() {
     framework.clear();
+    framework.addRect(player_x-5, player_y-5, 64, 53, '#000', 1);
     switch(gamestate){
+            
             case STATE_ILLUST:
             MAP[MAP_CODE].map.play(0,0);
             //if(illuster.width != width || illuster.height != height)
@@ -777,7 +795,7 @@ function Render() {
             else MAP[MAP_CODE].map.play(0,0);
             
             framework.showSprite('char', player_x, player_y, 4);
-            if(!sp){
+            if(spl){
                 framework.addText('!', '30px Arial', player_x+20, player_y-30, '#f00');
             }
             
