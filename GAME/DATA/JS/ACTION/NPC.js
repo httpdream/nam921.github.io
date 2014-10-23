@@ -114,7 +114,7 @@ Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:
                   });
 
 
-Action_Array.push({status: 0, r: 214, g: 66, b: 171,
+Action_Array.push({status: 0, r: 66, g: 206, b: 214,
                    illust: 'LUCID', width:218, height:288, x:250, y:300,delay: 500,
                   callback: function(){
                       var this_status = Action_Array[3].status;

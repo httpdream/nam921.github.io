@@ -93,7 +93,7 @@ var full_width=0;
 var full_height=0;
 
 var loader;
-var movement = 5;
+var movement = 7;
 var current_npc;
 
 var resize;
