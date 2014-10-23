@@ -8,7 +8,23 @@ var Action_Array = new Array();
 
 
 Action_Array.push({r: 78, g: 255, b: 0, status:0, //선택문
-                  callback: function(){}});
+                  callback: function(){
+                      var this_status = Action_Array[0].status;
+                      
+                      if(this_status==0){
+                          
+                          makeScriptAction(["!!"], function(){
+                              makeScript_Selection( ["책상위에 책이 있다. 읽어볼까?"], ["읽어본다", "그냥 나간다."],
+                                                   [ function(){ViewIllust('RESEARCH', 0, 0, 800, 600, function(){makeScript(['아이템을 획득하였습니다.']);});},
+                                                   function(){Potal(1,700,500); around=1;} ] );
+                          });
+                          Action_Array[0].status=1;
+                      }
+                      else if(this_status==1){
+                          Potal(1,700,500);
+                          around=1;
+                      }
+                  }});
 
 Action_Array.push({r: 119, g: 149, b: 217, status:0, //혼잣말
                   callback: function(){
@@ -83,10 +99,12 @@ Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:
                                    }
                                       
                                    falling_Script(script, function(){
-                                       makeScript([ 
-                                        '귀찮아 내일만듬'
-                                       ]);
-                                       console.log('***');
+                                       makeScript(['이런게 왜 내 침대 옆에 놓여있는거지?', 
+                                        function(){Action_Array[2].illust='LUCID';},
+                                        '들어갈게요~',
+                                        function(){Action_Array[2].illust='ILLUST1';},
+                                        '(그래, 일단 침대로 가서 다시 자는 척 하자.)']);
+                                       Action_Array[3].status=1;
                                }); }, function(){}]);
                            });
                            Action_Array[2].status=1;
@@ -96,23 +114,39 @@ Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:
                   });
 
 
-Action_Array.push({status: 0, r: 214, g: 66, b: 171, //혼잣말
+Action_Array.push({status: 0, r: 214, g: 66, b: 171,
+                   illust: 'LUCID', width:218, height:288, x:250, y:300,delay: 500,
                   callback: function(){
-                      var this_status = Action_Array[0].status;
-                      
-                      if(this_status==0){
-                          
-                          makeScriptAction(["!!"], function(){
-                              makeScript_Selection( ["책상위에 책이 있다. 읽어볼까?"], ["읽어본다", "그냥 나간다."],
-                                                   [ function(){ViewIllust('RESEARCH', 0, 0, 800, 600, function(){makeScript(['아이템을 획득하였습니다.']);});},
-                                                   function(){Potal(1,700,500); around=1;} ] );
+                      var this_status = Action_Array[3].status;
+                      if(this_status==1){ //침대에 눕습니다
+                          makeScriptAction(['은비님, 깨셨나요?', '어라, 아직도 잠들어 계신 건가요?', '이상하다. 박사님이 분명 이쯤 깨실 거라고 했는데 ...', '설마 자는 척 하는건 아니시죠? 은비님, 이 세진이를 속이면 다 들통나요~', '평소대로라면 간지럽혀서 일으킬텐데, 지금은 그럴 상황이 아니시니...', '이따가 올게요, 그 때까진 깨어나셨으면 좋겠네요.', '#우리들은 아직 할 말이 많으니까.하하하하하히히힣' ], function(){
+                              Action_Array[3].illust='ILLUST1'
+                              falling_Script(['……이게 무슨 상황이지?',
+'나는 급히 연구일지를 집어서 이름을 확인해 보았다.',
+'틀림없어, 아까 그 여자가 부르던 이름이다.',
+'………',
+'상황을 정리해 보자.',
+'나는 연구실 침대에 누워있었고, 누군가 나를 관찰한 ',
+'「연구일지」를 쓰고 있었다.',
+'거기엔 다 끝났다고 적혀 있었어.',
+'여자도 내가 깨어나기를 기다리는 것 같고.',
+'나는 왜 이곳에 있는 걸까?',
+'어떤 일이 있었던 걸까?',
+'그, 말로만 듣던 그런 걸까? ',
+'무시무시한 비밀 실험의 실험체 같은……']
+, function(){
+                              falling_Script(['그 순간,',
+'내 머릿속에서 경고음이 울리는 것 같았다.',
+'나가야 해.',
+'여기에 오래 있으면 안 돼.',
+'',
+'알 수 없는 무언가가, 내게 말해주는 것 같았다.',
+'이 이상한 곳에서, 꼭 빠져나가야 한다고.'], function(){
+                                              makeScript(['문을 통해 빨리 밖으로 빠져나가자.']);
+                                  Action_Array[0].status=1;
+                              });
+                              });
                           });
-                          Action_Array[0].status=1;
                       }
-                      else if(this_status==1){
-                          Potal(1,700,500);
-                          around=1;
-                      }
-                      
-                      
                   }});
+                              

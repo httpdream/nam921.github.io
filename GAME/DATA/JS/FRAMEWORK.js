@@ -55,6 +55,7 @@ var STATE_DIALOGUE = 9; //대화중
 var STATE_ILLUST = 10; //일러스트 표시중
 var STATE_FALLING = 11; //인트로
 
+var Current = 0;
 var spl = false;
 var dialogue;
 var dialogue_index = 0;
@@ -324,6 +325,7 @@ function leftright(){
 }
 
 function letsgo_x(max){
+    Current=0;
     Max = max;
     if(max>0){
         framework.setSprite('char', 'right');
@@ -336,6 +338,7 @@ function letsgo_x(max){
 }
 
 function letsgo_y(max){
+    Current=0;
     Max = max;
     if(max>0){
         framework.setSprite('char', 'down');
@@ -421,7 +424,6 @@ function gotoX(){
 }
 
 function nextFalling(){
-    console.log('이타이타   ');
     if(falling_index<falling_dialogue.length) falling_index = falling_dialogue.length+1;
     else{
         gamestate = STATE_PLAY;
@@ -828,8 +830,8 @@ function Render() {
             case STATE_FALLING:
             MAP[MAP_CODE].map.play(0,0);
             framework.addRect(bg_x, bg_y, width, height, '#000', 0.7);
-            if(falling_index<falling_dialogue.length) falling_index+=0.01;
-            falling_alpha+=0.01;
+            if(falling_index<falling_dialogue.length) falling_index+=0.02;
+            falling_alpha+=0.02;
             if(falling_alpha>=1) falling_alpha = 0;
             var i=-1;
             for(i = 0; i<falling_index-1; i++)
@@ -848,7 +850,7 @@ function Render() {
             TEMP_MAP[MAP_CODE].map.play(0,0);
             
             if(cur_select != -1){
-                framework.addRect(30+bg_x , height-230+bg_y, width-60, 200, '#960', 0.5);
+                framework.addRect(30+bg_x , height-230+bg_y, width-60, 200, '#00f', 0.5);
                 for(var t = 0; t<selection.length; t++){
                     if(t == cur_select) framework.addText('►', '24px gulim', 60+bg_x, height-100+bg_y+25*t, '#0f0');
                     framework.addText(selection[t], '24px gulim', 80+bg_x, height-100+bg_y+25*t, '#0f0');
@@ -856,15 +858,25 @@ function Render() {
                 framework.addText(dialogue[dialogue_index].substring(0,current_dialogue), '24px gulim', 60+bg_x, height-200+bg_y, '#0f0');
             }
             else if(typeof dialogue[dialogue_index] == "string"){
-                framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#960', 0.5);
+                framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#00f', 0.5);
                 
                 var cur_script = dialogue[dialogue_index].substring(0, current_dialogue);
+                if(cur_script[0]=='#'){
+                    if(current_dialogue>1){
+                    for(var i=0; i<current_dialogue; i++)
+                        framework.addText(cur_script.slice(limit*i+1, limit*(i+1)+1), '24px gulim', 60+bg_x, height-100+bg_y+30*i, '#f00');
+                }
+                    else
+                        framework.addText(cur_script.substring(1, cur_script.length), '24px gulim', 60+bg_x, height-100+bg_y, '#f00');
+                }
+                else{
                 if(current_dialogue>limit){
                     for(var i=0; i<current_dialogue; i++)
                         framework.addText(cur_script.slice(limit*i, limit*(i+1)), '24px gulim', 60+bg_x, height-100+bg_y+30*i, '#0f0');
                 }
                 else
                     framework.addText(cur_script, '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
+                }
                 
                 
             }
