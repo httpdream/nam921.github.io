@@ -53,10 +53,14 @@ var STATE_INVENTORY = 7; //인벤토리
 var STATE_SAVE = 8; //저장
 var STATE_DIALOGUE = 9; //대화중
 var STATE_ILLUST = 10; //일러스트 표시중
+var STATE_FALLING = 11; //인트로
 
 var spl = false;
 var dialogue;
 var dialogue_index = 0;
+
+var falling_dialogue;
+var falling_index = 0;
 
 var gamestate = STATE_START;
 
@@ -98,9 +102,12 @@ var fullscreen = false;
 var around = 0;
 var scale = 1;
 
-function ViewIllust(_name, _x, _y, _width, _height){
+var limit = 20;
+
+function ViewIllust(_name, _x, _y, _width, _height, _action){
     gamestate = STATE_ILLUST;
     illuster = {ILL: framework.addImage(_name, width, height), x: _x, y: _y, width: _width, height: _height};
+    after_action = _action;
 }
 
 function draw_load() {
@@ -216,12 +223,20 @@ function nextDlg(){
 var selection;//선택문
 var cur_select = -1; //현재 선택
 
+function falling_Script(script, Action){
+    gamestate = STATE_FALLING;
+    falling_dialogue = script;
+    falling_index = 0;
+    after_action = Action;
+    falling_alpha = 0;
+}
 
 function makeScript_Selection(script, select, func){
     dialogue = script;
     gamestate = STATE_DIALOGUE;
     dialogue.push("");
     selection = select;
+    dialogue_index = 0;
     cur_select = 0;
     after_action = function(){
         func[cur_select]();
@@ -234,6 +249,7 @@ function makeScript(script){
     dialogue.push("");
     after_action = undefined;
     cur_select = -1;
+    dialogue_index = 0;
 }
 
 function makeScriptAction(script, Action){
@@ -242,12 +258,13 @@ function makeScriptAction(script, Action){
     dialogue.push("");
     after_action = Action;
     cur_select = -1;
+    dialogue_index = 0;
 }
 
 function do_newGame(){               
     MAP_CODE = 0;
     player_x = 500;
-    player_y = 500;
+    player_y = 515;
     
     if(player_y>height/2)
             bg_y = player_y-height/2;
@@ -257,7 +274,7 @@ function do_newGame(){
     if(MAP[MAP_CODE].auto){
         current_npc = Action_Array[MAP[MAP_CODE].auto];
         current_npc.callback();
-        addSpaceDown(500, 700, MAP_CODE, current_npc.callback);
+        addSpaceDown(500, 500, MAP_CODE, current_npc.callback);
         sp = false;
     }
     
@@ -269,11 +286,147 @@ function start_load(){
     start_game();
 }
 
+var once = false;
+var goX = 0;
+var goInterval = 0;
+var final_x = 0;
+function goTOx(_x){
+    final_x = _x;
+    if(_x>0){
+        framework.setSprite('char', 'right');
+        goInterval = requestAnimationFrame(go_x);
+    }
+    else{
+        framework.setSprite('char', 'left');
+        goInterval = requestAnimationFrame(go_x);
+    }
+}
+
+function go_x(){
+    console.log('실행되었자나');
+    goX+=1;
+    player_x += movement;
+   
+    if(goX>=final_x)
+    {
+        if(final_x>0) framework.setSprite('char', 'stand_right');
+        else framework.setSprite('char', 'stand_left');
+        cancelAnimationFrame(goInterval);
+    }
+}
+
 function leftright(){
-    framework.setSprite('char', 'stand_left');
-    setTimeout(function(){
+    if(!once){
+        console.log('한번만 되어야되');
+        letsgo_x(300);
+        once=true;
+    }
+}
+
+function letsgo_x(max){
+    Max = max;
+    if(max>0){
+        framework.setSprite('char', 'right');
+        GOInterval = requestAnimationFrame(gotoX);
+    }
+    else {
+        framework.setSprite('char', 'left');
+        GOInterval = requestAnimationFrame(gotoDeX);
+    }
+}
+
+function letsgo_y(max){
+    Max = max;
+    if(max>0){
+        framework.setSprite('char', 'down');
+        GOInterval = requestAnimationFrame(gotoY);
+    }
+    else {
+        framework.setSprite('char', 'up');
+        GOInterval = requestAnimationFrame(gotoDeY);
+    }
+}
+
+function gotoY(){
+    player_y += movement;
+    if(bg_y < MAP[MAP_CODE].height-height && bg_y+height/2<player_y){
+        bg_y += movement;
+        framework.Context.translate(0, -movement);
+        check(0, -movement, false);
+    }
+    else check(0, -movement, true);
+
+    if(Current>=Max) {
+        GOInterval = cancelAnimationFrame(GOInterval);
+        framework.setSprite('char', 'stand_down');
+    }
+    else
+        requestAnimationFrame(gotoY);
+}
+
+function gotoDeY(){
+    Current+=movement;
+    player_y -= movement;
+    if(bg_y > 0 && bg_y+height/2>player_y){
+        bg_y -= movement;
+        framework.Context.translate(0, movement);
+        check(0, movement, false);
+    }
+    else check(0, movement, true);
+
+    if(Current>=Max) {
+        GOInterval = cancelAnimationFrame(GOInterval);
+        framework.setSprite('char', 'stand_up');
+    }
+    else
+        requestAnimationFrame(gotoDeY);
+}
+
+function gotoDeX(){
+    Current-=movement;
+    player_x -= movement;
+    if(bg_x > 0 && bg_x+width/2>player_x){
+        framework.Context.translate(movement, 0);
+        bg_x -= movement;
+        check(movement, 0, false);
+    }
+    else check(movement, 0, true);
+
+    if(Current>=Max) {
+        GOInterval = cancelAnimationFrame(GOInterval);
+        framework.setSprite('char', 'stand_left');
+    }
+    else
+        requestAnimationFrame(gotoDeX);
+}
+
+
+function gotoX(){
+    Current+=movement;
+    player_x += movement;
+    TEMP_MAP[MAP_CODE].map.play(0,0);
+    if(bg_x < MAP[MAP_CODE].width-width && bg_x+width/2<player_x){
+        framework.Context.translate(-movement, 0);
+        bg_x+=movement;
+        check(-movement, 0, false);
+    }   
+    else check(-movement, 0, true);
+
+    if(Current>=Max) {
+        GOInterval = cancelAnimationFrame(GOInterval);
         framework.setSprite('char', 'stand_right');
-               }, 1000);
+    }
+    else
+        requestAnimationFrame(gotoX);
+}
+
+function nextFalling(){
+    console.log('이타이타   ');
+    if(falling_index<falling_dialogue.length) falling_index = falling_dialogue.length+1;
+    else{
+        gamestate = STATE_PLAY;
+        after_action();
+    }
 }
 
 //본게임
@@ -317,9 +470,17 @@ function start_game() {
     framework.addKeyDown('SPACE', function(){
         if(gamestate == STATE_ILLUST){
             gamestate = STATE_PLAY;
+            after_action();
         }
+        
+        else if(gamestate == STATE_FALLING){
+            nextFalling();
+        }
+        
         else if(gamestate == STATE_DIALOGUE)
             nextDlg();
+        
+        
         
     });
     
@@ -328,6 +489,10 @@ function start_game() {
             nextDlg();
         else if(gamestate == STATE_ILLUST){
             gamestate = STATE_PLAY;
+            after_action();
+        }
+        else if(gamestate == STATE_FALLING){
+            nextFalling();
         }
     });
 
@@ -411,6 +576,8 @@ function start_game() {
                 case 3:
                     gamestate = STATE_START;
                     framework.Context.translate(bg_x, bg_y);
+                    bg_x = 0;
+                    bg_y = 0;
                     break;
             }
         }
@@ -433,19 +600,20 @@ function start_game() {
         
         else if(gamestate == STATE_ILLUST){
             gamestate = STATE_PLAY;
+            after_action();
         }
-            
+        
+        else if(gamestate == STATE_FALLING) nextFalling();
         
         else if(gamestate == STATE_LOAD){
-            player_x = framework.getData('data_x');
-            player_y = framework.getData('data_y');
-            bg_x = framework.getData('data_bgx');
-            bg_y = framework.getData('data_bgy');
-            MAP_CODE = framework.getData('data_map');
+            player_x = parseInt(framework.getData('data_x'));
+            player_y = parseInt(framework.getData('data_y'));
+            bg_x = parseInt(framework.getData('data_bgx'));
+            bg_y = parseInt(framework.getData('data_bgy'));
+            MAP_CODE = parseInt(framework.getData('data_map'));
             
             for(var i=0; i<Action_Array.length; i++)
-                Action_Array[i].status = framework.getData('data_status');
-                status.push(Action_Array[i].status);
+                Action_Array[i].status = parseInt(framework.getData('data_status')[i]);
             
             if(MAP[MAP_CODE].auto){
                 current_npc = Action_Array[MAP[MAP_CODE].auto];
@@ -455,6 +623,7 @@ function start_game() {
             }
     
             framework.Context.translate(-bg_x, -bg_y);
+            gamestate = STATE_PLAY;
         }
         
         
@@ -633,22 +802,8 @@ function check(x, y, moved){
         }else sp = true;
     }
     
-    var splash = Temp.Context.getImageData(player_x-5, player_y-5, 64, 53);
     
-    for(var i = 0; i<imgData.data.length; i+=4){
-        var r = imgData.data[i];
-        var g = imgData.data[i+1];
-        var b = imgData.data[i+2];
-        spl = false;
-        if(r!=255 || g!=255 || b!=255){
-            for(var j=0; j<MAP[MAP_CODE].npc.length; j++){
-                var npc = Action_Array[MAP[MAP_CODE].npc[j]];
-                if(r==npc.r && g==npc.g && npc.b==b){
-                        spl = true;
-                }
-            }
-        }
-    }
+
 }
 
 var auto = 0; //auto_중복대화 방지
@@ -656,24 +811,41 @@ var current_dialogue = 0; //현재 숫자
 var dialogue_delay = 0;
 var end_delay = 0;
 var end_visible = false;
+var falling_alpha = 0;
 
 var potaling = 0;
 function Update() { }
 function Render() {
     framework.clear();
-    framework.addRect(player_x-5, player_y-5, 64, 53, '#000', 1);
+    
     switch(gamestate){
             
             case STATE_ILLUST:
             MAP[MAP_CODE].map.play(0,0);
-            //if(illuster.width != width || illuster.height != height)
-              //  illuster.ILL.play(illuster.x,illuster.y);
             illuster.ILL.play(illuster.x+bg_x,illuster.y+bg_y);
+            break;
+            
+            case STATE_FALLING:
+            MAP[MAP_CODE].map.play(0,0);
+            framework.addRect(bg_x, bg_y, width, height, '#000', 0.7);
+            if(falling_index<falling_dialogue.length) falling_index+=0.01;
+            falling_alpha+=0.01;
+            if(falling_alpha>=1) falling_alpha = 0;
+            var i=-1;
+            for(i = 0; i<falling_index-1; i++)
+                framework.addTextAlpha(falling_dialogue[i], '24px gulim', 60+bg_x, 70+bg_y+35*i, '#fff', 0.99);
+            if(i<falling_index) if(falling_dialogue[i]) framework.addTextAlpha(falling_dialogue[i], '24px gulim', 60+bg_x, 70+bg_y+35*i, '#fff', falling_alpha);
+            end_delay++;
+            if(end_delay>40){ end_visible = !end_visible; end_delay=0; }
+            if(falling_index>=falling_dialogue.length && end_visible)
+                framework.addText('▼', '24px gulim', width+bg_x-75, 70+bg_y+35*i, '#fff');
             
             break;
+            
         case STATE_DIALOGUE:
             var cur_map = MAP[MAP_CODE];
             MAP[MAP_CODE].map.play(0, 0);
+            TEMP_MAP[MAP_CODE].map.play(0,0);
             
             if(cur_select != -1){
                 framework.addRect(30+bg_x , height-230+bg_y, width-60, 200, '#960', 0.5);
@@ -681,11 +853,20 @@ function Render() {
                     if(t == cur_select) framework.addText('►', '24px gulim', 60+bg_x, height-100+bg_y+25*t, '#0f0');
                     framework.addText(selection[t], '24px gulim', 80+bg_x, height-100+bg_y+25*t, '#0f0');
                 }
-                framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-200+bg_y, '#0f0');
+                framework.addText(dialogue[dialogue_index].substring(0,current_dialogue), '24px gulim', 60+bg_x, height-200+bg_y, '#0f0');
             }
             else if(typeof dialogue[dialogue_index] == "string"){
                 framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#960', 0.5);
-                framework.addText(dialogue[dialogue_index].substring(0,[current_dialogue]), '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
+                
+                var cur_script = dialogue[dialogue_index].substring(0, current_dialogue);
+                if(current_dialogue>limit){
+                    for(var i=0; i<current_dialogue; i++)
+                        framework.addText(cur_script.slice(limit*i, limit*(i+1)), '24px gulim', 60+bg_x, height-100+bg_y+30*i, '#0f0');
+                }
+                else
+                    framework.addText(cur_script, '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
+                
+                
             }
     
             if(typeof dialogue[dialogue_index] == "string"){
@@ -694,10 +875,11 @@ function Render() {
                 dialogue_delay++;
                 end_delay++;
                 if(end_delay>40){ end_visible = !end_visible; end_delay=0; }
-                if(dialogue_delay>=3){
+                if(dialogue_delay>=3 && current_dialogue<dialogue[dialogue_index].length){
                     current_dialogue++;
                     dialogue_delay=0;
                 }
+                
                 
                 if(current_dialogue>=dialogue[dialogue_index].length && end_visible){
                     if(current_npc.illust)
@@ -778,6 +960,7 @@ function Render() {
             Temp.clear();
             TEMP_MAP[MAP_CODE].map.play(0, 0);
             MAP[MAP_CODE].map.play(0, 0);
+            
             if(around==1){
                 framework.Context.save();
                 if(!potaling) framework.addRect(0,0,2000,2000,'#000', 0.7);
@@ -795,7 +978,8 @@ function Render() {
             else MAP[MAP_CODE].map.play(0,0);
             
             framework.showSprite('char', player_x, player_y, 4);
-            if(spl){
+            
+            if(!sp){
                 framework.addText('!', '30px Arial', player_x+20, player_y-30, '#f00');
             }
             
@@ -848,12 +1032,12 @@ function Render() {
         case STATE_LOAD:
             framework.addRect(0, 0, width, height, '#0ff', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('LOAD', '20px gothic', width / 2-50, height / 2, '#000');
+            framework.addText('LOAD', '20px gothic', bg_x+width / 2-50, bg_y+height / 2, '#000');
             break;
         case STATE_SAVE:
-            framework.addRect(0, 0, width, height, '#369', 1);
-            framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('정말로 저장하시겠습니까?', '20px gothic', width / 2-50, height / 2, '#fff');
+            framework.addRect(0, 0, bg_x+width, bg_y+height, '#369', 1);
+            framework.addRect(50, 50, bg_x+width - 100, bg_y+height - 100, '#fff', 0.7);
+            framework.addText('정말로 저장하시겠습니까?', '20px gothic', bg_x+ width / 2-50, bg_y+height / 2, '#fff');
             break;
         case STATE_CONFIG:
             /*framework.addRect(0, 0, width, height, '#ff0', 1);
@@ -917,6 +1101,11 @@ function gameLoop(){
 
 function addSpaceDown(x,y,current,callback){                                                                                   
     framework.addKeyDown('SPACE', function(){
+        char_status.down=false;
+        char_status.left=false;
+        char_status.right=false;
+        char_status.up=false;
+        
         if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
         
         else if(dialogue){

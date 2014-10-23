@@ -14,5 +14,5 @@ Illust_Array.push({src: 'ILLUST/beta.png', name: 'ILLUST2'});
 Illust_Array.push({src: 'ILLUST/lucid.png', name: 'LUCID'});
 Illust_Array.push({src: 'ILLUST/Research.png', name: 'RESEARCH'});
 
-Sprite_Array.push({src: 'CHARACTER/PPlayer.png', name: 'char', width: 64, height: 96, delay: 10})
+Sprite_Array.push({src: 'CHARACTER/PPlayer.png', name: 'char', width: 64, height: 96, delay: 5})
 

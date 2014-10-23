@@ -1,20 +1,79 @@
 <!-----------
-GAME CLIENT
+GAME HOMEPAGE
 ------------>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
         <title>ALTIS TEST</title>
+        <script src="GAME/DATA/JS/jquery-1.10.2.min.js"></script>
         
-<script src="DATA/JS/jquery-1.10.2.min.js"></script>
-<script src="DATA/JS/ALTIS.js"></script>
-<script src="DATA/JS/ACTION/NPC.js"></script>
-        <script src="DATA/JS/resource.js"></script>
-<script src="DATA/JS/FRAMEWORK.js"></script>
+        <style>
+            body{
+                background-color: #FCF0FF;
+                margin:0px;
+                padding:0px;
+                overflow:hidden;
+                text-align: center;
+            }
             
+            #left{
+                float:left;
+                margin: 30px 0;
+                transition-duration: 0.5s;
+            }
+            
+            ul{
+                list-style: none;
+            }
+            
+            li{
+                font-weight: bold;
+                padding-left: 50px;
+                padding-right: 50px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                font-size: 20px;
+                background-color: #E0D4B0;
+                color:#886488;
+            }
+            
+            iframe{
+                height:px;
+                width:50%;
+                overflow:hidden;
+            }
+            #hide{
+                text-align: right;
+                padding-right: 10px;
+            }
+        </style>
+        
+        <script>
+            window.load = function(){
+                $('#community').click(function(){
+                });
+                
+                $('#hide').click(function(){
+                    $('#left').css('opacity', '0');
+                    alert('??');
+                });
+            }
+        </script>
+        
     </head>
-    <body>   
+    <body>
+        <div id="left">
+            <ul>
+                <li id="introduce">◦ 게임 소개</li>
+                <li id="community">◦ 커뮤니티</li>
+                <li id="about">◦ 공략법</li>
+                <li id="game">◦ 게임하기</li>
+                <li id="hide"><<</li>
+            </ul>
+        </div>
+        
+        <iframe id="if" src="board.php" frameborder=0 width="50%" height="700px"></iframe>
     </body>
 
 </html>

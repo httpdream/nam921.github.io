@@ -182,6 +182,14 @@ ALTIS.prototype.addText = function (text, font, x, y, color) {
     this.Context.fillText(text, x, y);
 }
 
+ALTIS.prototype.addTextAlpha = function (text, font, x, y, color, opacity) {
+    this.Context.globalAlpha = opacity;
+    this.Context.fillStyle = color;
+    this.Context.font = font;
+    this.Context.fillText(text, x, y);
+    this.Context.globalAlpha = 1;
+}
+
 ALTIS.prototype.underline = function(text, x, y, font, size, color, thickness ,offset){
     var ctx = this.Context;
   var width = ctx.measureText(text).width;
