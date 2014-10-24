@@ -158,8 +158,7 @@ ALTIS.prototype.fullScreen = function(){
     this.setHeight(height);*/
     
  	if(this.Canvas.webkitRequestFullScreen) {
-       //this.Canvas.webkitRequestFullScreen();
-        this.Canvas.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+       this.Canvas.webkitRequestFullScreen();
     }
     
     else {
@@ -215,30 +214,11 @@ ALTIS.prototype.underline = function(text, x, y, font, size, color, thickness ,o
 
 }
 
-ALTIS.prototype.addRect = function (x, y, width, height, color, alpha, path) {
+ALTIS.prototype.addRect = function (x, y, width, height, color, alpha) {
     this.Context.globalAlpha = alpha;
     this.Context.fillStyle = color;
     this.Context.fillRect(x, y, width, height);
-    if(!path) path = '#000';
-    this.Context.strokeStyle = path;
-    this.Context.strokeRect(x, y, width, height);
     this.Context.globalAlpha = 1;
-}
-
-ALTIS.prototype.addRect_Triangle = function(x, y, Rectwidth, height, Triwidth, color, path){
-    this.Context.fillStyle = color;
-    this.Context.beginPath();
-    this.Context.moveTo(x, y);
-    this.Context.lineTo(x+Rectwidth, y);
-    this.Context.lineTo(x+Rectwidth+Triwidth, (y+y+height)/2);
-    this.Context.lineTo(x+Rectwidth, y+height);
-    this.Context.lineTo(x, y+height);
-    
-    
-    this.Context.fill();
-    this.Context.strokeStyle = path;
-    this.Context.stroke();
-    this.Context.closePath();
 }
 
 ALTIS.prototype.flipStart = function(){
@@ -296,8 +276,6 @@ ALTIS.prototype.addKeyDown = function (key, callback) {
     }
     
     if (!code) console.log('not found');
-    
-    
 
     window.addEventListener('keydown', function (e) {
         if (e.keyCode == code){

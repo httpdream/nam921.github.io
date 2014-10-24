@@ -47,21 +47,18 @@ var STATE_PLAY = 1; //게임플레이
 var STATE_LOAD = 2; //로딩
 var STATE_CONFIG = 3; //설정
 var STATE_GALALY = 4; //갤러리
-var STATE_CREDIT = 5; //제작자
+var STATE_MAKER = 5; //제작자
 var STATE_PAUSE = 6; //정지
 var STATE_INVENTORY = 7; //인벤토리
 var STATE_SAVE = 8; //저장
 var STATE_DIALOGUE = 9; //대화중
 var STATE_ILLUST = 10; //일러스트 표시중
-var STATE_FALLING = 11; //책같은거 표시중
-var STATE_STORY = 12; //스토리 표시중
+var STATE_FALLING = 11; //인트로
 
-var item_index = 0;
 var Current = 0;
 var spl = false;
 var dialogue;
 var dialogue_index = 0;
-var myItem = new Array();
 
 var falling_dialogue;
 var falling_index = 0;
@@ -147,7 +144,7 @@ function onPageLoadComplete() {
     height = 600;
 
     $(window).resize(function () {
-        if($(window)){
+        if(fullscreen){
         console.log("resize");
         if(player_y>height/2)
             bg_y = player_y-height/2;
@@ -226,8 +223,6 @@ function nextDlg(){
 
 var selection;//선택문
 var cur_select = -1; //현재 선택
-var falling_illust;
-var falling_string;
 
 function falling_Script(script, Action){
     gamestate = STATE_FALLING;
@@ -235,18 +230,6 @@ function falling_Script(script, Action){
     falling_index = 0;
     after_action = Action;
     falling_alpha = 0;
-    falling_illust = undefined;
-    falling_string = undefined;
-}
-
-function Illust_falling(script, Action, Illust, top_string){
-    gamestate = STATE_STORY;
-    falling_dialogue = script;
-    falling_index = 0;
-    after_action = Action;
-    falling_alpha = 0;
-    falling_illust = Illust;
-    falling_string = top_string;
 }
 
 function makeScript_Selection(script, select, func){
@@ -476,26 +459,12 @@ function start_game() {
             char_status.left = true;
             framework.setSprite('char', 'left');
         }
-        else if (gamestate == STATE_START){
-            if(menu != 0) menu--;
-            else menu = 4;
-        }
-        else if (gamestate == STATE_INVENTORY){
-            if(item_index%11>0) item_index --;
-        }
     });
 
     framework.addKeyDown('RIGHT', function () {
         if(gamestate == STATE_PLAY){
             char_status.right = true;
             framework.setSprite('char', 'right');
-        }
-        else if (gamestate == STATE_START){
-            if(menu != 4) menu++;
-            else menu = 0;
-        }
-        else if (gamestate == STATE_INVENTORY){
-            if(item_index<myItem.length-1) item_index++;
         }
     });
     
@@ -506,7 +475,7 @@ function start_game() {
             after_action();
         }
         
-        else if(gamestate == STATE_FALLING||gamestate == STATE_STORY){
+        else if(gamestate == STATE_FALLING){
             nextFalling();
         }
         
@@ -524,7 +493,7 @@ function start_game() {
             gamestate = STATE_PLAY;
             after_action();
         }
-        else if(gamestate == STATE_FALLING||gamestate == STATE_STORY){
+        else if(gamestate == STATE_FALLING){
             nextFalling();
         }
     });
@@ -534,17 +503,17 @@ function start_game() {
             char_status.up = true;
             framework.setSprite('char', 'up');
         }
-        
+        else if (gamestate == STATE_START){
+            if(menu != 0) menu--;
+            else menu = 4;
+        }
         else if (gamestate == STATE_PAUSE){
             if(sub_menu != 0) sub_menu--;
-            else sub_menu = 5;
+            else sub_menu = 3;
         }
         else if (gamestate == STATE_DIALOGUE && cur_select != -1){
             if(cur_select != 0) cur_select--;
             else cur_select = selection.length-1;
-        }
-        else if (gamestate == STATE_INVENTORY){
-            if(item_index>=11) item_index -= 11;
         }
     });
 
@@ -553,17 +522,17 @@ function start_game() {
             char_status.down = true;
             framework.setSprite('char', 'down');
         }
-        
+        else if (gamestate == STATE_START){
+            if(menu != 4) menu++;
+            else menu = 0;
+        }
         else if (gamestate == STATE_PAUSE){
-            if(sub_menu != 5) sub_menu++;
+            if(sub_menu != 3) sub_menu++;
             else sub_menu = 0;
         }
         else if (gamestate == STATE_DIALOGUE && cur_select != -1){
             if(cur_select != selection.length-1) cur_select++;
             else cur_select = 0;
-        }
-        else if (gamestate == STATE_INVENTORY){
-            if(item_index>=11) item_index -= 11;
         }
     });
     
@@ -584,13 +553,13 @@ function start_game() {
                     framework.fullScreen();
                     fullscreen = true;
                     //framework.fullScreen();
-                    //framework.Context.translate(-bg_x, -bg_y);
+                    framework.Context.translate(-bg_x, -bg_y);
                     break;
                 case 3:
                     gamestate = STATE_GALALY;
                     break;
                 case 4:
-                    gamestate = STATE_CREDIT;
+                    gamestate = STATE_MAKER;
                     break;
             }
         }
@@ -607,31 +576,16 @@ function start_game() {
                     gamestate = STATE_INVENTORY;
                     break;
                 case 3:
-                    framework.fullScreen();
-                    fullscreen = true;
-                    
-                    framework.Context.translate(-bg_x, -bg_y);
-                    break;
-                case 4:
                     gamestate = STATE_START;
                     framework.Context.translate(bg_x, bg_y);
-                    
                     bg_x = 0;
                     bg_y = 0;
-                    break;
-                case 5:
-                    gamestate = STATE_PLAY;
                     break;
             }
         }
         
         else if(gamestate == STATE_DIALOGUE)
             nextDlg();
-        
-        else if(gamestate == STATE_INVENTORY){
-            if(myItem[item_index].callback)
-                myItem[item_index].callback();
-        }
         
         else if(gamestate == STATE_SAVE){
             framework.saveData('data_x', player_x);
@@ -651,7 +605,7 @@ function start_game() {
             after_action();
         }
         
-        else if(gamestate == STATE_FALLING||gamestate == STATE_STORY) nextFalling();
+        else if(gamestate == STATE_FALLING) nextFalling();
         
         else if(gamestate == STATE_LOAD){
             player_x = parseInt(framework.getData('data_x'));
@@ -707,18 +661,15 @@ function start_game() {
         }
     });
     
-    framework.addKeyDown('O', function(){
+    framework.addKeyDown('ESC', function(){
         menu = 0;
         sub_menu = 0;
         if (gamestate == STATE_PLAY)
             gamestate = STATE_PAUSE;
         else if (gamestate == STATE_PAUSE) gamestate = STATE_PLAY;
-    });
-    
-    framework.addKeyDown('I', function(){
         
-        if (gamestate == STATE_PLAY)
-            gamestate = STATE_INVENTORY;
+        
+        
     });
     
     ///COOKIE TEST
@@ -874,26 +825,6 @@ function Render() {
             case STATE_ILLUST:
             MAP[MAP_CODE].map.play(0,0);
             illuster.ILL.play(illuster.x+bg_x,illuster.y+bg_y);
-            break;
-            
-            case STATE_STORY:
-            MAP[MAP_CODE].map.play(0,0);
-            framework.addRect(bg_x, bg_y, width, height, '#000', 1);
-            framework.addRect_Triangle(bg_x+20, bg_y+20, 280, 70, 40, '#fff', '#0f0');
-            framework.addText(falling_string, '40px arial', bg_x+70, bg_y+70,'#000' );
-            falling_illust.play(bg_x, bg_y+100);
-            if(falling_index<falling_dialogue.length) falling_index+=0.02;
-            falling_alpha+=0.02;
-            if(falling_alpha>=1) falling_alpha = 0;
-            var i=-1;
-            for(i = 0; i<falling_index-1; i++)
-                framework.addTextAlpha(falling_dialogue[i], '24px gulim', 340+bg_x, 130+bg_y+35*i, '#fff', 0.99);
-            if(i<falling_index) if(falling_dialogue[i]) framework.addTextAlpha(falling_dialogue[i], '24px gulim', 340+bg_x, 130+bg_y+35*i, '#fff', falling_alpha);
-            end_delay++;
-            if(end_delay>40){ end_visible = !end_visible; end_delay=0; }
-            if(falling_index>=falling_dialogue.length && end_visible)
-                framework.addText('▼', '24px gulim', width+bg_x-75, 120+bg_y+35*i, '#fff');
-            
             break;
             
             case STATE_FALLING:
@@ -1065,48 +996,7 @@ function Render() {
             }
             
             if (gamestate == STATE_PAUSE) {
-                framework.addRect(bg_x, bg_y, MAP[MAP_CODE].width+bg_x, MAP[MAP_CODE].height+bg_y, '#000', 0);
-                framework.addRect_Triangle(bg_x+10, bg_y+20, 200, 50, 20, '#fff', '#0f0');
                 
-                framework.addText('MENU', '30px arial', bg_x+50, bg_y+55, '#00f');
-                
-                framework.addRect(bg_x+10, bg_y+73, 200, 450, '#fff',  1, '#0f0');
-                framework.addText('SAVE', '27px arial', bg_x+80, bg_y+140, '#00f');
-                framework.addText('LOAD', '27px arial', bg_x+80, bg_y+190, '#00f');
-                framework.addText('ITEM', '27px arial', bg_x+80, bg_y+240, '#00f');
-                framework.addText('SYSTEM', '27px arial', bg_x+60, bg_y+290, '#00f');
-                framework.addText('TITLE', '27px arial', bg_x+80, bg_y+340, '#00f');
-                framework.addText('BACK', '27px Arial', bg_x+80, bg_y+390, '#00f');
-                
-                switch(sub_menu){
-                        //►
-                        case 0:
-                        framework.addText('►', '27px arial', bg_x+50, bg_y+140, '#00f');
-                        break;
-                
-                        case 1:
-                        framework.addText('►', '27px arial', bg_x+50, bg_y+190, '#00f');
-                        break;
-                
-                        case 2:
-                        framework.addText('►', '27px arial', bg_x+50, bg_y+240, '#00f');
-                        break;
-                
-                        case 3:
-                        framework.addText('►', '27px arial', bg_x+30, bg_y+290, '#00f');
-                        break;
-                
-                        case 4:
-                        framework.addText('►', '27px arial', bg_x+50, bg_y+340, '#00f');
-                        break;
-                
-                        case 5:
-                        framework.addText('►', '27px arial', bg_x+50, bg_y+390, '#00f');
-                        break;
-                }
-                
-                
-                /*
                 framework.addRect(bg_x, bg_y, MAP[MAP_CODE].width+bg_x, MAP[MAP_CODE].height+bg_y, '#000', 0.7);
                 
                 char_status.up = false;
@@ -1147,10 +1037,9 @@ function Render() {
             framework.addText('저장', '20px gulim', bg_x+tmp_width/2-20, bg_y+tmp_height/2-40, '#000');
             framework.addText('불러오기', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2-10, '#000');
             framework.addText('인벤토리', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2+20, '#000');
-            framework.addText('메인화면', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2+50, '#000');*/
+            framework.addText('메인화면', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2+50, '#000');
             }
             break;
-    
             
         case STATE_LOAD:
             framework.addRect(0, 0, width, height, '#0ff', 1);
@@ -1162,78 +1051,54 @@ function Render() {
             framework.addRect(50, 50, bg_x+width - 100, bg_y+height - 100, '#fff', 0.7);
             framework.addText('정말로 저장하시겠습니까?', '20px gothic', bg_x+ width / 2-50, bg_y+height / 2, '#fff');
             break;
-        case STATE_INVENTORY:
-            framework.addRect(bg_x, bg_y, width, height, '#ff0', 1);
-            framework.addRect(bg_x+50, bg_y+50,width - 100, height - 100, '#fff', 0.7);
-            
-            for(var i = 0; i<4; i++){
-                for(var j = 0; j<11; j++){
-                    framework.addRect(bg_x+70+j*60, bg_y+70+i*60, 50, 50, '#0f0', 1);
-                }
-            }
-            
-            for(var i= 0 ; i<myItem.length; i++){
-                //아이템의 이미지를 출력할 것이야
-                //if(i == item_index)
-                    //framework.addText('->  '+myItem[i].name+': '+myItem[i].description, '20px gulim', bg_x+70, bg_y+100+i*30, '#000');
-                //else framework.addText(myItem[i].name+': '+myItem[i].description, '20px gulim', bg_x+70, bg_y+100+i*30, '#000');
-            }
-            
-            framework.addRect(bg_x+100, bg_y+height-250, 600, 150, '#000', 0.5);
-            framework.addText(myItem[item_index].name, '20px gulim', bg_x+130, bg_y+height-200, '#fff');
-            framework.addText(myItem[item_index].description, '20px gulim', bg_x+130, bg_y+height-170, '#fff');
+        case STATE_CONFIG:
+            /*framework.addRect(0, 0, width, height, '#ff0', 1);
+            framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
+            framework.addText('전체화면하기', '20px gothic', width / 2 - 70, height / 2, '#000');*/
+            //framework.fullScreen();
             break;
         case STATE_GALALY:
             framework.addRect(0, 0, width, height, '#00f', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('GALALY', '20px gothic', width / 2 - 70, height / 2, '#000');
+            framework.addText('GALALY', '20px githic', width / 2 - 70, height / 2, '#000');
             break;
-        case STATE_CREDIT:
+        case STATE_MAKER:
             framework.addRect(0, 0, width, height, '#0f0', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
             framework.addText('다같이', '20px gothic', width / 2 - 50, height / 2, '#000');
             break;
         case STATE_START:
             framework.addRect(0,0,width, height, '#000', 1);
-            framework.addImage('INTRO', 600, 450).play(width/2-300, height/2-300);
-            
-            framework.addText('START', '20px arial', width/2-325, height-100, '#ff0');
-            framework.addText('LOAD', '20px arial', width/2-175, height-100, '#ff0');
-            framework.addText('CONFIG', '20px arial', width/2-25, height-100, '#ff0');
-            framework.addText('GALARY', '20px arial', width/2+125, height-100, '#ff0');
-            framework.addText('CREDIT', '20px arial', width/2+275, height-100, '#ff0');
+            framework.addRect(width/2-100,height/2-100, 200, 200, '#fff', 0.7);
             switch(menu){
                 case 0:
-                    //framework.addRect(width/2-340, height-125, 100, 40, '#f0f', 0.7);
-                    framework.addText('►', '20px arial', width/2-350, height-100, '#ff0');
+                    framework.addRect(width/2-100,height/2-70, 200, 30, '#f0f', 0.7);
                     break;
                     
                 case 1:
-                    framework.addText('►', '20px arial', width/2-200, height-100, '#ff0');
-                    //framework.addRect(width/2-190, height-125, 90, 40, '#f0f', 0.7);
+                    framework.addRect(width/2-100,height/2-40, 200, 30, '#f0f', 0.7);
                     break;
                     
                 case 2:
-                    framework.addText('►', '20px arial', width/2-50, height-100, '#ff0');
-            
-                    //framework.addRect(width/2-40, height-125, 100, 40, '#f0f', 0.7);
+                    framework.addRect(width/2-100,height/2-10, 200, 30, '#f0f', 0.7);
                     break;
                     
                 case 3:
-                    framework.addText('►', '20px arial', width/2+100, height-100, '#ff0');
-            
-                    //framework.addRect(width/2+110, height-125, 100, 40, '#f0f', 0.7);
+                    framework.addRect(width/2-100,height/2+20, 200, 30, '#f0f', 0.7);
                     break;
                     
                 case 4:
-                    framework.addText('►', '20px arial', width/2+250, height-100, '#ff0');
-                    //framework.addRect(width/2+260, height-125, 100, 40, '#f0f', 0.7);
+                    framework.addRect(width/2-100,height/2+50, 200, 30, '#f0f', 0.7);
                     break;
             }
             
             //5글자 50
             
-            
+            framework.addText('게임시작', '20px gulim', width/2-37, height/2-50, '#000');
+            framework.addText('불러오기', '20px gulim', width/2-37, height/2-20, '#000');
+            framework.addText('전체화면', '20px gulim', width/2-37, height/2+10, '#000');
+            framework.addText('갤러리', '20px gulim', width/2-25, height/2+40, '#000');
+            framework.addText('제작자', '20px gulim', width/2-25, height/2+70, '#000');
             
             break;
     }
