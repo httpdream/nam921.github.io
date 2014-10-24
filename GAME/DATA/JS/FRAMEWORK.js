@@ -146,29 +146,26 @@ function onPageLoadComplete() {
     width = 800;
     height = 600;
     
+    Temp = new ALTIS('Temp', 2000, 2000, false);
+    framework = new ALTIS('ALTIS', width, height, true);
 
+    full_width = $(window).innerWidth() - 20;
+    full_height = $(window).innerHeight() - 20;
+    framework.Canvas.width = full_width;
+    framework.Canvas.height = full_height;
+    framework.Context.scale(full_width/width, full_height/height);
 
     $(window).resize(function () {
-        if($(window)){
-        console.log("resize");
-        if(player_y>height/2)
-            bg_y = player_y-height/2;
-        if(player_x>width/2)
-            bg_x = player_x-width/2;
-            if($(window).innerWidth() - 20>full_width)
-                full_width = $(window).innerWidth() - 20;
-            if($(window).innerHeight() - 20>full_height)
-                full_height = $(window).innerHeight() - 20;
+            full_width = $(window).innerWidth() - 20;
+            full_height = $(window).innerHeight() - 20;
             framework.setHeight(height);
             framework.setWidth(width);
             framework.Canvas.width = full_width;
             framework.Canvas.height = full_height;
-        framework.Context.scale(full_width/width, full_height/height);
-            fullscreen++;
-            console.log(fullscreen);
-        }
+            framework.Context.scale(full_width/width, full_height/height);
+            framework.Context.translate(-bg_x, -bg_y);
         
-        if(fullscreen>2){
+        /*if(fullscreen>2){
             if(player_y>height/2)
             bg_y = player_y-height/2;
         if(player_x>width/2)
@@ -180,11 +177,10 @@ function onPageLoadComplete() {
             fullscreen=0;
             framework.Context.scale(1, 1);
             framework.Context.translate(-bg_x, -bg_y);
-        }
+        }*/
     });
     
-    Temp = new ALTIS('Temp', 2000, 2000, false);
-    framework = new ALTIS('ALTIS', width, height, true);
+    
     
     for(var i=0; i<Map_Array.length; i++){
         framework.loadImage('DATA/IMAGE/'+Map_Array[i].src, Map_Array[i].name);
