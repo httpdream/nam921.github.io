@@ -9,10 +9,10 @@ Map_Array.push({src: 'MAP/Map_Room.png', name: 'MAP2', width: 1920, height: 1080
 Map_Tmp_Array.push({src: 'MAP/TMP_Room.png', name: 'MAP1', width: 1600, height: 900});
 Map_Tmp_Array.push({src: 'MAP/Temp_Map_Room.png', name: 'MAP2', width: 1920, height: 1080});
 
-Illust_Array.push({src: 'ILLUST/alpha.png', name: 'ILLUST1'});
-Illust_Array.push({src: 'ILLUST/beta.png', name: 'ILLUST2'});
-Illust_Array.push({src: 'ILLUST/lucid.png', name: 'LUCID'});
-Illust_Array.push({src: 'ILLUST/Research.png', name: 'RESEARCH'});
+Illust_Array.push({src: 'ILLUST/Image.png', name: 'ILLUST1'});
+Illust_Array.push({src: 'ILLUST/Image.png', name: 'ILLUST2'});
+Illust_Array.push({src: 'ILLUST/Image.png', name: 'LUCID'});
+Illust_Array.push({src: 'ILLUST/Image.png', name: 'RESEARCH'});
 Illust_Array.push({src: 'ILLUST/intro.png', name: 'INTRO'});
 
 Sprite_Array.push({src: 'CHARACTER/PPlayer.png', name: 'char', width: 64, height: 96, delay: 7})

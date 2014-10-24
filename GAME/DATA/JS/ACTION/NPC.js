@@ -91,7 +91,22 @@ Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:
                                             '아, 침대 옆에 뭔가 있다.',
                                             '붉은 리본과……「연구일지」?'], function(){
                                myItem.push(Item_Array[0]); 
-                               myItem.push(Item_Array[1]); 
+                               myItem.push(Item_Array[1]);
+                                                    myItem.push(Item_Array[2]); 
+                                                    myItem.push(Item_Array[0]); 
+                                                    myItem.push(Item_Array[1]); 
+                                                    myItem.push(Item_Array[2]); 
+                                                    myItem.push(Item_Array[0]); 
+                                                    myItem.push(Item_Array[1]); 
+                                                    myItem.push(Item_Array[2]); 
+                                                    myItem.push(Item_Array[0]); 
+                                                    myItem.push(Item_Array[1]); 
+                                                    myItem.push(Item_Array[2]); 
+                                                    myItem.push(Item_Array[0]); 
+                                                    myItem.push(Item_Array[1]); 
+                                                    myItem.push(Item_Array[2]); 
+                                                    myItem.push(Item_Array[0]); 
+                                                    myItem.push(Item_Array[1]); 
                                makeScript(['인벤토리의 연구일지를 클릭하여 연구일지를 설펴보자.(단축키: I)']);
                                                 }, framework.addImage('ILLUST2', 350, 500), 'STORY');
                            },framework.addImage('ILLUST1', 350, 500), 'STORY');

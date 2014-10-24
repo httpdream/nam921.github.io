@@ -131,7 +131,7 @@ function draw_load() {
 
 
     framework.clear();
-    framework.addText('이미지 리소스 로딩중 (' + loader + '/' + (framework.Image.length + framework.Sprite.length + Temp.Image.length) + ')...', '20px nanumgothiccoding', 150, 180, '#000');
+    framework.addText('이미지 리소스 로딩중 (' + loader + '/' + (framework.Image.length + framework.Sprite.length + Temp.Image.length) + ')...', '20px "korean_font"', 150, 180, '#000');
 
     if (loader == (framework.Image.length + framework.Sprite.length + Temp.Image.length)) {
         requestAnimationFrame(gameLoop);
@@ -145,6 +145,8 @@ function onPageLoadComplete() {
     var FPS = 60;
     width = 800;
     height = 600;
+    
+
 
     $(window).resize(function () {
         if($(window)){
@@ -481,7 +483,7 @@ function start_game() {
             else menu = 4;
         }
         else if (gamestate == STATE_INVENTORY){
-            if(item_index%11>0) item_index --;
+            if(item_index>0) item_index --;
         }
     });
 
@@ -563,7 +565,7 @@ function start_game() {
             else cur_select = 0;
         }
         else if (gamestate == STATE_INVENTORY){
-            if(item_index>=11) item_index -= 11;
+            if((item_index+11)<myItem.length) item_index += 11;
         }
     });
     
@@ -879,20 +881,20 @@ function Render() {
             case STATE_STORY:
             MAP[MAP_CODE].map.play(0,0);
             framework.addRect(bg_x, bg_y, width, height, '#000', 1);
-            framework.addRect_Triangle(bg_x+20, bg_y+20, 280, 70, 40, '#fff', '#0f0');
-            framework.addText(falling_string, '40px arial', bg_x+70, bg_y+70,'#000' );
+            framework.addRect_Triangle(bg_x+20, bg_y+20, 280, 70, 40, '#c0c0c0', '#fff');
+            framework.addText(falling_string, '40px "english_font"', bg_x+80, bg_y+70,'#000' );
             falling_illust.play(bg_x, bg_y+100);
             if(falling_index<falling_dialogue.length) falling_index+=0.02;
             falling_alpha+=0.02;
             if(falling_alpha>=1) falling_alpha = 0;
             var i=-1;
             for(i = 0; i<falling_index-1; i++)
-                framework.addTextAlpha(falling_dialogue[i], '24px gulim', 340+bg_x, 130+bg_y+35*i, '#fff', 0.99);
-            if(i<falling_index) if(falling_dialogue[i]) framework.addTextAlpha(falling_dialogue[i], '24px gulim', 340+bg_x, 130+bg_y+35*i, '#fff', falling_alpha);
+                framework.addTextAlpha(falling_dialogue[i], '24px korean_font', 360+bg_x, 130+bg_y+35*i, '#fff', 0.99);
+            if(i<falling_index) if(falling_dialogue[i]) framework.addTextAlpha(falling_dialogue[i], '24px korean_font', 360+bg_x, 130+bg_y+35*i, '#fff', falling_alpha);
             end_delay++;
             if(end_delay>40){ end_visible = !end_visible; end_delay=0; }
             if(falling_index>=falling_dialogue.length && end_visible)
-                framework.addText('▼', '24px gulim', width+bg_x-75, 120+bg_y+35*i, '#fff');
+                framework.addText('▼', '24px korean_font', width+bg_x-75, 120+bg_y+35*i, '#fff');
             
             break;
             
@@ -904,12 +906,12 @@ function Render() {
             if(falling_alpha>=1) falling_alpha = 0;
             var i=-1;
             for(i = 0; i<falling_index-1; i++)
-                framework.addTextAlpha(falling_dialogue[i], '24px gulim', 60+bg_x, 70+bg_y+35*i, '#fff', 0.99);
-            if(i<falling_index) if(falling_dialogue[i]) framework.addTextAlpha(falling_dialogue[i], '24px gulim', 60+bg_x, 70+bg_y+35*i, '#fff', falling_alpha);
+                framework.addTextAlpha(falling_dialogue[i], '24px korean_font', 60+bg_x, 70+bg_y+35*i, '#fff', 0.99);
+            if(i<falling_index) if(falling_dialogue[i]) framework.addTextAlpha(falling_dialogue[i], '24px korean_font', 60+bg_x, 70+bg_y+35*i, '#fff', falling_alpha);
             end_delay++;
             if(end_delay>40){ end_visible = !end_visible; end_delay=0; }
             if(falling_index>=falling_dialogue.length && end_visible)
-                framework.addText('▼', '24px gulim', width+bg_x-75, 70+bg_y+35*i, '#fff');
+                framework.addText('▼', '24px korean_font', width+bg_x-75, 70+bg_y+35*i, '#fff');
             
             break;
             
@@ -921,10 +923,10 @@ function Render() {
             if(cur_select != -1){
                 framework.addRect(30+bg_x , height-230+bg_y, width-60, 200, '#00f', 0.5);
                 for(var t = 0; t<selection.length; t++){
-                    if(t == cur_select) framework.addText('►', '24px gulim', 60+bg_x, height-100+bg_y+25*t, '#0f0');
-                    framework.addText(selection[t], '24px gulim', 80+bg_x, height-100+bg_y+25*t, '#0f0');
+                    if(t == cur_select) framework.addText('►', '24px arial', 60+bg_x, height-100+bg_y+25*t, '#0f0');
+                    framework.addText(selection[t], '24px arial', 80+bg_x, height-100+bg_y+25*t, '#0f0');
                 }
-                framework.addText(dialogue[dialogue_index].substring(0,current_dialogue), '24px gulim', 60+bg_x, height-200+bg_y, '#0f0');
+                framework.addText(dialogue[dialogue_index].substring(0,current_dialogue), '24px malgungothic', 60+bg_x, height-200+bg_y, '#0f0');
             }
             else if(typeof dialogue[dialogue_index] == "string"){
                 framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#00f', 0.5);
@@ -933,18 +935,18 @@ function Render() {
                 if(cur_script[0]=='#'){
                     if(current_dialogue>1){
                     for(var i=0; i<current_dialogue; i++)
-                        framework.addText(cur_script.slice(limit*i+1, limit*(i+1)+1), '24px gulim', 60+bg_x, height-100+bg_y+30*i, '#f00');
+                        framework.addText(cur_script.slice(limit*i+1, limit*(i+1)+1), '24px malgungothic', 60+bg_x, height-100+bg_y+30*i, '#f00');
                 }
                     else
-                        framework.addText(cur_script.substring(1, cur_script.length), '24px gulim', 60+bg_x, height-100+bg_y, '#f00');
+                        framework.addText(cur_script.substring(1, cur_script.length), '24px malgungothic', 60+bg_x, height-100+bg_y, '#f00');
                 }
                 else{
                 if(current_dialogue>limit){
                     for(var i=0; i<current_dialogue; i++)
-                        framework.addText(cur_script.slice(limit*i, limit*(i+1)), '24px gulim', 60+bg_x, height-100+bg_y+30*i, '#0f0');
+                        framework.addText(cur_script.slice(limit*i, limit*(i+1)), '24px malgungothic', 60+bg_x, height-95+bg_y+30*i, '#0f0');
                 }
                 else
-                    framework.addText(cur_script, '24px gulim', 60+bg_x, height-100+bg_y, '#0f0');
+                    framework.addText(cur_script, '24px malgungothic', 60+bg_x, height-95+bg_y, '#0f0');
                 }
                 
                 
@@ -964,8 +966,8 @@ function Render() {
                 
                 if(current_dialogue>=dialogue[dialogue_index].length && end_visible){
                     if(current_npc.illust)
-                        framework.addText('▼', '24px gulim', width+bg_x-300, height+bg_y-40, '#0f0');
-                    else framework.addText('▼', '24px gulim', width+bg_x-75, height+bg_y-40, '#0f0');
+                        framework.addText('▼', '24px korean_font', width+bg_x-300, height+bg_y-40, '#0f0');
+                    else framework.addText('▼', '24px korean_font', width+bg_x-75, height+bg_y-40, '#0f0');
                 }
                 
                 if(current_npc.illust){
@@ -1061,22 +1063,22 @@ function Render() {
             framework.showSprite('char', player_x, player_y, 4);
             
             if(!sp){
-                framework.addText('!', '30px Arial', player_x+20, player_y-30, '#f00');
+                framework.addText('!', '30px "english_font"', player_x+20, player_y-30, '#f00');
             }
             
             if (gamestate == STATE_PAUSE) {
                 framework.addRect(bg_x, bg_y, MAP[MAP_CODE].width+bg_x, MAP[MAP_CODE].height+bg_y, '#000', 0);
                 framework.addRect_Triangle(bg_x+10, bg_y+20, 200, 50, 20, '#fff', '#0f0');
                 
-                framework.addText('MENU', '30px arial', bg_x+50, bg_y+55, '#00f');
+                framework.addText('MENU', '30px "english_font"', bg_x+50, bg_y+55, '#00f');
                 
                 framework.addRect(bg_x+10, bg_y+73, 200, 450, '#fff',  1, '#0f0');
-                framework.addText('SAVE', '27px arial', bg_x+80, bg_y+140, '#00f');
-                framework.addText('LOAD', '27px arial', bg_x+80, bg_y+190, '#00f');
-                framework.addText('ITEM', '27px arial', bg_x+80, bg_y+240, '#00f');
-                framework.addText('SYSTEM', '27px arial', bg_x+60, bg_y+290, '#00f');
-                framework.addText('TITLE', '27px arial', bg_x+80, bg_y+340, '#00f');
-                framework.addText('BACK', '27px Arial', bg_x+80, bg_y+390, '#00f');
+                framework.addText('SAVE', '27px "english_font"', bg_x+80, bg_y+140, '#00f');
+                framework.addText('LOAD', '27px "english_font"', bg_x+80, bg_y+190, '#00f');
+                framework.addText('ITEM', '27px "english_font"', bg_x+80, bg_y+240, '#00f');
+                framework.addText('SYSTEM', '27px "english_font"', bg_x+60, bg_y+290, '#00f');
+                framework.addText('TITLE', '27px "english_font"', bg_x+80, bg_y+340, '#00f');
+                framework.addText('BACK', '27px "english_font"', bg_x+80, bg_y+390, '#00f');
                 
                 switch(sub_menu){
                         //►
@@ -1144,10 +1146,10 @@ function Render() {
                     break;
             }
             
-            framework.addText('저장', '20px gulim', bg_x+tmp_width/2-20, bg_y+tmp_height/2-40, '#000');
-            framework.addText('불러오기', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2-10, '#000');
-            framework.addText('인벤토리', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2+20, '#000');
-            framework.addText('메인화면', '20px gulim', bg_x+tmp_width/2-40, bg_y+tmp_height/2+50, '#000');*/
+            framework.addText('저장', '20px korean_font', bg_x+tmp_width/2-20, bg_y+tmp_height/2-40, '#000');
+            framework.addText('불러오기', '20px korean_font', bg_x+tmp_width/2-40, bg_y+tmp_height/2-10, '#000');
+            framework.addText('인벤토리', '20px korean_font', bg_x+tmp_width/2-40, bg_y+tmp_height/2+20, '#000');
+            framework.addText('메인화면', '20px korean_font', bg_x+tmp_width/2-40, bg_y+tmp_height/2+50, '#000');*/
             }
             break;
     
@@ -1155,12 +1157,12 @@ function Render() {
         case STATE_LOAD:
             framework.addRect(0, 0, width, height, '#0ff', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('LOAD', '20px gothic', bg_x+width / 2-50, bg_y+height / 2, '#000');
+            framework.addText('LOAD', '20px korean_font', bg_x+width / 2-50, bg_y+height / 2, '#000');
             break;
         case STATE_SAVE:
             framework.addRect(0, 0, bg_x+width, bg_y+height, '#369', 1);
             framework.addRect(50, 50, bg_x+width - 100, bg_y+height - 100, '#fff', 0.7);
-            framework.addText('정말로 저장하시겠습니까?', '20px gothic', bg_x+ width / 2-50, bg_y+height / 2, '#fff');
+            framework.addText('정말로 저장하시겠습니까?', '20px korean_font', bg_x+ width / 2-50, bg_y+height / 2, '#fff');
             break;
         case STATE_INVENTORY:
             framework.addRect(bg_x, bg_y, width, height, '#ff0', 1);
@@ -1172,61 +1174,66 @@ function Render() {
                 }
             }
             
-            for(var i= 0 ; i<myItem.length; i++){
+            for(var i= 0 ; i<(myItem.length/11); i++){
+                var end = 0;
+                if(i>(myItem.length/11)-1) end = myItem.length%11;
+                else end = 11;
+                for(var j = 0; j<end; j++){
                 //아이템의 이미지를 출력할 것이야
-                //if(i == item_index)
-                    //framework.addText('->  '+myItem[i].name+': '+myItem[i].description, '20px gulim', bg_x+70, bg_y+100+i*30, '#000');
-                //else framework.addText(myItem[i].name+': '+myItem[i].description, '20px gulim', bg_x+70, bg_y+100+i*30, '#000');
+                    if(i*11+j == item_index)
+                        framework.addRect(bg_x+70+j*60, bg_y+70+i*60, 50, 50, '#f00', 1);
+                    else framework.addRect(bg_x+70+j*60, bg_y+70+i*60, 50, 50, '#ff0', 1);
+                }
             }
             
             framework.addRect(bg_x+100, bg_y+height-250, 600, 150, '#000', 0.5);
-            framework.addText(myItem[item_index].name, '20px gulim', bg_x+130, bg_y+height-200, '#fff');
-            framework.addText(myItem[item_index].description, '20px gulim', bg_x+130, bg_y+height-170, '#fff');
+            framework.addText(myItem[item_index].name, '20px korean_font', bg_x+130, bg_y+height-200, '#fff');
+            framework.addText(myItem[item_index].description, '20px korean_font', bg_x+130, bg_y+height-170, '#fff');
             break;
         case STATE_GALALY:
             framework.addRect(0, 0, width, height, '#00f', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('GALALY', '20px gothic', width / 2 - 70, height / 2, '#000');
+            framework.addText('GALALY', '20px "english_font"', width / 2 - 70, height / 2, '#000');
             break;
         case STATE_CREDIT:
             framework.addRect(0, 0, width, height, '#0f0', 1);
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('다같이', '20px gothic', width / 2 - 50, height / 2, '#000');
+            framework.addText('다같이', '20px korean_font', width / 2 - 50, height / 2, '#000');
             break;
         case STATE_START:
-            framework.addRect(0,0,width, height, '#000', 1);
-            framework.addImage('INTRO', 600, 450).play(width/2-300, height/2-300);
+            framework.addRect(0,0,width, height, '#000', 0.8);
+            framework.addImage('INTRO', 800, 525).play(1, -2);
             
-            framework.addText('START', '20px arial', width/2-325, height-100, '#ff0');
-            framework.addText('LOAD', '20px arial', width/2-175, height-100, '#ff0');
-            framework.addText('CONFIG', '20px arial', width/2-25, height-100, '#ff0');
-            framework.addText('GALARY', '20px arial', width/2+125, height-100, '#ff0');
-            framework.addText('CREDIT', '20px arial', width/2+275, height-100, '#ff0');
+            framework.addText('START', '20px "english_font"', width/2-325, height-30, '#ff0');
+            framework.addText('LOAD', '20px "english_font"', width/2-175, height-30, '#ff0');
+            framework.addText('CONFIG', '20px "english_font"', width/2-25, height-30, '#ff0');
+            framework.addText('GALARY', '20px "english_font"', width/2+125, height-30, '#ff0');
+            framework.addText('CREDIT', '20px "english_font"', width/2+275, height-30, '#ff0');
             switch(menu){
                 case 0:
                     //framework.addRect(width/2-340, height-125, 100, 40, '#f0f', 0.7);
-                    framework.addText('►', '20px arial', width/2-350, height-100, '#ff0');
+                    framework.addText('►', '20px arial', width/2-350, height-30, '#ff0');
                     break;
                     
                 case 1:
-                    framework.addText('►', '20px arial', width/2-200, height-100, '#ff0');
+                    framework.addText('►', '20px arial', width/2-200, height-30, '#ff0');
                     //framework.addRect(width/2-190, height-125, 90, 40, '#f0f', 0.7);
                     break;
                     
                 case 2:
-                    framework.addText('►', '20px arial', width/2-50, height-100, '#ff0');
+                    framework.addText('►', '20px arial', width/2-50, height-30, '#ff0');
             
                     //framework.addRect(width/2-40, height-125, 100, 40, '#f0f', 0.7);
                     break;
                     
                 case 3:
-                    framework.addText('►', '20px arial', width/2+100, height-100, '#ff0');
+                    framework.addText('►', '20px arial', width/2+100, height-30, '#ff0');
             
                     //framework.addRect(width/2+110, height-125, 100, 40, '#f0f', 0.7);
                     break;
                     
                 case 4:
-                    framework.addText('►', '20px arial', width/2+250, height-100, '#ff0');
+                    framework.addText('►', '20px arial', width/2+250, height-30, '#ff0');
                     //framework.addRect(width/2+260, height-125, 100, 40, '#f0f', 0.7);
                     break;
             }

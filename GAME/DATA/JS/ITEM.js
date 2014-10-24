@@ -9,9 +9,9 @@ Item_Array.push({name: '연구일지', description: '누군가의 연구일지�
 '그 아이가 깨어나면 할 일이 많지만 그건 그때 가서 생각하자.',
 '어서 빨리 보고 싶다, 내 걸작.'];
                                    
-                                   if(framework.getData('Bad__1')){
+                                   if(framework.getData('Bad_1')){
                                        script.push('');
-                                        script.push('▶'+framework.getData('Bad__1'));
+                                        script.push('▶'+framework.getData('Bad_1'));
                                         script.push('실패했다.');
                                    }
                                       
