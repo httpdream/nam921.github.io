@@ -105,6 +105,35 @@ Array.prototype.Last = function(){
     return this[this.length-1];
 }
 
+String.prototype.toFunction = function(){
+    var functionName = this;
+    var args = Array.prototype.slice.call(arguments).splice(1);
+    //debug
+    console.log('args:', args);
+
+    var namespaces = functionName.split(".");
+    //debug
+    console.log('namespaces:', namespaces);
+
+    var func = namespaces.pop();
+    //debug
+    console.log('func:', func);
+
+    ns = namespaces.join('.');
+    //debug
+    console.log('namespace:', ns);
+
+    
+
+    ns = eval(ns);
+    //debug
+    console.log('evaled namespace:', ns);
+
+    //if(ns=='') return window[]
+    return ns[func].apply(ns, args);
+}
+
+
 ALTIS.prototype.loadImage = function (src, name){
     this.Image.push({ img: new Image(), name: name, load: 0});
     var thisImage = this.Image.Last();
@@ -234,6 +263,21 @@ ALTIS.prototype.addRect_Triangle = function(x, y, Rectwidth, height, Triwidth, c
     this.Context.lineTo(x+Rectwidth, y+height);
     this.Context.lineTo(x, y+height);
     
+    
+    this.Context.fill();
+    this.Context.strokeStyle = path;
+    this.Context.stroke();
+    this.Context.closePath();
+}
+
+ALTIS.prototype.addTriangle_Rect = function(x, y, Triwidth, height, Rectwidth, color, path){
+    this.Context.fillStyle = color;
+    this.Context.beginPath();
+    this.Context.moveTo(x, (y+y+height)/2);
+    this.Context.lineTo(x+Triwidth, y);
+    this.Context.lineTo(x+Triwidth+Rectwidth, y);
+    this.Context.lineTo(x+Triwidth+Rectwidth, y+height);
+    this.Context.lineTo(x, (y+y+height)/2);
     
     this.Context.fill();
     this.Context.strokeStyle = path;

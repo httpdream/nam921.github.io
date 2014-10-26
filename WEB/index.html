@@ -1,0 +1,342 @@
+<html>
+<head>
+    <meta charset="utf-8">
+<style>
+    @font-face{
+                font-family: 'eng_font';
+                src: url('eng_Font.ttf');
+            }
+    #logo{
+        background-image:url(logo2.png) ;
+        background-size: 100% 100%;
+        margin-left: -10px;
+        color: transparent;
+    }
+    body{
+        
+    }
+    #top{
+        position:absolute;
+        height:100px;
+        width:1280px;
+        top:0px;
+        background-color: #262626;
+    }
+    ul{
+        list-style: none;
+    }
+    ul li{
+        font-family: "eng_font";
+        float:left;
+        
+        
+        margin:35px;
+        margin-top:10px;
+        padding-bottom: 20px;
+        
+        font-size:30px;
+        color:#cacaca;
+        cursor: pointer;
+        transition: color 0.5s;
+    }
+    
+    
+    
+    iframe{
+        position:absolute;
+        top:100px;
+        transition: all 0.5s;
+    }
+    
+    .sub_comm{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    .sub_qna{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    .sub_login{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    ol li{
+        color: white;
+        font-family: "eng_font";
+        color:#cacaca;
+        
+        list-style-type: none;
+        transition: color 0.5s;
+        
+    }
+    
+    #free{
+        position:absolute;
+        top: 70px;
+        left: 520px;
+    }
+    
+    
+    #sc_shot{
+        position:absolute;
+        top: 70px;
+        left: 605px;
+    }
+    
+    
+    #howto{
+        position:absolute;
+        top: 70px;
+        left: 690px;
+    }
+    
+    
+    #bar1{
+        position:absolute;
+        top: 70px;
+        left: 600px;
+    }
+    
+    #bar2{
+        position:absolute;
+        top: 70px;
+        left: 690px;
+    }
+    
+    #q{
+        position:absolute;
+        top: 70px;
+        left: 719px;
+    }
+    
+    #bar3{
+        position:absolute;
+        top: 70px;
+        left: 785px;
+    }
+    
+    #faq{
+        position:absolute;
+        top: 70px;
+        left: 800px;
+    }
+    
+    #_login{
+        position:absolute;
+        top: 70px;
+        left: 1100px;
+    }
+    
+    #bar4{
+        position:absolute;
+        top: 70px;
+        left: 1095px;
+    }
+    
+    #register{
+        position:absolute;
+        top: 70px;
+        left: 1031px;
+    }
+</style>
+</head>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script>
+    var hide = 0;
+    var width;
+    var height;
+    
+    function getWidth(WIDTH){
+        var w = $(window).innerWidth()/1280;
+        return WIDTH*w;
+    }
+    
+    function getHeight(HEIGHT){
+        var h = window.innerHeight/height;
+        return HEIGHT*h;
+    }
+    
+    function changesize(){
+        width = $(window).innerWidth();
+    height = $(window).innerHeight();
+        
+        /*if(width>0){
+        
+           $('ul li').css('margin', getWidth(30)+'px');
+            $('ul li').css('font-size', getWidth(35)+'px');
+            $('ol li').css('font-size', getWidth(20)+'px');
+            $('ul li').css('margin-top', getWidth(10)+'px');
+            $('ul li').css('padding-bottom', getWidth(20)+'px');
+        
+            $('#free').css('left', getWidth(520)+'px');
+            $('#sc_shot').css('left', getWidth(620)+'px');
+            $('#howto').css('left', getWidth(725)+'px');
+            $('#faq').css('left', getWidth(870)+'px');
+            $('#q').css('left', getWidth(790)+'px');
+            $('#_login').css('left', getWidth(1180)+'px');
+            $('#register').css('left', getWidth(1100)+'px');
+            $('#free,#sc_shot,#howto,#faq,#q,#_login,#register').css('top', getWidth(70));
+        
+            $('#top').css('width', getWidth(1280)+'px');
+            $('#top').css('height', getWidth(100)+'px');
+            $('iframe').css('width', getWidth(1280)+'px');
+            $('iframe').css('height', (height-getWidth(100))+'px');
+            $('iframe').css('top',getWidth(100)+'px');
+        }*/
+        if(width>1280){
+        $('iframe').css('left', ((width-1280)/2)+'px');
+        $('#top').css('left', ((width-1280)/2)+'px');
+        }
+        else{
+            $('iframe').css('left', 0+'px');
+            $('#top').css('left', 0+'px');
+        }
+        
+        $('#top').css('width', 1280+'px');
+        $('#top').css('height', 100+'px');
+        $('iframe').css('width', 1280+'px');
+        $('iframe').css('height', (height-100)+'px');
+        $('iframe').css('top',100+'px');
+    }
+$(document).ready(function(){
+    
+$(window).resize(function(){
+    changesize();
+});
+    width = $(window).innerWidth();
+    height = $(window).innerHeight();
+    
+    
+    
+    
+    
+    
+    $('#comm,.sub_comm').hover(function(){
+        $('#comm').css('color', '#d44a4a');
+        
+        $('.sub_comm').css('opacity', '1');
+        $('.sub_comm').css('display', 'block');
+    }, function(){
+        $('#comm').css('color', '#cacaca');
+        
+            $('.sub_comm').css('opacity', '0');
+            $('.sub_comm').css('display', 'none');
+
+    });
+    
+    $('#qna,.sub_qna').hover(function(){
+        $('#qna').css('color', '#d44a4a');
+        
+        $('.sub_qna').css('opacity', '1');
+        $('.sub_qna').css('display', 'block');
+    }, function(){
+        $('#qna').css('color', '#cacaca');
+        
+            $('.sub_qna').css('opacity', '0');
+            $('.sub_qna').css('display', 'none');
+
+    });
+    
+    $('#login,.sub_login').hover(function(){
+        $('#login').css('color', '#d44a4a');
+        
+        $('.sub_login').css('opacity', '1');
+        $('.sub_login').css('display', 'block');
+    }, function(){
+        $('#login').css('color', '#cacaca');
+        
+            $('.sub_login').css('opacity', '0');
+            $('.sub_login').css('display', 'none');
+
+    });
+    
+    $('#intro').click(function(){
+        $('iframe').attr('src', 'intro.html');
+    });
+    
+    $('#play').click(function(){
+        location.href="http://nam921.github.io/GAME/";
+    });
+    
+    $('#comm').click(function(){
+        $('iframe').attr('src', 'community.html');
+    });
+    
+    $('#qna').click(function(){
+        $('iframe').attr('src', 'qna.php');
+    });
+    
+    $('#ranking').click(function(){
+        $('iframe').attr('src', 'ranking.html');
+    });
+    
+    $('#login').click(function(){
+        $('iframe').attr('src', 'login.php');
+    });
+    
+    
+    
+    $('#intro,#play,#ranking,#login,#free,#sc_shot,#howto,#q,#faq,#_login, #register').hover(function(){
+        $(this).css('color', '#d44a4a');
+    }, function(){
+        $(this).css('color', '#cacaca');
+    });
+    
+    changesize();
+                  
+    
+    
+});
+    
+    
+    
+    
+    
+    
+</script>
+    
+    <body>
+<div id="top">
+<ul>
+    <li id="logo">LOGOLO</li>
+    <li id="intro">INTRO</li>
+    <li id="play">PLAY</li>
+    <li id="comm">COMMUNITY</li>
+    <li id="qna">Q&A</li>
+    <li id="ranking">RANKING</li>
+    <li id="login">LOGIN</li>
+</ul>
+    
+    <ol class = "sub_comm">
+        <li id="free">자유게시판</li>
+        <li id="bar1">|</li>
+        <li id="sc_shot">&nbsp;스샷게시판</li>
+        <li id="bar2">|</li>
+        <li id="howto">&nbsp;공략게시판</li>
+    </ol>
+    
+    <ol class = "sub_qna">
+        <li id="q">질문하기</li>
+        <li id="bar3">&nbsp;|&nbsp;</li>
+        <li id="faq">&nbsp;FAQ</li>
+    </ol>
+    
+    <ol class = "sub_login">
+        <li id="register">회원가입</li>
+        <li id="bar4">|</li>
+        <li id="_login">&nbsp;로그인</li>
+    </ol>
+    
+    
+</div>
+<iframe src="intro.html" frameborder=0 width=1280></iframe>
+</body>
+</html>
+

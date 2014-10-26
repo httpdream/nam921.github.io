@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8" />
+        <title>ALTIS TEST</title>
+        
+        <link rel="stylesheet" type="text/css" href="jquery.fullPage.css" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+
+	<script type="text/javascript" src="jquery.fullPage.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#fullpage').fullpage({
+				sectionsColor: ['#eeeefe', '#eeeefe'],
+                anchors: ['firstPage', 'secondPage'],
+                slidesNavigation: true
+       		});
+        });
+    </script>
+        
+        <style>
+            a{
+                text-decoration: none;
+            }
+            body{
+                text-align:center;
+            }
+             @font-face{
+                font-family: 'kor_font';
+                src: url('kor_Font.ttf');
+            }
+            @font-face{
+                font-family: 'eng_font';
+                src: url('eng_Font.ttf');
+            }
+            @font-face{
+                font-family: 'NanumBarunGothic';
+                src: url('NanumBarunGothic.ttf');
+            }
+            #rank{
+                font-family: 'kor_font';
+                font-size:30px;
+            }
+            .body{
+                font-family: 'NanumBarunGothic';
+                font-size:17px;
+            }
+            .red{
+                color:red;
+            }
+            .box{
+                font-size: 20px;
+                color:black;
+                padding-top:50px;
+                margin-left: 280px;
+                text-align: left;
+                font-family: 'NanumBarunGothic';
+            }
+            #box1{
+                background-color: #dcdcdc;
+                width: 700px;
+                height: 100px;
+            }
+            #box2{
+                margin-top:20px;
+                background-color: #acacac;
+                width: 380px;
+                height: 100px;
+                float:left;
+            }
+            #box3{
+                margin-left:680px;
+                margin-top:20px;
+                background-color: #ececec;
+                width: 300px;
+                height: 100px;
+                text-align: right;
+            }
+            .kf{
+                font-family: 'kor_font';
+                font-size:25px;
+                padding-right: 30px;
+            }
+            .txt{
+                font-size:20px;
+                font-family: 'NanumBarunGothic';
+            }
+        </style>
+    </head>
+    
+    
+    <body>
+
+
+        <div id="fullpage">
+            <div class="section" id="section0">
+                
+                <div class="slide" id="slide1">
+                    <span id='rank'>RANKING</span><br/>
+                <span class='body'><a href='#firstPage' class='red'>일일랭킹</a></span>
+                <span class='body'> / <a href='#secondPage'>주간랭킹</a></span><br/>
+                <span class='body'>* 랭킹은 상위 10명까지만 표시됩니다 *</span>
+                <br/><br/><br/>
+                <div class='box' id='box1'>버그씁시다<br/> 0: 0: 1</div>
+                <div class='box' id='box2'>정직하게합시다<br/> 1: 50: 31</div>
+                <div class='box' id='box3'>1초 말이되냐<br/> 14: 36: 1</div>
+                </div>
+                
+                <div class="slide" id="slide2">
+                    <span id='rank'>RANKING</span><br/>
+                <span class='body'><a href='#firstPage' class='red'>일일랭킹</a></span>
+                <span class='body'> / <a href='#secondPage'>주간랭킹</a></span><br/>
+                <span class='body'>* 랭킹은 상위 10명까지만 표시됩니다 *</span>
+                <br/><br/><br/>
+                <div class='txt'><span class='kf'>4</span>4등이여 / 16 : 49 : 2</div>
+                <div class='txt'><span class='kf'>5</span>5등이여 / 27 : 50 : 31</div>
+                <div class='txt'><span class='kf'>6</span>6등이여 / 48 : 36 : 1</div>
+                <div class='txt'><span class='kf'>7</span>7등이여 / 98 : 10 : 10</div>
+                <div class='txt'><span class='kf'>8</span>8등이여 / 137 : 18 : 4</div>
+                <div class='txt'><span class='kf'>9</span>9등이여 / 200 : 32 : 52</div>
+                <div class='txt'><span class='kf'>10</span>꼴등이여 / 261 : 29 : 3</div>
+                </div></div>
+
+            
+            
+        
+         <div class="section" id="section1">
+                
+                <div class="slide" id="slide1" data-anchor='slide1'>
+                    <span id='rank'>RANKING</span><br/>
+                <span class='body'><a href='#firstPage'>일일랭킹</a> / </span>
+                <span class='body'><a href='#secondPage' class='red'>주간랭킹</a></span><br/>
+                <span class='body'>* 랭킹은 상위 10명까지만 표시됩니다 *</span>
+                <br/><br/><br/>
+                <div class='box' id='box1'>해킹<br/> 0: 0: 0</div>
+                <div class='box' id='box2'>당했<br/> 0: 0: 0</div>
+                <div class='box' id='box3'>어요<br/> 0: 0: 0</div>
+                </div>
+                
+                <div class="slide" id="slide2" data-anchor='slide2'>
+                    <span id='rank'>RANKING</span><br/>
+                <span class='body'><a href='#firstPage'>일일랭킹</a> / </span>
+                <span class='body'><a href='#secondPage' class='red'>주간랭킹</a></span><br/>
+                <span class='body'>* 랭킹은 상위 10명까지만 표시됩니다 *</span>
+                <br/><br/><br/>
+                <div class='txt'><span class='kf'>4</span>ㅎㅎ / 0 : 0 : 2</div>
+                <div class='txt'><span class='kf'>5</span>5등이여 / 27 : 50 : 31</div>
+                <div class='txt'><span class='kf'>6</span>6등이여 / 48 : 36 : 1</div>
+                <div class='txt'><span class='kf'>7</span>7등이여 / 98 : 10 : 10</div>
+                <div class='txt'><span class='kf'>8</span>8등이여 / 137 : 18 : 4</div>
+                <div class='txt'><span class='kf'>9</span>9등이여 / 200 : 32 : 52</div>
+                <div class='txt'><span class='kf'>10</span>꼴등이여 / 261 : 29 : 3</div>
+                </div></div>
+
+            </div>
+        </div>
+        
+        
+    </body>
+
+</html>

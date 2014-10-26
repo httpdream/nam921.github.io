@@ -3,11 +3,13 @@ var Map_Tmp_Array = new Array();
 var Illust_Array = new Array();
 var Sprite_Array = new Array();
 
-Map_Array.push({src: 'MAP/NEW_Room.png', name: 'MAP1', width: 1600, height: 900, npc: [0,3], auto: 2});
-Map_Array.push({src: 'MAP/Map_Room.png', name: 'MAP2', width: 1920, height: 1080, npc: [1]});
+Map_Array.push({src: 'NEW_MAP/Room_1.png', name: 'MAP1', width: 1600, height: 900, npc: [0,2,3], auto: 1});
+Map_Array.push({src: 'NEW_MAP/Room_2.png', name: 'MAP2', width: 1600, height: 1600, npc: [4]});
+Map_Array.push({src: 'NEW_MAP/Room_3.png', name: 'MAP3', width: 1600, height: 900, npc: [0]});
 
-Map_Tmp_Array.push({src: 'MAP/TMP_Room.png', name: 'MAP1', width: 1600, height: 900});
-Map_Tmp_Array.push({src: 'MAP/Temp_Map_Room.png', name: 'MAP2', width: 1920, height: 1080});
+Map_Tmp_Array.push({src: 'NEW_MAP/(TMP) Room_1.png', name: 'MAP1', width: 1600, height: 900});
+Map_Tmp_Array.push({src: 'NEW_MAP/(TMP) Room_2.png', name: 'MAP2', width: 1600, height: 1600});
+Map_Tmp_Array.push({src: 'NEW_MAP/(TMP) Room_3.png', name: 'MAP3', width: 1600, height: 900});
 
 Illust_Array.push({src: 'ILLUST/Image.png', name: 'ILLUST1'});
 Illust_Array.push({src: 'ILLUST/Image.png', name: 'ILLUST2'});

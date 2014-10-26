@@ -55,6 +55,7 @@ var STATE_DIALOGUE = 9; //대화중
 var STATE_ILLUST = 10; //일러스트 표시중
 var STATE_FALLING = 11; //책같은거 표시중
 var STATE_STORY = 12; //스토리 표시중
+var STATE_CHARACTER = 13;
 
 var item_index = 0;
 var Current = 0;
@@ -76,7 +77,6 @@ var potaling = 0;
 var illuster;
 
 var sp = true; //중복대화 방지
-var after_action; //대화후
 
 var loadInterval;
 var char_status = { up: false, down: false, left: false, right: false };
@@ -110,8 +110,7 @@ var limit = 20;
 
 function ViewIllust(_name, _x, _y, _width, _height, _action){
     gamestate = STATE_ILLUST;
-    illuster = {ILL: framework.addImage(_name, width, height), x: _x, y: _y, width: _width, height: _height};
-    after_action = _action;
+    illuster = {ILL: framework.addImage(_name, _width, _height), x: _x, y: _y, width: _width, height: _height};
 }
 
 function draw_load() {
@@ -217,7 +216,11 @@ function nextDlg(){
             dialogue_index = 0;
             console.log('대화 엔드');
             sp = true;
-            if(after_action) after_action();
+            function_index++;
+            if(current_npc.callback[function_index]){
+                setTimeout(current_npc.callback[function_index], 1);
+            }
+        else function_index=-1;
         }
     }
 }
@@ -227,21 +230,19 @@ var cur_select = -1; //현재 선택
 var falling_illust;
 var falling_string;
 
-function falling_Script(script, Action){
+function falling_Script(script){
     gamestate = STATE_FALLING;
     falling_dialogue = script;
     falling_index = 0;
-    after_action = Action;
     falling_alpha = 0;
     falling_illust = undefined;
     falling_string = undefined;
 }
 
-function Illust_falling(script, Action, Illust, top_string){
+function Illust_falling(script, Illust, top_string){
     gamestate = STATE_STORY;
     falling_dialogue = script;
     falling_index = 0;
-    after_action = Action;
     falling_alpha = 0;
     falling_illust = Illust;
     falling_string = top_string;
@@ -254,16 +255,12 @@ function makeScript_Selection(script, select, func){
     selection = select;
     dialogue_index = 0;
     cur_select = 0;
-    after_action = function(){
-        func[cur_select]();
-    }
 }
 
 function makeScript(script){
     dialogue = script;
     gamestate = STATE_DIALOGUE;
     dialogue.push("");
-    after_action = undefined;
     cur_select = -1;
     dialogue_index = 0;
 }
@@ -272,15 +269,14 @@ function makeScriptAction(script, Action){
     dialogue = script;
     gamestate = STATE_DIALOGUE;
     dialogue.push("");
-    after_action = Action;
     cur_select = -1;
     dialogue_index = 0;
 }
 
 function do_newGame(){               
     MAP_CODE = 0;
-    player_x = 500;
-    player_y = 515;
+    player_x = 821;
+    player_y = 428; 
     
     if(player_y>height/2)
             bg_y = player_y-height/2;
@@ -288,11 +284,16 @@ function do_newGame(){
             bg_x = player_x-width/2;
     
     if(MAP[MAP_CODE].auto){
+        function_index = 0;
         current_npc = Action_Array[MAP[MAP_CODE].auto];
-        current_npc.callback();
+        current_npc.callback[function_index]();
         addSpaceDown(500, 500, MAP_CODE, current_npc.callback);
         sp = false;
     }
+    
+    myItem = new Array();
+    for(var i = 0; i<Action_Array.length; i++)
+        Action_Array[i].status = 0;
     
     framework.Context.translate(-bg_x, -bg_y);
 }
@@ -442,7 +443,10 @@ function nextFalling(){
     if(falling_index<falling_dialogue.length) falling_index = falling_dialogue.length+1;
     else{
         gamestate = STATE_PLAY;
-        after_action();
+        function_index++;
+            if(current_npc.callback[function_index]){
+                setTimeout(current_npc.callback[function_index], 1);
+            }else function_index = -1;
     }
 }
 
@@ -501,7 +505,10 @@ function start_game() {
     framework.addKeyDown('SPACE', function(){
         if(gamestate == STATE_ILLUST){
             gamestate = STATE_PLAY;
-            after_action();
+            function_index++;
+            if(current_npc.callback[function_index]){
+                setTimeout(current_npc.callback[function_index], 1);
+            }else function_index = -1;
         }
         
         else if(gamestate == STATE_FALLING||gamestate == STATE_STORY){
@@ -520,7 +527,10 @@ function start_game() {
             nextDlg();
         else if(gamestate == STATE_ILLUST){
             gamestate = STATE_PLAY;
-            after_action();
+            function_index++;
+            if(current_npc.callback[function_index]){
+                setTimeout(current_npc.callback[function_index], 1);
+            } else function_index = -1;
         }
         else if(gamestate == STATE_FALLING||gamestate == STATE_STORY){
             nextFalling();
@@ -576,7 +586,31 @@ function start_game() {
                     do_newGame();
                     break;
                 case 1:
-                    gamestate = STATE_LOAD;
+                    player_x = parseInt(framework.getData('data_x'));
+                    player_y = parseInt(framework.getData('data_y'));
+                    framework.Context.translate(bg_x, bg_y);
+                    bg_x = parseInt(framework.getData('data_bgx'));
+                    bg_y = parseInt(framework.getData('data_bgy'));
+                    MAP_CODE = parseInt(framework.getData('data_map'));
+                    var item = JSON.parse(framework.getData('data_item'));
+                    var status = JSON.parse(framework.getData('data_status'));
+            
+                    for(var i=0; i<Action_Array.length; i++)
+                        Action_Array[i].status = parseInt(status[i]);
+                    
+                    for(var i=0; i<item.length; i++)
+                        myItem.push(Item_Array[item[i]]);
+            
+                    if(MAP[MAP_CODE].auto){
+                         function_index = 0;
+                        current_npc = Action_Array[MAP[MAP_CODE].auto];
+                        current_npc.callback[function_index]();
+                        addSpaceDown(500, 500, MAP_CODE, current_npc.callback);
+                        sp = false;
+                    }
+    
+                    framework.Context.translate(-bg_x, -bg_y);
+                    gamestate = STATE_PLAY;
                     break;
                 case 2:
                     framework.fullScreen();
@@ -595,11 +629,50 @@ function start_game() {
 
         else if (gamestate == STATE_PAUSE) {
             switch (sub_menu) {
-                case 0:
-                    gamestate = STATE_SAVE;
+                case 0: //save
+                    //gamestate = STATE_SAVE;
+                    framework.saveData('data_x', player_x);
+                    framework.saveData('data_y', player_y);
+                    framework.saveData('data_bgx', bg_x);
+                    framework.saveData('data_bgy', bg_y);
+                    framework.saveData('data_map', MAP_CODE);
+            
+                    var status = new Array();
+                    for(var i=0; i<Action_Array.length; i++)
+                        status.push(Action_Array[i].status);
+                    framework.saveData('data_status', JSON.stringify(status));
+                    
+                    var item = new Array();
+                    for(var i=0; i<myItem.length; i++)
+                        item.push(myItem[i].index);
+                    framework.saveData('data_item', JSON.stringify(item));
+                    framework.Context.translate(bg_x, bg_y);
+                    gamestate = STATE_START;
                     break;
-                case 1:
-                    gamestate = STATE_LOAD;
+                case 1: //load
+                    player_x = parseInt(framework.getData('data_x'));
+                    player_y = parseInt(framework.getData('data_y'));
+                    framework.Context.translate(bg_x, bg_y);
+                    bg_x = parseInt(framework.getData('data_bgx'));
+                    bg_y = parseInt(framework.getData('data_bgy'));
+                    MAP_CODE = parseInt(framework.getData('data_map'));
+                    var item = JSON.parse(framework.getData('data_item'));
+                    var status = JSON.parse(framework.getData('data_status'));
+            
+                    for(var i=0; i<Action_Array.length; i++)
+                        Action_Array[i].status = parseInt(status[i]);
+                    
+                    for(var i=0; i<item.length; i++)
+                        myItem.push(Item_Array[item[i]]);
+            
+                    if(MAP[MAP_CODE].auto){
+                        current_npc = Action_Array[MAP[MAP_CODE].auto];
+                        addSpaceDown(500, 700, MAP_CODE, current_npc.callback);
+                        sp = false;
+                    }
+    
+                    framework.Context.translate(-bg_x, -bg_y);
+                    gamestate = STATE_PLAY;
                     break;
                 case 2:
                     gamestate = STATE_INVENTORY;
@@ -627,8 +700,14 @@ function start_game() {
             nextDlg();
         
         else if(gamestate == STATE_INVENTORY){
-            if(myItem[item_index].callback)
-                myItem[item_index].callback();
+            function_index = 0;
+            if(myItem[item_index].callback){
+            if(myItem[item_index].callback[function_index]){
+                function_index = 0;
+                setTimeout(myItem[item_index].callback[function_index], 1);
+                current_npc = myItem[item_index];
+            }
+            }
         }
         
         else if(gamestate == STATE_SAVE){
@@ -646,30 +725,16 @@ function start_game() {
         
         else if(gamestate == STATE_ILLUST){
             gamestate = STATE_PLAY;
-            after_action();
+            function_index++;
+            if(current_npc.callback[function_index]){
+                setTimeout(current_npc.callback[function_index], 1);
+            }else function_index = -1;
         }
         
         else if(gamestate == STATE_FALLING||gamestate == STATE_STORY) nextFalling();
         
         else if(gamestate == STATE_LOAD){
-            player_x = parseInt(framework.getData('data_x'));
-            player_y = parseInt(framework.getData('data_y'));
-            bg_x = parseInt(framework.getData('data_bgx'));
-            bg_y = parseInt(framework.getData('data_bgy'));
-            MAP_CODE = parseInt(framework.getData('data_map'));
-            
-            for(var i=0; i<Action_Array.length; i++)
-                Action_Array[i].status = parseInt(framework.getData('data_status')[i]);
-            
-            if(MAP[MAP_CODE].auto){
-                current_npc = Action_Array[MAP[MAP_CODE].auto];
-                current_npc.callback();
-                addSpaceDown(500, 700, MAP_CODE, current_npc.callback);
-                sp = false;
-            }
-    
-            framework.Context.translate(-bg_x, -bg_y);
-            gamestate = STATE_PLAY;
+            ///ㅎㅎ
         }
         
         
@@ -784,7 +849,7 @@ function doPotal(){
         if (potaling > 1) {
             potaling = 0;
             moveable = true;
-            cancelAnimationFrame(potal);
+            potal = cancelAnimationFrame(potal);
         }
         else potal = requestAnimationFrame(doPotal);
     }
@@ -809,7 +874,7 @@ function Potal(MAP_Code, pl_x, pl_y){
     
     moveable = false;
     
-    potal = requestAnimationFrame(doPotal);
+    if(!potal)potal = requestAnimationFrame(doPotal);
 }
 
 //Temp와 현재 캐릭터의 위치를 비교
@@ -838,12 +903,14 @@ function check(x, y, moved){
             for(var j=0; j<MAP[MAP_CODE].npc.length; j++){
                 
                 var npc = Action_Array[MAP[MAP_CODE].npc[j]];
+                
                 if(r==npc.r && g==npc.g && npc.b==b){
                     if(sp == true){
                         addSpaceDown(_x, _y, current, npc.callback);
                         current_npc = npc;
                         sp = false;
                         console.log('추우가');
+                        function_index = 0;
                     }
                 }
             }
@@ -894,6 +961,10 @@ function Render() {
             
             break;
             
+            case STATE_CHARACTER:
+            framework.addTriangle_Rect(bg_x+width-240, 20, 40, 200, 200, '#000', '#f0f');
+            break;
+            
             case STATE_FALLING:
             MAP[MAP_CODE].map.play(0,0);
             framework.addRect(bg_x, bg_y, width, height, '#000', 0.7);
@@ -922,7 +993,7 @@ function Render() {
                     if(t == cur_select) framework.addText('►', '24px arial', 60+bg_x, height-100+bg_y+25*t, '#0f0');
                     framework.addText(selection[t], '24px arial', 80+bg_x, height-100+bg_y+25*t, '#0f0');
                 }
-                framework.addText(dialogue[dialogue_index].substring(0,current_dialogue), '24px malgungothic', 60+bg_x, height-200+bg_y, '#0f0');
+                framework.addText(dialogue[dialogue_index].substring(0,current_dialogue), '24px script_font', 60+bg_x, height-200+bg_y, '#0f0');
             }
             else if(typeof dialogue[dialogue_index] == "string"){
                 framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#00f', 0.5);
@@ -931,7 +1002,7 @@ function Render() {
                 if(cur_script[0]=='#'){
                     if(current_dialogue>1){
                     for(var i=0; i<current_dialogue; i++)
-                        framework.addText(cur_script.slice(limit*i+1, limit*(i+1)+1), '24px malgungothic', 60+bg_x, height-100+bg_y+30*i, '#f00');
+                        framework.addText(cur_script.slice(limit*i+1, limit*(i+1)+1), '24px script_font', 60+bg_x, height-100+bg_y+30*i, '#f00');
                 }
                     else
                         framework.addText(cur_script.substring(1, cur_script.length), '24px malgungothic', 60+bg_x, height-100+bg_y, '#f00');
@@ -939,10 +1010,10 @@ function Render() {
                 else{
                 if(current_dialogue>limit){
                     for(var i=0; i<current_dialogue; i++)
-                        framework.addText(cur_script.slice(limit*i, limit*(i+1)), '24px malgungothic', 60+bg_x, height-95+bg_y+30*i, '#0f0');
+                        framework.addText(cur_script.slice(limit*i, limit*(i+1)), '22px script_font', 60+bg_x, height-95+bg_y+30*i, '#fff');
                 }
                 else
-                    framework.addText(cur_script, '24px malgungothic', 60+bg_x, height-95+bg_y, '#0f0');
+                    framework.addText(cur_script, '22px script_font', 60+bg_x, height-95+bg_y, '#fff');
                 }
                 
                 
@@ -983,7 +1054,6 @@ function Render() {
                 gamestate = STATE_PLAY;
                 dialogue_index = 0;
                 sp = true;
-                //(after_action) after_action();
             }
                 }, current_npc.delay);
                     auto=1;
@@ -1191,14 +1261,16 @@ function Render() {
             framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
             framework.addText('GALALY', '20px "english_font"', width / 2 - 70, height / 2, '#000');
             break;
-        case STATE_CREDIT:
-            framework.addRect(0, 0, width, height, '#0f0', 1);
-            framework.addRect(50, 50, width - 100, height - 100, '#fff', 0.7);
-            framework.addText('다같이', '20px korean_font', width / 2 - 50, height / 2, '#000');
+        
+            case STATE_CREDIT:
+            
+            
+            Illust_falling(['기획: 양효준', '트릭, 사운드: 이창선', '일러스트, 시나리오: 김혜인',  '맵, 스프라이트: 여재훈', '프로그래밍: 김남환', 'This Game made by', 'TEAM "닝겐쟈나이 <Not-Ningen>"', '', 'For 선린인터넷 고등학교', '디지털 콘텐츠 경진대회'], function(){ gamestate = STATE_START;}, framework.addImage('ILLUST1', 350, 500), 'CREDIT');
             break;
+            
         case STATE_START:
             framework.addRect(0,0,width, height, '#000', 0.8);
-            framework.addImage('INTRO', 800, 525).play(1, -2);
+            framework.addImage('INTRO', 800, 605).play(1, -2);
             
             framework.addText('START', '20px "english_font"', width/2-325, height-30, '#ff0');
             framework.addText('LOAD', '20px "english_font"', width/2-175, height-30, '#ff0');
@@ -1234,11 +1306,8 @@ function Render() {
                     break;
             }
             
-            //5글자 50
             
             
-            
-            break;
     }
 }
 
@@ -1247,6 +1316,7 @@ function gameLoop(){
     Render();
     requestAnimationFrame(gameLoop);
 }
+var function_index = -1;
 
 
 function addSpaceDown(x,y,current,callback){                                                                                   
@@ -1256,23 +1326,33 @@ function addSpaceDown(x,y,current,callback){
         char_status.right=false;
         char_status.up=false;
         
+        
+        
         if(gamestate == STATE_ILLUST) gamestate = STATE_PLAY;
         
-        else if(dialogue){
+        else if(gamestate == STATE_DIALOGUE){
+            
+            
         if(dialogue_index >= dialogue.length-1){
             gamestate = STATE_PLAY;
             dialogue_index = 0;
             console.log('대화 엔드');
             sp = true;
-            if(after_action) after_action();
+            function_index++;
+            if(callback[function_index]){
+                setTimeout(callback[function_index], 1);
+            }else function_index = -1;
+            
         }
-            else if(player_x==x && player_y == y && MAP_CODE == current && gamestate == STATE_PLAY&&sp==false){
-                callback();
         }
-        }
+        
+        
         else{
-            callback();
+            if(gamestate == STATE_STORY|| gamestate == STATE_FALLING);
+            else{
+            setTimeout(callback[function_index], 1);
             console.log('p2');
+            }
         }
         
         

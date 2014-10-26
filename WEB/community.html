@@ -1,0 +1,108 @@
+<html>
+<head>
+    <meta charset="utf-8">
+<style>
+    @font-face{
+                font-family: 'eng_font';
+                src: url('eng_Font.ttf');
+            }
+    #logo{
+        margin-left: -10px;
+    }
+    body{
+        
+    }
+    #left{
+        position:absolute;
+        width:200px;
+        left:0px;
+        top:10px;
+        float:left;
+    }
+    ul{
+        list-style: none;
+    }
+    li{
+        float:left;
+    }
+    ul li{
+        font-family: "eng_font";
+        float:left;
+        
+        font-size:30px;
+        color:#262626;
+        cursor: pointer;
+        transition: color 0.5s;
+        margin:13px;
+    }
+    
+    #dontsee{
+        
+    }
+    
+    iframe{
+        position:absolute;
+        left:250px;
+        top:0px;
+        transition: all 0.5s;
+    }
+    
+    
+    
+</style>
+</head>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script>
+    var hide = 0;
+    var width;
+    var height;
+    
+    function getWidth(WIDTH){
+        var w = $(window).innerWidth()/1280;
+        return WIDTH*w;
+    }
+    
+    function getHeight(HEIGHT){
+        var h = window.innerHeight/height;
+        return HEIGHT*h;
+    }
+    
+   
+$(document).ready(function(){
+    $('#free,#sc_shot,#howto').css('font-size', '24px');
+    $('#free,#sc_shot,#howto').css('text-align', 'center');
+    $('#free,#sc_shot,#howto').hover(function(){
+        $(this).css('color', '#d44a4a');
+    }, function(){
+        $(this).css('color', '#262626');
+    });
+    
+    
+    
+                  
+    
+    
+});
+    
+    
+    
+    
+    
+    
+</script>
+    
+    <body>
+<div id="left">
+<ul>
+    <li id="logo">COMMUNITY<br/></li>
+    
+    <li id="free">자유게시판</li>
+    <li id="sc_shot">스샷게시판<br/></li>
+    <li id="howto">공략게시판<br/></li>
+</ul>
+</div>
+<iframe src="community_free.html" frameborder=0 width="1000px" height="700px"></iframe>
+</body>
+</html>
+
