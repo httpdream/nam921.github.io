@@ -1272,36 +1272,36 @@ function Render() {
             framework.addRect(0,0,width, height, '#000', 0.8);
             framework.addImage('INTRO', 800, 605).play(1, -2);
             
-            framework.addText('START', '20px "english_font"', width/2-325, height-30, '#ff0');
-            framework.addText('LOAD', '20px "english_font"', width/2-175, height-30, '#ff0');
-            framework.addText('CONFIG', '20px "english_font"', width/2-25, height-30, '#ff0');
-            framework.addText('GALARY', '20px "english_font"', width/2+125, height-30, '#ff0');
-            framework.addText('CREDIT', '20px "english_font"', width/2+275, height-30, '#ff0');
+            framework.addText('START', '20px "english_font"', width/2-325, height-30, '#262626');
+            framework.addText('LOAD', '20px "english_font"', width/2-175, height-30, '#262626');
+            framework.addText('CONFIG', '20px "english_font"', width/2-25, height-30, '#262626');
+            framework.addText('GALARY', '20px "english_font"', width/2+125, height-30, '#262626');
+            framework.addText('CREDIT', '20px "english_font"', width/2+275, height-30, '#262626');
             switch(menu){
                 case 0:
                     //framework.addRect(width/2-340, height-125, 100, 40, '#f0f', 0.7);
-                    framework.addText('►', '20px arial', width/2-350, height-30, '#ff0');
+                    framework.addText('►', '20px arial', width/2-350, height-30, '#262626');
                     break;
                     
                 case 1:
-                    framework.addText('►', '20px arial', width/2-200, height-30, '#ff0');
+                    framework.addText('►', '20px arial', width/2-200, height-30, '#262626');
                     //framework.addRect(width/2-190, height-125, 90, 40, '#f0f', 0.7);
                     break;
                     
                 case 2:
-                    framework.addText('►', '20px arial', width/2-50, height-30, '#ff0');
+                    framework.addText('►', '20px arial', width/2-50, height-30, '#262626');
             
                     //framework.addRect(width/2-40, height-125, 100, 40, '#f0f', 0.7);
                     break;
                     
                 case 3:
-                    framework.addText('►', '20px arial', width/2+100, height-30, '#ff0');
+                    framework.addText('►', '20px arial', width/2+100, height-30, '#262626');
             
                     //framework.addRect(width/2+110, height-125, 100, 40, '#f0f', 0.7);
                     break;
                     
                 case 4:
-                    framework.addText('►', '20px arial', width/2+250, height-30, '#ff0');
+                    framework.addText('►', '20px arial', width/2+250, height-30, '#262626');
                     //framework.addRect(width/2+260, height-125, 100, 40, '#f0f', 0.7);
                     break;
             }
