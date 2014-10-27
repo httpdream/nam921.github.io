@@ -1,30 +1,116 @@
-
-<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>ALTIS TEST</title>
+<head>
+    <meta charset="utf-8">
+<style>
+    @font-face{
+                font-family: 'eng_font';
+                src: url('FONT/eng_Font.ttf');
+            }
+    @font-face{
+                font-family: 'NanumBarunGothic';
+                src: url('FONT/NanumBarunGothic.ttf');
+            }
+    #logo{
+        margin-left: -10px;
+        font-family: 'eng_font';
+    }
+    body{
         
-    </head>
-    <body>
-        <table border=1>
-            <tr><td>번호</td><td>제목</td><td>닉네임</td></td><td>작성시각</td></tr>
-        <?
-             $mysql = mysql_connect('localhost', 'root', 'root');
-             mysql_select_db('ht', $mysql);
-             mysql_query('charset utf-8');
-             
-             $result = mysql_query('select* from board');
-             while($row = mysql_fetch_row($result)){
-                 echo "<tr>";
-                 for($i = 0; $i<3; $i++)
-                    echo "<td>$row[$i]<br></td>";
-                 echo "<td>$row[5]<br></td>";
-                 echo "</tr>";
-             }
-             
-        ?>
-        </table>
-    </body>
+    }
+    #left{
+        position:absolute;
+        width:200px;
+        left:0px;
+        top:10px;
+        float:left;
+    }
+    ul{
+        list-style: none;
+    }
+    
+    ul li{
+        font-family: "NanumBarunGothic";
+        float:left;
+        
+        font-size:30px;
+        color:#262626;
+        cursor: pointer;
+        transition: color 0.5s;
+        margin:13px;
+    }
+    
+    
+    iframe{
+        position:absolute;
+        left:250px;
+        top:0px;
+        transition: all 0.5s;
+    }
+    
+    
+    
+</style>
+</head>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
+<script>
+    var hide = 0;
+    var width;
+    var height;
+    
+    function getWidth(WIDTH){
+        var w = $(window).innerWidth()/1280;
+        return WIDTH*w;
+    }
+    
+    function getHeight(HEIGHT){
+        var h = window.innerHeight/height;
+        return HEIGHT*h;
+    }
+    
+   
+$(document).ready(function(){
+    $('#free,#sc_shot,#howto').css('font-size', '24px');
+    $('#free,#sc_shot,#howto').css('text-align', 'center');
+    $('#free,#sc_shot,#howto').hover(function(){
+        $(this).css('color', '#d44a4a');
+    }, function(){
+        $(this).css('color', '#262626');
+    });
+    
+<?
+    $comm = $_GET['comm'];
+    if($comm == "free")
+        echo "$('iframe').attr('src', 'community_free.html');";
+    else if($comm == "sc_shot")
+        echo "$('iframe').attr('src', 'community_scshot.html');";
+    else if($comm == "howto")
+        echo "$('iframe').attr('src', 'community_howto.html');";
+?>
+    
+                  
+    
+    
+});
+    
+    
+    
+    
+    
+    
+</script>
+    
+    <body>
+<div id="left">
+<ul>
+    <li id="logo">COMMUNITY<br/></li>
+    
+    <li id="free">자유게시판</li>
+    <li id="sc_shot">스샷게시판<br/></li>
+    <li id="howto">공략게시판<br/></li>
+</ul>
+</div>
+<iframe src="community_free.html" frameborder=0 width="1000px" height="700px"></iframe>
+</body>
 </html>
+

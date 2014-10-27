@@ -1275,7 +1275,7 @@ function Render() {
             framework.addText('START', '20px "english_font"', width/2-325, height-30, '#262626');
             framework.addText('LOAD', '20px "english_font"', width/2-175, height-30, '#262626');
             framework.addText('CONFIG', '20px "english_font"', width/2-25, height-30, '#262626');
-            framework.addText('GALARY', '20px "english_font"', width/2+125, height-30, '#262626');
+            framework.addText('GALLERY', '20px "english_font"', width/2+125, height-30, '#262626');
             framework.addText('CREDIT', '20px "english_font"', width/2+275, height-30, '#262626');
             switch(menu){
                 case 0:

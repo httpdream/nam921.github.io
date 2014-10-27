@@ -82,7 +82,7 @@ Action_Array.push({r: 119, g: 149, b: 217, status: 0,
                                
 
 
-Action_Array.push({status: 0, r: 150, g: 214, b: 66,
+Action_Array.push({status: 0, r: 150, g: 214, b: 66, //책상
                    illust: 'LUCID', width:218, height:288, x:250, y:300,delay: 500,
                   callback: [function(){
                       var this_status = Action_Array[0].status;
@@ -99,7 +99,7 @@ Action_Array.push({status: 0, r: 150, g: 214, b: 66,
 Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:300, delay:500,  //AUTO
                    callback: [function(){
                        if(Action_Array[1].status == 0){
-                           Illust_falling(['음……여기는?',
+                           falling_Script(['음……여기는?',
                                             '내가 눈을 떴을 때, 가장 먼저 본 건',
                                             '하얀 천장이었다.',
                                             '아주 긴 잠에서 깬 듯한 기분이 들었다.',
@@ -111,18 +111,18 @@ Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:
                                             '으으……나는 어째서 여기에',
                                             '누워있는 거지? 전혀 기억나지 않는다.',
                                             '……기억? 그러고보니 난 누구였더라?', //기준
-                                            ],framework.addImage('ILLUST1', 350, 500), 'STORY');
+                                            ]);
                                            }},
                                            function(){
                                            if(Action_Array[1].status == 0){
-                                           Illust_falling(['……',
+                                           falling_Script(['……',
                                             '아무것도 기억나지 않아!',
                                             '이름도, 생긴 모습도,',
                                             '집 주소도, 아무것도!',
                                             '당황한 나는 벌떡 일어나 다시 한 번',
                                             '주변을 살펴보았다.',
                                             '아, 침대 옆에 뭔가 있다.',
-                                            '붉은 리본과……「연구일지」?'], framework.addImage('ILLUST2', 350, 500), 'STORY')
+                                            '붉은 리본과……「연구일지」?'])
                        }},
                            function(){
                                if(Action_Array[1].status == 0){
@@ -132,7 +132,7 @@ Action_Array.push({status:0, illust: 'ILLUST1', width:218, height:288, x:250, y:
                                }}]});
                               
                               
-                Action_Array.push({status: 0, r: 66, g: 108, b: 214,
+                Action_Array.push({status: 0, r: 66, g: 108, b: 214, //침대
                    illust: 'LUCID', width:218, height:288, x:250, y:300,delay: 500,
                   callback: [function(){
                       var this_status = Action_Array[2].status;
@@ -160,6 +160,7 @@ Action_Array.push({status: 0, r: 214, g: 66, b: 120,
                            }
                            else{
                                makeScript(['아직 할일이 남아있는거 같은데..?']);
+                                Potal(1, 1320, 927);
                                
                            }
                            
@@ -169,13 +170,19 @@ Action_Array.push({status: 0, r: 214, g: 66, b: 120,
 Action_Array.push({status: 0, r: 255, g: 0, b: 210,
     callback: [
         function(){
-            Potal(2, 350, 1180);
+            Potal(2, 350, 1100);
         }]});
 
 Action_Array.push({status: 0, r: 255, g: 0, b: 210,
     callback: [
         function(){
             makeScript(['통제실이다']);
+        }]});
+
+Action_Array.push({status: 0, r: 214, g: 66, b: 120,
+    callback: [
+        function(){
+            makeScript(['여기는 위험하다. 다른곳으로 가자.']);
         }]});
 /*
 Action_Array.push({status: 0, r: 66, g: 118, b: 214, callback: [

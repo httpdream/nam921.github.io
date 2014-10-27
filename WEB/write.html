@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8" />
+        <title>ALTIS TEST</title>
+        
+        
+        
+        <style>
+            body{
+                text-align: center;
+            }
+            #write{
+                
+                font-family: kor_font;
+                font-size: 35px;
+                margin: 0;
+            }
+            a{
+                text-decoration: none;
+            }
+            @font-face{
+                font-family: 'kor_font';
+                src: url('FONT/kor_Font.ttf');
+            }
+            
+            @font-face{
+                font-family: 'eng_font';
+                src: url('FONT/eng_Font.ttf');
+            }
+            
+            @font-face{
+                font-family: 'NanumBarunGothic';
+                src: url('FONT/NanumBarunGothic.ttf');
+            }
+            
+           
+            
+            #title{
+                
+            }
+            #body{
+                font-size: 25px;
+                font-family: 'NanumBarunGothic';
+                position:relative;
+                left: -10px;
+            }
+            #txt{
+                font-size: 20px;
+                width: 800px;
+            }
+            
+            textarea#txt{
+                height: 350px;
+            }
+            
+            #btn{
+                position: relative;
+                left:  0px;
+                width: 100px;
+                background-color: #262626;
+                font-size: 20px;
+                color:white;
+                padding:10px 20px 10px 20px;
+                cursor:pointer;
+                font-family: "NanumBarunGothic";
+            }
+            
+            #btn2{
+                position: relative;
+                left:  0px;
+                width: 130px;
+                background-color: white;
+                border-style:solid;
+                border-color: #262626;
+                font-size: 20px;
+                color:#262626;
+                padding:10px 20px 10px 20px;
+                cursor:pointer;
+                font-family: "NanumBarunGothic";
+            }
+            
+            #file{
+                left:  0px;
+                width: 800px;
+                background-color: white;
+                color: red;
+                border-style:solid;
+                border-color: #262626;
+                font-size: 20px;
+                color:#262626;
+                padding:10px 20px 10px 20px;
+                cursor:pointer;
+                font-family: "NanumBarunGothic";
+            }
+            
+            .file_inputbox{
+                font-size: 20px;
+                width: 700px;
+            }
+            
+            .file{
+                position: relative;
+                top: -70px;
+                left: 383px;
+                overflow: hidden;
+            }
+            
+            .file_btn{
+                color:#FFFFFF;
+                background-color: #262626;
+                border-style: solid;
+                font-size: 20px;
+                font-family: NanumBarunGothic;
+            }
+            .hidden{
+                font-size: 45px;
+                position: absolute;
+                top:0px;
+                right: 0px;
+                opacity: 0;
+                
+                filter: alpha(opacity=0);
+            }
+            .file_string{
+            }
+        </style>
+        
+        <script>
+            window.load = function(){
+                document.getElementById('file').select();
+                document.selection.clear();
+            }
+            function change(){
+                var file = document.getElementById('hid').value;
+                document.getElementById('fileName').value = file.substring(12, file.length);
+            }
+        </script>
+
+    </head>
+    
+    
+    <body>
+        <div id="write">
+        <span id="title">글작성</span>
+        <br/>
+        <form method="post" action="upload.php" enctype="multipart/form-data">
+            <span id="body">제목</span><input type=text id="txt" name="title"/><br/>
+            <span id="body">내용</span><textarea id="txt" name="content" ></textarea><br/>
+            <span id="body" class="file_string">파일</span>
+            
+            <input id="fileName" class="file_inputbox" readonly="readonly" />
+            <div class="file"> <input type="button" value="찾아보기" class="file_btn" />  <input type=file class="hidden" id="hid" onchange="change()" /> </div>
+            <span ><input type="submit" id="btn" value="글쓰기"></span>
+            <span ><input type="reset" id="btn2" value="다시작성"></span>
+        </form>
+        </div>
+        
+        
+        
+    </body>
+
+</html>

@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8" />
+        <title>ALTIS TEST</title>
+        
+        
+        
+        <style>
+            body{
+                text-align: center;
+            }
+            #login{
+                
+                font-family: kor_font;
+                font-size: 35px;
+                margin: 0;
+                position: relative;
+                top: 100px;
+            }
+            a{
+                text-decoration: none;
+            }
+            @font-face{
+                font-family: 'kor_font';
+                src: url('FONT/kor_Font.ttf');
+            }
+            
+            @font-face{
+                font-family: 'eng_font';
+                src: url('FONT/eng_Font.ttf');
+            }
+            
+            @font-face{
+                font-family: 'NanumBarunGothic';
+                src: url('FONT/NanumBarunGothic.ttf');
+            }
+            
+           
+            
+            #title{
+                
+            }
+            #body{
+                font-size: 25px;
+                font-family: 'NanumBarunGothic';
+                position:relative;
+                left: -10px;
+            }
+            #txt{
+                font-size: 20px;
+            }
+            
+            #btn{
+                position: relative;
+                left:  0px;
+                width: 100px;
+                background-color: #262626;
+                font-size: 20px;
+                color:white;
+                padding:10px 20px 10px 20px;
+                cursor:pointer;
+                font-family: "NanumBarunGothic";
+            }
+            
+            #btn2{
+                position: relative;
+                left:  0px;
+                width: 100px;
+                background-color: white;
+                border-style:solid;
+                border-color: #262626;
+                font-size: 20px;
+                color:#262626;
+                padding:10px 20px 10px 20px;
+                cursor:pointer;
+                font-family: "NanumBarunGothic";
+            }
+            
+            .
+        </style>
+        
+        <script>
+        </script>
+
+    </head>
+    
+    
+    <body>
+        <script>
+  window.fbAsyncInit = function() {
+			
+			//초기화
+			FB.init({
+				appId      : '1518098188447411', // App ID
+				//channelUrl : '//127.0.0.1:8020/rotuebook_html5/WebContent/testCase//FB_channel.html', // Channel File
+				status     : true, // check login status
+				cookie     : true, // enable cookies to allow the server to access the session
+				xfbml      : true  // parse XFBML
+			});
+			
+			// Additional initialization code here
+			/*
+			FB.ui({ method: 'feed', 
+			  message: 'Facebook for Websites is super-cool'
+			 });
+			*/
+			
+			//페이지 로드 했을시 호출 
+			FB.getLoginStatus(function(response) {
+				if (response.status === 'connected') {
+					
+					FB.api('/me', function(user) {
+						if (user) {
+							console.log(user.name);
+			
+							var image = document.getElementById('image');
+							image.src = 'http://graph.facebook.com/' + user.id + '/picture';
+							var name = document.getElementById('name');
+							name.innerHTML = user.name
+							var id = document.getElementById('id');
+							id.innerHTML = user.id
+
+						}
+					});	
+					var uid = response.authResponse.userID;
+					var accessToken = response.authResponse.accessToken;
+					 console.log(accessToken);
+					 
+				} else if (response.status === 'not_authorized') {
+					// the user is logged in to Facebook, 
+					// but has not authenticated your app
+				} else {
+					// the user isn't logged in to Facebook.
+				}
+			});
+			
+			//로그인 되는 순간 호출
+			FB.Event.subscribe('auth.login', function(response) {
+				alert("로그인 되는 순간 호출");
+				document.location.reload();
+			});
+			//로그아웃 되는 순간 호출
+			FB.Event.subscribe('auth.logout', function(response) {
+				alert("로그아웃 되는 순간 호출");
+				document.location.reload();
+			});
+ 			
+			/*
+			FB.login(function(response) {
+				if (response.authResponse) {
+					console.log('Welcome!  Fetching your information.... ');
+					FB.api('/me', function(response) {
+						console.log('Good to see you, ' + response.name + '.');
+					});
+				} else {
+					console.log('User cancelled login or did not fully authorize.');
+				}
+			});
+			*/	  
+        };
+		
+		//Feed백에 글남기는 method
+		function postToFeed (){
+			// calling the API ...
+			var obj = {
+				method: 'feed',
+				link: 'http://nam921.github.io/WEB',
+				picture: 'http://fbrell.com/f8.jpg',
+				name: 'name',
+				caption: 'caption',
+				description: 'description'
+			};
+			
+			function callback(response) {
+				alert("callback Fn");;
+			}
+			
+			FB.ui(obj, callback);
+		};
+		
+        // Load the SDK Asynchronously
+        (function(d){
+           var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement('script'); js.id = id; js.async = true;
+           js.src = "http://connect.facebook.net/ko_KR/all.js";
+           ref.parentNode.insertBefore(js, ref);
+         }(document));
+</script>
+          
+       <input type="submit" id="btn" class='fb_login' value='fbLogin'/a></span>
+        <span ><input type="submit" id="btn2" onclick='FB.login()' value="fbLogout"></span>
+        
+        
+        
+        
+    </body>
+
+</html>

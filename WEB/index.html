@@ -4,10 +4,10 @@
 <style>
     @font-face{
                 font-family: 'eng_font';
-                src: url('eng_Font.ttf');
+                src: url('FONT/eng_Font.ttf');
             }
     #logo{
-        background-image:url(logo2.png) ;
+        background-image:url(IMAGE/logo2.png) ;
         background-size: 100% 100%;
         margin-left: -10px;
         color: transparent;
@@ -73,7 +73,7 @@
         
         list-style-type: none;
         transition: color 0.5s;
-        
+        cursor: pointer;
     }
     
     #free{
@@ -93,7 +93,7 @@
     #howto{
         position:absolute;
         top: 70px;
-        left: 690px;
+        left: 692px;
     }
     
     
@@ -112,37 +112,37 @@
     #q{
         position:absolute;
         top: 70px;
-        left: 719px;
+        left: 749px;
     }
     
     #bar3{
         position:absolute;
         top: 70px;
-        left: 785px;
+        left: 812px;
     }
     
     #faq{
         position:absolute;
         top: 70px;
-        left: 800px;
+        left: 827px;
     }
     
     #_login{
         position:absolute;
         top: 70px;
-        left: 1100px;
+        left: 1171px;
     }
     
     #bar4{
         position:absolute;
         top: 70px;
-        left: 1095px;
+        left: 1166px;
     }
     
     #register{
         position:absolute;
         top: 70px;
-        left: 1031px;
+        left: 1100px;
     }
 </style>
 </head>
@@ -266,11 +266,11 @@ $(window).resize(function(){
     });
     
     $('#comm').click(function(){
-        $('iframe').attr('src', 'community.html');
+        $('iframe').attr('src', 'community.php?comm=free');
     });
     
     $('#qna').click(function(){
-        $('iframe').attr('src', 'qna.php');
+        $('iframe').attr('src', 'qna.html');
     });
     
     $('#ranking').click(function(){
@@ -278,9 +278,37 @@ $(window).resize(function(){
     });
     
     $('#login').click(function(){
-        $('iframe').attr('src', 'login.php');
+        $('iframe').attr('src', 'login.html');
     });
     
+    
+    $('#_login').click(function(){
+        $('iframe').attr('src', 'login.html');
+    });
+    
+    $('#free').click(function(){
+        $('iframe').attr('src', 'community.php?comm=free');
+    });
+    
+    $('#sc_shot').click(function(){
+        $('iframe').attr('src', 'community.php?comm=sc_shot');
+    });
+    
+    $('#howto').click(function(){
+        $('iframe').attr('src', 'community.php?comm=howto');
+    });
+    
+    $('#q').click(function(){
+        $('iframe').attr('src', 'question.html');
+    });
+    
+    $('#faq').click(function(){
+        $('iframe').attr('src', 'faq.html');
+    });
+    
+    $('#register').click(function(){
+        $('iframe').attr('src', 'register.html');
+    });
     
     
     $('#intro,#play,#ranking,#login,#free,#sc_shot,#howto,#q,#faq,#_login, #register').hover(function(){
@@ -305,7 +333,7 @@ $(window).resize(function(){
     <body>
 <div id="top">
 <ul>
-    <li id="logo">LOGOLO</li>
+    <li id="logo">LOGOLOGOLO</li>
     <li id="intro">INTRO</li>
     <li id="play">PLAY</li>
     <li id="comm">COMMUNITY</li>
