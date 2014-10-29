@@ -4,15 +4,13 @@
 session_start();
 $conn = mysql_connect('localhost', 'root', 'root');
 mysql_selectdb('web');
-$id = $_POST['id'];
-$password = md5($_POST['pw']);
+$id = $_GET['id'];
 
-$result = mysql_query("select * from user where id='$id' and password='$password'");
+$result = mysql_query("select * from user where fbid=$id");
 $row = @mysql_fetch_row($result);
 
 if(count($row)==1 || count($row)==0){
-    echo "<script>alert('아이디 또는 비밀번호가 틀립니다.'); window.history.back();</script>";
-    
+    echo "<script> parent.location = 'register.php?fb_id=$id';</script>";
 }
 else{
     $_SESSION['login_id'] = $row[0];

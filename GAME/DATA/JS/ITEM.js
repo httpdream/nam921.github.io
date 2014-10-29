@@ -30,3 +30,4 @@ Item_Array.push({index: 0, name: '연구일지', description: '누군가의 연�
 
 Item_Array.push({index: 1, name: '붉은 리본', description: '붉은 리본 한 쌍이다. 어디서 본 것 같은데 ……?'});
 Item_Array.push({index: 2, name: '여자아이의 사진', description: '붉은 리본을 양 옆으로 예쁘게 묶고 있는 여자아이 사진이다.'});
+Item_Array.push({index: 3, name: 'KeyCard', description: '제 1연구실에 들어갈 수 있는 키이다.'});

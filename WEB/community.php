@@ -81,9 +81,9 @@ $(document).ready(function(){
 <?
     $comm = $_GET['comm'];
     if($comm == "free")
-        echo "$('iframe').attr('src', 'community_free.html');";
+        echo "$('iframe').attr('src', 'community_free.php');";
     else if($comm == "sc_shot")
-        echo "$('iframe').attr('src', 'community_scshot.html');";
+        echo "$('iframe').attr('src', 'community_scshot.php');";
     else if($comm == "howto")
         echo "$('iframe').attr('src', 'community_howto.html');";
 ?>
@@ -110,7 +110,7 @@ $(document).ready(function(){
     <li id="howto">공략게시판<br/></li>
 </ul>
 </div>
-<iframe src="community_free.html" frameborder=0 width="1000px" height="700px"></iframe>
+<iframe src="community_free.html" frameborder=0 width="1000px" height="100%"></iframe>
 </body>
 </html>
 

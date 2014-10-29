@@ -1,3 +1,15 @@
+<?
+session_start();
+$register = '회원가입';
+$login = '로그인';
+$en_login = 'LOGIN';
+    
+if(isset($_SESSION['login_id'])){
+    $register = '정보관리';
+    $login = '로그아웃';
+    $en_login = 'LOGOUT';
+}
+?>
 <html>
 <head>
     <meta charset="utf-8">
@@ -21,6 +33,7 @@
         width:1280px;
         top:0px;
         background-color: #262626;
+        transition: all 0.5s;
     }
     ul{
         list-style: none;
@@ -130,26 +143,32 @@
     #_login{
         position:absolute;
         top: 70px;
-        left: 1171px;
+        left: 1158px;
     }
     
     #bar4{
         position:absolute;
         top: 70px;
-        left: 1166px;
+        left: 1153px;
     }
     
     #register{
         position:absolute;
         top: 70px;
-        left: 1100px;
+        left: 1087px;
+    }
+    
+    #hide{
+        position:absolute;
+        left: 1200px;
+        top: 50px;
     }
 </style>
 </head>
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <script>
-    var hide = 0;
+    var hide = 1;
     var width;
     var height;
     
@@ -204,6 +223,7 @@
         $('iframe').css('width', 1280+'px');
         $('iframe').css('height', (height-100)+'px');
         $('iframe').css('top',100+'px');
+        
     }
 $(document).ready(function(){
     
@@ -278,12 +298,12 @@ $(window).resize(function(){
     });
     
     $('#login').click(function(){
-        $('iframe').attr('src', 'login.html');
+        $('iframe').attr('src', 'path_login.php');
     });
     
     
     $('#_login').click(function(){
-        $('iframe').attr('src', 'login.html');
+        $('iframe').attr('src', 'path_login.php');
     });
     
     $('#free').click(function(){
@@ -307,11 +327,29 @@ $(window).resize(function(){
     });
     
     $('#register').click(function(){
-        $('iframe').attr('src', 'register.html');
+        $('iframe').attr('src', 'path_register.php');
     });
     
+    $('#hide').click(function(){
+        hide *= -1;
+        if(hide == 1){
+            $('#logo').css('display', 'block');
+            $('iframe').css('height', (height-100)+'px');
+            $('iframe').css('top',100+'px');
+            $('#top').css('top', '0px');
+            $('#hide').text('▲');
+        }
+        
+        else{
+            $('iframe').css('height', (height-35)+'px');
+            $('iframe').css('top',35+'px');
+            $('#top').css('top', '-65px');
+            $('#hide').text('▼');
+            $('#logo').css('display', 'none');
+        }
+    });
     
-    $('#intro,#play,#ranking,#login,#free,#sc_shot,#howto,#q,#faq,#_login, #register').hover(function(){
+    $('#intro,#play,#ranking,#login,#free,#sc_shot,#howto,#q,#faq,#_login, #register,#hide').hover(function(){
         $(this).css('color', '#d44a4a');
     }, function(){
         $(this).css('color', '#cacaca');
@@ -339,7 +377,8 @@ $(window).resize(function(){
     <li id="comm">COMMUNITY</li>
     <li id="qna">Q&A</li>
     <li id="ranking">RANKING</li>
-    <li id="login">LOGIN</li>
+    <li id="login"><?=$en_login?></li>
+    <li id="hide">▲</li>
 </ul>
     
     <ol class = "sub_comm">
@@ -357,9 +396,9 @@ $(window).resize(function(){
     </ol>
     
     <ol class = "sub_login">
-        <li id="register">회원가입</li>
+        <li id="register"><?=$register?>&nbsp;</li>
         <li id="bar4">|</li>
-        <li id="_login">&nbsp;로그인</li>
+        <li id="_login">&nbsp;<?=$login?></li>
     </ol>
     
     

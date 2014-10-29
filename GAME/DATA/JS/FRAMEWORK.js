@@ -106,7 +106,7 @@ var fullscreen = false;
 var around = 0;
 var scale = 1;
 
-var limit = 20;
+var limit = 35;
 
 function ViewIllust(_name, _x, _y, _width, _height, _action){
     gamestate = STATE_ILLUST;
@@ -145,8 +145,13 @@ function onPageLoadComplete() {
     width = 800;
     height = 600;
     
+    
     Temp = new ALTIS('Temp', 2000, 2000, false);
     framework = new ALTIS('ALTIS', width, height, true);
+    
+    framework.loadAudio('DATA/AUDIO/opening.mp3', 'opening');
+    framework.playAudio('opening');
+    
 
     full_width = $(window).innerWidth() - 20;
     full_height = $(window).innerHeight() - 20;
@@ -470,13 +475,22 @@ function start_game() {
     framework.addSprite('char', 'stand_right', [8]);
     framework.addSprite('char', 'stand_up', [12]);
     framework.addSprite('char', 'stand_down', [0]);
+    
+    framework.addKeyDown('Y', function(){
+        framework.controlVolume('opening',-0.1);
+    });
+    framework.addKeyDown('N', function(){
+        framework.controlVolume('opening',0.1);
+    });
 
     framework.setSprite('char', 'stand_down');
 
     framework.addKeyDown('LEFT', function () {
         if(gamestate == STATE_PLAY){
-            char_status.left = true;
-            framework.setSprite('char', 'left');
+            if(char_status.down==false && char_status.right == false && char_status.up ==false){
+                char_status.left = true;
+                framework.setSprite('char', 'left');
+            }
         }
         else if (gamestate == STATE_START){
             if(menu != 0) menu--;
@@ -489,8 +503,10 @@ function start_game() {
 
     framework.addKeyDown('RIGHT', function () {
         if(gamestate == STATE_PLAY){
-            char_status.right = true;
-            framework.setSprite('char', 'right');
+            if(char_status.left==false && char_status.down == false && char_status.up ==false){
+                char_status.right = true;
+                framework.setSprite('char', 'right');
+            }
         }
         else if (gamestate == STATE_START){
             if(menu != 4) menu++;
@@ -539,8 +555,10 @@ function start_game() {
 
     framework.addKeyDown('UP', function () {
         if(gamestate == STATE_PLAY){
-            char_status.up = true;
-            framework.setSprite('char', 'up');
+            if(char_status.left==false && char_status.right == false && char_status.down ==false){
+                char_status.up = true;
+                framework.setSprite('char', 'up');
+            }
         }
         
         else if (gamestate == STATE_PAUSE){
@@ -558,8 +576,10 @@ function start_game() {
 
     framework.addKeyDown('DOWN', function () {
         if(gamestate == STATE_PLAY){
-            char_status.down = true;
-            framework.setSprite('char', 'down');
+            if(char_status.left==false && char_status.right == false && char_status.up ==false){
+                char_status.down = true;
+                framework.setSprite('char', 'down');
+            }
         }
         
         else if (gamestate == STATE_PAUSE){
@@ -588,7 +608,7 @@ function start_game() {
                 case 1:
                     player_x = parseInt(framework.getData('data_x'));
                     player_y = parseInt(framework.getData('data_y'));
-                    framework.Context.translate(bg_x, bg_y);
+                    //framework.Context.translate(bg_x, bg_y);
                     bg_x = parseInt(framework.getData('data_bgx'));
                     bg_y = parseInt(framework.getData('data_bgy'));
                     MAP_CODE = parseInt(framework.getData('data_map'));
@@ -744,33 +764,47 @@ function start_game() {
 
     framework.addKeyUp('LEFT', function () {
         if(gamestate == STATE_PLAY){
-            char_status.left = false;
-            framework.setSprite('char', 'stand_left');
+            if(char_status.up==false && char_status.right == false && char_status.down ==false){
+                char_status.left = false;
+                framework.setSprite('char', 'stand_left');
+            }
         }
     });
 
     framework.addKeyUp('RIGHT', function () {
         if(gamestate == STATE_PLAY){
-            char_status.right = false;
-            framework.setSprite('char', 'stand_right');
+            if(char_status.left==false && char_status.up == false && char_status.down ==false){
+                char_status.right = false;
+                framework.setSprite('char', 'stand_right');
+            }
         }
     });
 
     framework.addKeyUp('UP', function () {
         if(gamestate == STATE_PLAY){
-            char_status.up = false;
-            framework.setSprite('char', 'stand_up');
+            if(char_status.left==false && char_status.right == false && char_status.down ==false){
+                char_status.up = false;
+                framework.setSprite('char', 'stand_up');
+            }
         }
     });
 
     framework.addKeyUp('DOWN', function () {
         if(gamestate == STATE_PLAY){
-            char_status.down = false;
-            framework.setSprite('char', 'stand_down');
+            if(char_status.left==false && char_status.right == false && char_status.up ==false){
+                char_status.down = false;
+                framework.setSprite('char', 'stand_down');
+            }
         }
     });
     
     framework.addKeyDown('O', function(){
+        char_status.left=false;
+        char_status.right=false;
+        char_status.up=false;
+        char_status.down=false;
+        framework.setSprite('char', 'stand_down');
+        
         menu = 0;
         sub_menu = 0;
         if (gamestate == STATE_PLAY)
@@ -782,6 +816,9 @@ function start_game() {
         
         if (gamestate == STATE_PLAY)
             gamestate = STATE_INVENTORY;
+        
+        else if(gamestate == STATE_INVENTORY)
+            gamestate = STATE_PLAY;
     });
     
     ///COOKIE TEST
@@ -990,10 +1027,10 @@ function Render() {
             if(cur_select != -1){
                 framework.addRect(30+bg_x , height-230+bg_y, width-60, 200, '#00f', 0.5);
                 for(var t = 0; t<selection.length; t++){
-                    if(t == cur_select) framework.addText('►', '24px arial', 60+bg_x, height-100+bg_y+25*t, '#0f0');
-                    framework.addText(selection[t], '24px arial', 80+bg_x, height-100+bg_y+25*t, '#0f0');
+                    if(t == cur_select) framework.addText('►', '24px arial', 60+bg_x, height-100+bg_y+25*t, '#fff');
+                    framework.addText(selection[t], '24px arial', 80+bg_x, height-100+bg_y+25*t, '#fff');
                 }
-                framework.addText(dialogue[dialogue_index].substring(0,current_dialogue), '24px script_font', 60+bg_x, height-200+bg_y, '#0f0');
+                framework.addText(dialogue[dialogue_index].substring(0,current_dialogue), '24px script_font', 60+bg_x, height-200+bg_y, '#fff');
             }
             else if(typeof dialogue[dialogue_index] == "string"){
                 framework.addRect(30+bg_x , height-130+bg_y, width-60, 100, '#00f', 0.5);
@@ -1033,8 +1070,8 @@ function Render() {
                 
                 if(current_dialogue>=dialogue[dialogue_index].length && end_visible){
                     if(current_npc.illust)
-                        framework.addText('▼', '24px korean_font', width+bg_x-300, height+bg_y-40, '#0f0');
-                    else framework.addText('▼', '24px korean_font', width+bg_x-75, height+bg_y-40, '#0f0');
+                        framework.addText('▼', '24px korean_font', width+bg_x-300, height+bg_y-40, '#fff');
+                    else framework.addText('▼', '24px korean_font', width+bg_x-75, height+bg_y-40, '#fff');
                 }
                 
                 if(current_npc.illust){
@@ -1325,6 +1362,7 @@ function addSpaceDown(x,y,current,callback){
         char_status.left=false;
         char_status.right=false;
         char_status.up=false;
+        framework.setSprite('char', 'stand_down');
         
         
         
@@ -1349,7 +1387,7 @@ function addSpaceDown(x,y,current,callback){
         
         else{
             if(gamestate == STATE_STORY|| gamestate == STATE_FALLING);
-            else{
+            else if(x == player_x && y == player_y && current==MAP_CODE){
             setTimeout(callback[function_index], 1);
             console.log('p2');
             }

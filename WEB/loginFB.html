@@ -1,0 +1,68 @@
+<!doctype html>
+<html xmlns:fb="http://ogp.me/ns/fb#">
+<html>
+    <head>
+      <title>My Facebook Login Page</title>
+      <meta charset="UTF-8">
+    </head>
+    <body>
+
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+			
+			//초기화
+			FB.init({
+				appId      : '1518098188447411', // App ID
+				//channelUrl : '//127.0.0.1:8020/rotuebook_html5/WebContent/testCase//FB_channel.html', // Channel File
+				status     : true, // check login status
+				cookie     : true, // enable cookies to allow the server to access the session
+				xfbml      : true  // parse XFBML
+			});
+			
+			// Additional initialization code here
+			/*
+			FB.ui({ method: 'feed', 
+			  message: 'Facebook for Websites is super-cool'
+			 });
+			*/
+			
+			
+			
+			
+ 			
+			
+			FB.login(function(response) {
+				if (response.authResponse) {
+					FB.api('/me', function(response) {
+                        parent.location = 'fb_login.php?id='+response.id;
+					});
+				} else {
+					console.log('User cancelled login or did not fully authorize.');
+				}
+			});
+			
+        };
+		
+		
+		
+        // Load the SDK Asynchronously
+        (function(d){
+           var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+           if (d.getElementById(id)) {return;}
+           js = d.createElement('script'); js.id = id; js.async = true;
+           js.src = "http://connect.facebook.net/ko_KR/all.js";
+           ref.parentNode.insertBefore(js, ref);
+         }(document));
+		 //end Load the SDK Asynchronously
+		 
+      </script>
+     <h1>현재 페이지와 연동된 Facebook</h1>
+     <hr><hr>
+     
+     
+    
+
+    </body>
+ </html>
+

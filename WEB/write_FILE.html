@@ -47,26 +47,14 @@
                 position:relative;
                 left: -10px;
             }
-            #title{
+            #txt{
                 font-size: 20px;
-                width: 790px;
-                background-color: #262626;
-                color: white;
-                font-family: 'NanumBarunGothic';
-                padding:5px;
+                width: 800px;
             }
-            #content{
-                font-size: 20px;
-                width: 771px;
-                padding: 15px;
+            
+            textarea#txt{
                 height: 350px;
-                color: #262626;
-                position: relative;
-                font-family: 'NanumBarunGothic';
-                top: -5px;
             }
-            
-            
             
             #btn{
                 position: relative;
@@ -156,9 +144,12 @@
         <div id="write">
         <br/>
         <form method="post" action="upload.php" enctype="multipart/form-data">
-            <input type=text id="title" name="title" placeholder="제목"/>
-            <textarea id="content" name="content" placeholder="내용"></textarea><br/>
-
+            <input type=text id="txt" name="title"/>
+            <textarea id="txt" name="content" ></textarea><br/>
+            <span id="body" class="file_string">파일</span>
+            
+            <input id="fileName" class="file_inputbox" readonly="readonly" />
+            <div class="file"> <input type="button" value="찾아보기" class="file_btn" />  <input type=file class="hidden" id="hid" name='file' onchange="change()" /> </div>
             <span ><input type="submit" id="btn" value="등록"></span>
             <span ><input type="reset" id="btn2" value="돌아가기"></span>
         </form>

@@ -1,4 +1,6 @@
-
+<?
+session_start();
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,7 +8,7 @@
         <meta charset="utf-8" />
         <title>ALTIS TEST</title>
         
-        
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         
         <style>
             body{
@@ -79,16 +81,27 @@
                 font-family: "NanumBarunGothic";
             }
             
+            
             .
         </style>
         
-        <script>
-        </script>
+        
 
     </head>
     
+    <script>
+        window.onload = function(){
+            $('#fb').click(function(){
+                $('iframe').attr('src', 'loginFB.html');
+            });
+        }
+    </script>
     
     <body>
+      
+          
+        
+        
         <div id="login">
         <span id="title">로그인</span>
         <br/>
@@ -96,8 +109,18 @@
             <span id="body">아 이 디</span><input type=text id="txt" name="id"/><br/>
             <span id="body">비밀번호</span><input type=password id="txt" name="pw"/><br/>
             
-            <span ><a href="register.html" id="btn">회원가입</a></span>
-            <span ><input type="submit" id="btn2" value="로그인"></span>
+            <span ><a href="register.php" id="btn">회원가입</a></span>
+            <span ><input type="submit" id="btn2" value="로그인"></span><br/>
+
+  <img src='IMAGE/fb.png' id='fb'/>
+            
+            <iframe width='0px' height='0px'/>
+                
+            
+            
+            
+    <!--<a href="#" id="auth-logoutlink" style="font-size: 20px;" onclick="FB.logout(function() { document.location.reload(); });">[logout]</a><br>-->
+            
         </form>
         </div>
         

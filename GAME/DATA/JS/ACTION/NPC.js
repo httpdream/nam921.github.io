@@ -81,7 +81,7 @@ Action_Array.push({r: 119, g: 149, b: 217, status: 0,
                               
                                
 
-
+//ROOM_1
 Action_Array.push({status: 0, r: 150, g: 214, b: 66, //책상
                    illust: 'LUCID', width:218, height:288, x:250, y:300,delay: 500,
                   callback: [function(){
@@ -156,33 +156,117 @@ Action_Array.push({status: 0, r: 214, g: 66, b: 120,
                    callback: [
                        function(){
                            if(Action_Array[3].status==1){
-                               Potal(1, 200, 990);
+                               //makeScript(['아직 할일이 남아있는거 같은데..?']);
+                                Potal(1, 1320, 927);
+                               //makeScript(['복도인것 같다.']);
                            }
                            else{
                                makeScript(['아직 할일이 남아있는거 같은데..?']);
-                                Potal(1, 1320, 927);
                                
                            }
                            
-                       }
-                   ]});
+                       },
+                   function(){}]});
 
-Action_Array.push({status: 0, r: 255, g: 0, b: 210,
+Action_Array.push({status: 0, r: 228, g: 0, b: 255, //복도
     callback: [
         function(){
             Potal(2, 350, 1100);
+            //makeScript(['통제실인것 같다.']);
         }]});
 
-Action_Array.push({status: 0, r: 255, g: 0, b: 210,
+Action_Array.push({status: 0, r: 0, g: 201, b: 9, //통제실
     callback: [
         function(){
-            makeScript(['통제실이다']);
+            var i=0;
+            makeScript(['딱히 모르겠으니 쓰제마세요 ㅠ', 'ㅎㅎ쓸건데']);
         }]});
 
-Action_Array.push({status: 0, r: 214, g: 66, b: 120,
+Action_Array.push({status: 0, r: 112, g: 81, b: 18, //통제실의 문
     callback: [
         function(){
-            makeScript(['여기는 위험하다. 다른곳으로 가자.']);
+            Potal(1, 242, 955);
+            //makeScript(['복도인것 같다.']);
+        }]});
+
+Action_Array.push({status: 0, r: 13, g: 52, b: 191, //통제실 의자
+    callback: [
+        function(){
+            makeScript(['의자이다', '맛있겠다']);
+        }]});
+
+Action_Array.push({status: 0, r: 105, g: 79, b: 18, //복도
+    callback: [
+        function(){
+            Potal(0, 519, 1115);
+            //makeScript(['<방입니다?>']);
+        }]});
+
+Action_Array.push({status: 0, r: 7, g: 243, b: 214, //복도
+    callback: [
+        function(){
+            Potal(3, 346, 388);
+        }]});
+
+Action_Array.push({status: 0, r: 255, g: 0, b: 0, //복도2
+    callback: [
+        function(){
+            Potal(4, 402, 405);
+        }]});
+
+Action_Array.push({status: 0, r: 255, g: 150, b: 0, //복도2
+    callback: [
+        function(){
+            Potal(1, 242, 1055);
+        }]});
+
+Action_Array.push({status: 0, r: 204, g: 255, b: 0, //연구실1로 가는문
+    callback: [
+        function(){
+            var find = 0;
+            for(var i = 0; i<myItem.length; i++){
+                if(myItem[i].name == 'KeyCard'){
+                    find = 1;
+                }
+            }
+            if(find==1)makeScript(['아직 안그림 ㅠㅠ ㅈㅅ']);
+            else
+            makeScript(['문이 잠겨있다. 문을 열려면 키카드가 필요할것같다.']);
+        }]});
+
+Action_Array.push({status: 0, r: 228, g: 255, b: 0, //치킨치킨
+    callback: [
+        function(){
+            if(Action_Array[13].status==0){
+                myItem.push(Item_Array[3]);
+                makeScript(['치킨이네! 맛있겠다...', '어? 자세히 보니 무언가가 있다.', '[KeyCard를 획득했다]', '이것으로 다른문을 열수있는거 같은데?']);
+                Action_Array[13].status=1;
+            }
+            //Action_Array[13].status=1;
+        }]});
+
+Action_Array.push({status: 0, r: 17, g: 238, b: 50, //평범한 테이블
+    callback: [
+        function(){
+            makeScript(['평번한 테이블이다', '맛있겠다']);
+        }]});
+
+Action_Array.push({status: 0, r: 255, g: 0, b: 0, //음식조리
+    callback: [
+        function(){
+            makeScript(['여기서 음식을 만들어 먹는 듯 하다', '맛있겠다']);
+        }]});
+
+Action_Array.push({status: 0, r: 128, g: 85, b: 29, //복도2
+    callback: [
+        function(){
+            Potal(3, 388, 1188);
+        }]});
+
+Action_Array.push({status: 0, r: 0, g: 255, b: 228, //복도2
+    callback: [
+        function(){
+            makeScript(['6_복도와 연겨로딘 문']);
         }]});
 /*
 Action_Array.push({status: 0, r: 66, g: 118, b: 214, callback: [

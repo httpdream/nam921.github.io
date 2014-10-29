@@ -89,6 +89,7 @@ function ALTIS(id, width, height, visible) {
     this.height = height;
     this.Image = new Array();
     this.Sprite = new Array();
+    this.Audio = new Array();
 
     if(visible == true)
         document.body.innerHTML += '<canvas id = ' + id + ' width=' + width + ' height=' + height + ' style="position: absoulte;">캔버스도 안되</canvas>';
@@ -105,32 +106,45 @@ Array.prototype.Last = function(){
     return this[this.length-1];
 }
 
-String.prototype.toFunction = function(){
-    var functionName = this;
-    var args = Array.prototype.slice.call(arguments).splice(1);
-    //debug
-    console.log('args:', args);
+ALTIS.prototype.loadAudio = function(src, name){
+    var audio = new Audio(src);
+    audio.addEventListener('ended',function(){this.currentTime=0;this.play();},false);
+    this.Audio.push({ audio: audio, name: name });  
+}
 
-    var namespaces = functionName.split(".");
-    //debug
-    console.log('namespaces:', namespaces);
+ALTIS.prototype.playAudio = function(name){
+    var found = 0;
+    for(var i=0; i<this.Audio.length; i++){
+        if(name == this.Audio[i].name){
+            var Audio = this.Audio[i].audio;
+            Audio.play();
+            Audio.volume = 0.9;
+        }
+    }
+}
 
-    var func = namespaces.pop();
-    //debug
-    console.log('func:', func);
+ALTIS.prototype.pauseAudio = function(name){
+    var found = 0;
+    for(var i=0; i<this.Audio.length; i++){
+        if(name == this.Audio[i].name){
+            this.Audio[i].audio.pause();
+        }
+    }
+}
 
-    ns = namespaces.join('.');
-    //debug
-    console.log('namespace:', ns);
-
-    
-
-    ns = eval(ns);
-    //debug
-    console.log('evaled namespace:', ns);
-
-    //if(ns=='') return window[]
-    return ns[func].apply(ns, args);
+ALTIS.prototype.controlVolume = function(name, volume){
+    var found = 0;
+    for(var i=0; i<this.Audio.length; i++){
+        if(name == this.Audio[i].name){
+            var Audio = this.Audio[i].audio;
+            var Audio_volume = Audio.volume;
+            Audio_volume += volume;
+            console.log(Audio_volume);
+            
+            if(-1 < Audio_volume && Audio_volume <= 1)
+                Audio.volume += volume;
+        }
+    }
 }
 
 
