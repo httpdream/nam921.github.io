@@ -1,7 +1,6 @@
 <meta charset="utf-8">
-<?
-$mysql = mysql_connect('localhost', 'root', 'root');
-mysql_select_db('web', $mysql);
+<?php
+include "db_info.php";
 mysql_query('charset utf-8');
 $query = "select* from board where idx=$_GET[id]";
 $result = mysql_query($query);

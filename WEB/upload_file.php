@@ -2,9 +2,9 @@
 <html>
     <meta charset="utf-8">
     
-<?
+<?php
 $title = $_POST['title'];
-$nickname = 'TEMP';
+$nickname = $_SESSION['login_nick'];
 $content = $_POST['content'];
 $date = date("YmdHis");
 $time = date("ymd");
@@ -12,8 +12,7 @@ $time = date("ymd");
 if(!$_FILES['file']['name'])
     {
         echo "<script>alert('업로드 할 파일이 입력되지 않았습니다.');";
-        $conn = mysql_connect('localhost', 'root', 'root');
-mysql_selectdb('web');
+        include "db_info.php";
 $query = "insert into board (title, nickname, content, time) values('$title', '$nickname', '$content', '$time')";
 
 $result = mysql_query($query);
@@ -42,8 +41,6 @@ if(is_uploaded_file($_FILES['file']['tmp_name'])){
     }
 }
 
-$conn = mysql_connect('localhost', 'root', 'root');
-mysql_selectdb('web');
 $query = "insert into board (title, nickname, content, time, file_name, file_hash) values('$title', '$nickname', '$content', '$time', '".$_FILES['file']['name']."', '$file_hash')";
 
 $result = mysql_query($query);

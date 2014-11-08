@@ -1,5 +1,8 @@
-<?
-session_start();
+<?php
+if(isset($_SESSION['login_nick'])){
+    echo '이미 로그인되었는데?';
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,6 +85,7 @@ session_start();
             }
             
             
+            
             .
         </style>
         
@@ -112,7 +116,7 @@ session_start();
             <span ><a href="register.php" id="btn">회원가입</a></span>
             <span ><input type="submit" id="btn2" value="로그인"></span><br/>
 
-  <img src='IMAGE/fb.png' id='fb'/>
+  
             
             <iframe width='0px' height='0px'/>
                 

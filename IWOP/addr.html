@@ -1,0 +1,109 @@
+<html>
+    <meta charset="utf-8">
+    <style>
+        @font-face{
+            font-family: asd;
+            src: url(asd.ttf);
+        }
+        
+        table{
+            text-align:center;
+            font-family: asd;
+            border-style:outset;
+            margin: 100px;
+            width: 1280px;
+        }
+        img{
+            width: 300px;
+            height: 100px;
+        }
+        .btn{
+            width: 80px;
+            height : 40px;
+            background-color:#1cbbb4;
+            color: white;
+            padding: 5px 10px;
+            font-size: 20px;
+            margin: 10px 5px;
+            position:relative;
+            top: -10px;
+        }
+        
+        tr:nth-child(2) td{
+            background-color: #45413e;
+            color:#1cbbb4;
+            font-size: 30px;
+            padding: 5px 10px;
+        }
+        
+        tr:first-child td{
+            text-align: left;
+        }
+        
+        tr:first-child td:last-child{
+            text-align: right;
+            vertical-align:bottom;
+        }
+        
+        select{
+            width: 200px;
+            height: 40px;
+            font-size: 20px;
+        }
+        
+        
+        td:first-child{
+            width: 200px;
+            height: 60px;
+        }
+        
+        td:nth-child(2){
+            width: 200px;
+            height: 60px;
+        }
+        
+        td:nth-child(3){
+            width: 320px;
+            height: 60px;
+        }
+        
+        td:last-child{
+            width: 420px;
+            height: 60px;
+        }
+        
+        td{
+            font-size: 30px;
+        }
+        
+        
+    </style>
+
+    <body>
+        <table>
+            <tr>
+                <td colspan="3"><img src=4.png /><span class='btn'>등록</span> <span class='btn'>수정</span> <span class='btn'>삭제</span></td>
+                <td>
+                    <select>
+                        <option value="volvo">16기</option>
+                        <option value="saab">15기</option>
+                        <option value="mercedes">14기</option>
+                        <option value="audi">....</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>이름</td>
+                <td>기수</td>
+                <td>전화번호</td>
+                <td>이메일</td>
+            </tr>
+            <tr>
+                <td>asdf</td>
+                <td>16기</td>
+                <td>010-0084-5564</td>
+                <td>asdf@asdffew.net</td>
+            </tr>
+        </table>
+    </body>
+</html>

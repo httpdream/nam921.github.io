@@ -1,7 +1,6 @@
-<?
+<?php
 session_start();
-$mysql = mysql_connect('localhost', 'root', 'root');
-mysql_select_db('web', $mysql);
+include "db_info.php";
 mysql_query('charset utf-8');
 $query = "select* from board where idx=$_GET[id]";
 $result = mysql_query($query);
@@ -103,7 +102,7 @@ if(isset($_SESSION['login_nick']))
                 top: -5px;
                 resize: none;
                 float: left;
-<?
+<?php
 if($nick=='')
 echo "display:none;";
 ?>
@@ -126,9 +125,17 @@ echo "display:none;";
                 background-color: #C4C4C4;
                 color: #262626;
                 font-family: 'NanumBarunGothic';
-                font-size: 15px;
+                font-size: 20px;
                 width: 782px;
                 margin-bottom: 2px;
+            }
+            
+            pre{
+                background-color: #C4C4C4;
+                color: #262626;
+                font-family: 'NanumBarunGothic';
+                font-size: 15px;
+                width: 782px;
             }
             
             #do{
@@ -143,7 +150,7 @@ echo "display:none;";
                 padding:10px 20px 10px 20px;
                 cursor:pointer;
                 font-family: "NanumBarunGothic";
-<?
+<?php
 if($nick=='')
 echo "display:none;";
 ?>
@@ -164,6 +171,12 @@ echo "display:none;";
                 margin: 1px;
                 text-align:left;
                 
+            }
+            
+            #hid{
+                <?php
+if($row[2] != $nick) echo 'display: none;';
+?>
             }
             
             
@@ -189,19 +202,19 @@ echo "display:none;";
                 <span><input type="submit" id="do" value="등록"></span><br/>
                 </form>
             
-<?
+<?php
     while($row = mysql_fetch_row($result)){
-        echo "<div class='reply'>$row[2]&nbsp;&nbsp;&nbsp;&nbsp;$row[1]</div>";
+        echo "<div class='reply'>$row[2]<pre>$row[1]</pre></div>";
     }
 
 ?>
 <div class='end'>qwe</div>            
             
             
-            <div><input type="reset" id="btn" value="목록" style='float: left; margin:20px'></div>
+            <div><input type="reset" onclick='history.back(-1);' id="btn" value="목록" style='float: left; margin:20px'></div>
             <div id='bot'>
-            <span><a href='modify.php?id=<?=$id?>'><input type="button" id="btn" value="수정"></a></span>
-                <span><a href='delete.php?id=<?=$id?>'><input type="button" id="btn" value="삭제"></a></span>
+            <span id='hid'><a href='modify.php?id=<?=$_GET['id']?>'><input type="button" id="btn" value="수정"></a></span>
+                <span id='hid'><a href='delete.php?id=<?=$_GET['id']?>'><input type="button" id="btn" value="삭제"></a></span>
                 </div>
         </div>
         
@@ -212,7 +225,7 @@ echo "display:none;";
 </html>
 
 <meta charset="utf-8">
-<?
+<?php
 if($row[5]){
   echo "<a href='download.php?id=$_GET[id]'> download: $row[6] </a>";
 }

@@ -11,7 +11,7 @@ GAME HOMEPAGE
     <body>
         <table border=1>
             <tr><td>번호</td><td>제목</td><td>닉네임</td></td><td>작성시각</td></tr>
-        <?
+        <?php
              $mysql = mysql_connect('localhost', 'root', 'root');
              mysql_select_db('web', $mysql);
              mysql_query('charset utf-8');

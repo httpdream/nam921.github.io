@@ -1,0 +1,137 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>인간의 시간</title>
+    
+<style>
+    
+    @font-face{
+    font-family: 'NanumGothic';
+    src: url('font/nanumbarungothic.ttf');
+}
+    
+
+
+@font-face{
+    font-family: 'Aleo';
+    src: url('font/aleo.otf');
+}
+
+@font-face{
+    font-family: 'NanumBrush';
+    src: url('font/nanumbrush.ttf');
+}
+
+
+    
+    #logo{
+        background-image:url(IMAGE/logo.png) ;
+        background-size: 100% 100%;
+        margin-top: 20px;
+        opacity: 0.8;
+        padding: 10px;
+        color: transparent;
+    }
+    body{
+        background-image:url(IMAGE/bg_index.png) ;
+        background-size: 100% 100%;
+        background-color: #1cbbb4;
+        height: 880px;
+    }
+    
+    ul{
+        list-style: none;
+    }
+    ul li{
+        font-family: 'NanumGothic';
+        float:left;
+        
+        
+        margin:35px;
+        
+        font-size:32px;
+        color:white;
+        cursor: pointer;
+        transition: color 0.5s;
+    }
+    
+    
+    
+    iframe{
+        position:absolute;
+        top:144px;
+        transition: all 0.5s;
+    }
+    
+    .sub_comm{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    .sub_qna{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    .sub_login{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    
+    
+    #right{
+        text-align: right;
+    }
+    
+    #write{
+        transition-duration: 0.5s;
+    }
+    #write:hover{
+        transform: rotate(20deg);
+    }
+    
+    #iwop{
+        font-family: 'Aleo';
+        font-size: 112px;
+        color: white;
+    }
+    
+    span{
+        color: #45413e;
+    }
+    
+    #fb_iwop{
+        font-family: 'NanumBrush';
+        font-size:32px;
+        color: white;
+        position: relative;
+        top: -50px;
+    }
+    
+    #fb{
+        position: relative;
+        left: -100px;
+    }
+    
+</style>
+</head>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    
+	
+
+    
+<body>
+    <div id='right'><img src='image/write.png' id='write' width=256px height=256px/></div>
+    <div id='iwop'><span>I</span>nternet<br/><span>W</span>orld<br/><span>O</span>peration<br/><span>P</span>eople<span id='fb_iwop'>[아이-왑]</span><img width=42px height=44px src='image/fb.png' id='fb'/></div></div>
+    <div style='text-align:center'><img src='image/arrow.png'></div>
+    
+    
+
+</body>
+</html>
+

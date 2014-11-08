@@ -1,4 +1,6 @@
-
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -36,13 +38,14 @@
             
             #btn{
                 position: relative;
-                left:  657px;
+                left:  635px;
                 width: 100px;
                 background-color: #262626;
                 color:white;
                 padding:10px 20px 10px 20px;
                 cursor:pointer;
                 font-family: "NanumBarunGothic";
+                <?php if(!isset($_SESSION['login_nick'])) echo 'display:none;'; ?>
             }
             
             #title{
@@ -126,12 +129,19 @@
                 
                 
                 
-                <?
-             $mysql = mysql_connect('localhost', 'root', 'root');
-             mysql_select_db('web', $mysql);
+                <?php
+             include "db_info.php";
              mysql_query('charset utf-8');
              
-             $result = mysql_query('select* from board order by idx desc');
+$result='addr';
+             if(isset($_GET['page'])){
+                 $f = $_GET['page'];
+                 $prev = ($f-1)*10;
+                 $next = $f*10;
+                $result = mysql_query("select* from board order by idx desc limit $prev,10");
+             }
+
+            else $result = mysql_query('select* from board order by idx desc');
              while($row = mysql_fetch_row($result)){
                  echo "<tr class='body'>";
                  for($i = 0; $i<3; $i++)
@@ -152,20 +162,28 @@
             </tbody>
         </table>
         <div class="center">
-        <span class="arrow">◄</span>
-        <span class="bottom">
-            <a href='community.php?page=1'>1 </a>
-                 2 
-                 3 
-                 4 
-                 5 
-                 6 
-                 7 
-                 8 
-                 9 
-                 10 
+            <a href='community_free.php?page=<?php
+if(isset($_GET['page'])){ if($_GET['page']>1) echo ($_GET['page']-1); else echo '1';}
+else echo '1';
+?>
+                     '><span class="arrow">◄</span></a>
+        
+        <span>
+            <?php
+$result = mysql_query("select* from board");
+$row = ceil(mysql_num_rows($result)/10);
+
+for($i = 1; $i<=$row; $i++)
+    echo "<a href='community_free.php?page=$i'> $i </a>";
+            ?>
+            
         </span>
-        <span class="arrow">►</span>
+            
+            <a href='community_free.php?page=<?php
+if(isset($_GET['page'])) echo ($_GET['page']+1);
+else echo '2';
+?>
+                     '><span class="arrow">►</span></a>
         </div>
     </body>
 

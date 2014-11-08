@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>IWOP_HOMEPAGE</title>
+	
+
+
+	<link rel="stylesheet" type="text/css" href="CSS/jquery.fullPage.css" />
+	
+	<style>
+    
+    @font-face{
+    font-family: 'NanumGothic';
+    src: url('font/nanumbarungothic.ttf');
+}
+        @font-face{
+    font-family: 'NanumGothic-bold';
+    src: url('font/bold_nanumbarungothic.ttf');
+}
+    
+
+
+@font-face{
+    font-family: 'Aleo';
+    src: url('font/aleo.ttf');
+}
+
+@font-face{
+    font-family: 'NanumBrush';
+    src: url('font/nanumbrush.ttf');
+}
+    
+    
+    #iwop{
+        font-family: 'Aleo';
+        font-size: 112px;
+        color: white;
+        margin-left: 50px;
+    }
+    
+    span{
+        color: #45413e;
+    }
+    
+    #fb_iwop{
+        font-family: 'NanumBrush';
+        font-size:32px;
+        color: white;
+        position: relative;
+        top: -50px;
+    }
+    
+    #fb{
+        position: relative;
+        left: -100px;
+    }
+    
+    .section:first-child{
+        background-image:url(IMAGE/bg_index.png) ;
+        background-color: #1cbbb4;
+    }
+        
+        .section{
+            width: 1280px;
+            height: 880px;
+        }
+    
+    .center{
+        text-align: center;
+    }
+    
+    .left{
+        
+        text-align: left;
+    }
+        
+        .bottom{
+            vertical-align: bottom;
+        }
+    
+    .right{
+        text-align: right;
+    }
+        
+    .section:nth-child(3) table{
+            text-align:center;
+            font-family: 'NanumGothic-bold';
+        }
+        .section:nth-child(3) td{
+            width: 280px;
+            font-size: 30px;
+            padding-left: 10px;
+        }
+        .section:nth-child(3) table img{
+            height: 280px;
+        }
+        .section:nth-child(3) tr:first-child td{
+            padding-top: 80px;
+        }
+        .section:nth-child(3) tr:nth-child(3) td{
+            padding-top: 80px;
+        }
+        .section:nth-child(3) td:first-child{
+            padding-left:100px;
+            font-size: 50px;
+            text-align: left;
+        }
+        .section:nth-child(3) td:last-child{
+            font-size: 50px;
+            padding-right: 100px;
+            text-align: right;
+        }
+        .section:nth-child(3) td:nth-child(2){
+            text-align: left;
+            vertical-align: text-top;
+        }
+        .section:nth-child(3) td:nth-child(3){
+            text-align: right;
+            vertical-align: text-top;
+        }
+        
+        .section:nth-child(4) table{
+            text-align:center;
+            font-family: NanumGothic-bold;
+            margin: 100px;
+            font-size: 20px;
+        }
+        .section:nth-child(4) img{
+            width: 300px;
+            height: 70px;
+        }
+        .btn{
+            width: 80px;
+            height : 40px;
+            background-color:#1cbbb4;
+            color: white;
+            padding: 5px 10px;
+            font-size: 20px;
+            margin: 5px;
+            position:relative;
+            top: -10px;
+        }
+        
+        .section:nth-child(4) tr:nth-child(2) td{
+            background-color: #45413e;
+            color:#1cbbb4;
+            font-size: 25px;
+            padding: 5px 10px;
+        }
+        
+        .section:nth-child(4) tr:first-child td{
+            text-align: left;
+        }
+        
+        .section:nth-child(4) tr:first-child td:last-child{
+            text-align: right;
+            vertical-align:bottom;
+        }
+        
+        .section:nth-child(4) select{
+            width: 200px;
+            height: 40px;
+            font-size: 25px;
+            position:relative;
+            top: -10px;
+        }
+        
+        
+        .section:nth-child(4) td:first-child{
+            width: 200px;
+            height: 40px;
+        }
+        
+        .section:nth-child(4) td:nth-child(2){
+            width: 200px;
+            height: 40px;
+        }
+        
+        .section:nth-child(4) td:nth-child(3){
+            width: 320px;
+            height: 40px;
+        }
+        
+        .section:nth-child(4) td:last-child{
+            width: 420px;
+            height: 40px;
+        }
+        
+        .section:nth-child(4) td{
+            font-size: 20px;
+        }
+        
+        .section:nth-child(5) table{
+            text-align:center;
+            font-family: NanumGothic;
+            font-size: 30px;
+            margin-left: 150px;
+            margin-top: 40px;
+        }
+        
+        .section:nth-child(5) td{
+            padding-right: 150px;
+        }
+        
+        .section:nth-child(5) input{
+            font-size: 20px;
+            width: 200px;
+            height: 30px;
+        }
+        
+        .section:nth-child(5) img{
+            width: 230px;
+            height: 230px;
+        }
+        
+        .section:nth-child(5) tr:first-child td img{
+            width: 280px;
+            height: 50px;
+            padding-bottom: 20px;
+        }
+        
+        .section:nth-child(6) table{
+            text-align: center;
+            font-family: NanumGothic-bold;
+            margin: 0 auto;
+            font-size: 20px;
+        }
+        
+        .section:nth-child(6) #title{
+            font-size: 30px;
+        }
+        
+        .section:nth-child(6) pre{
+            font-size: 22px;
+            font-family: NanumGothic-bold;
+        }
+        
+        .section:nth-child(6) tr:first-child td:nth-child(2){
+            text-align: left;
+            vertical-align:top;
+            padding-top: 40px;
+            padding-left: 130px;
+        }
+        
+        .section:nth-child(6) tr:nth-child(2) td:nth-child(2){
+            padding-left: 130px;
+            vertical-align: bottom;
+        }
+        
+        .section:nth-child(6) input{
+            font-size: 20px;
+            position:relative;
+            top:-8px;
+        }
+    
+        .section:nth-child(7) table{
+            text-align:center;
+            font-family: NanumGothic-bold;
+            margin: 100px;
+        }
+        .section:nth-child(7) img{
+            width: 300px;
+            height: 70px;
+        }
+
+        
+        .section:nth-child(7) tr:nth-child(2) td{
+            background-color: #45413e;
+            color:#1cbbb4;
+            font-size: 25px;
+            padding: 5px 10px;
+        }
+        
+        .section:nth-child(7) tr:first-child td{
+            text-align: left;
+        }
+        
+        .section:nth-child(7) tr:first-child td:last-child{
+            text-align: right;
+            vertical-align:bottom;
+        }
+        
+        .section:nth-child(7) select{
+            width: 200px;
+            height: 40px;
+            font-size: 20px;
+            position:relative;
+            top: -10px;
+        }
+        
+        
+        .section:nth-child(7) td:first-child{
+            width: 200px;
+            height: 40px;
+        }
+        
+        .section:nth-child(7) td:nth-child(2){
+            width: 420px;
+            height: 40px;
+        }
+        
+        .section:nth-child(7) td:nth-child(3){
+            width: 320px;
+            height: 40px;
+        }
+        
+        .section:nth-child(7) td:last-child{
+            width: 200px;
+            height: 40px;
+        }
+        
+        .section:nth-child(7) td{
+            font-size: 20px;
+        }
+        
+        .section:nth-child(8){
+            text-align: center;
+            font-size: 30px;
+            font-family: 'NanumGothic-bold';
+        }
+        
+        .box{
+            
+            border-radius: 20px;
+            border-style: solid;
+            border-width: 1px;
+            text-align: left;
+            width: 500px;
+            margin: 0 auto;
+            margin-top: 10px;
+            padding: 30px;
+        }
+        
+        .section:nth-child(8) input{
+            border-width: 0px;
+            font-size: 25px;
+            font-family: 'NanumGothic';
+        }
+        
+        #register{
+            background-color: white;
+            border-style: solid;
+            border-width: 1px;
+            border-color:black;
+            padding: 10px 50px;
+            border-radius: 10px;
+            font-family: 'NanumGothic-bold';
+        }
+        
+        #dologin{
+            background-color: #1CBBB4;
+            font-family: 'NanumGothic-bold';
+            border-color:white;
+            border-width: 0px;
+            color:white;
+            padding: 10px 50px;
+            border-radius: 10px;
+            margin-left: 30px;
+            margin-right: 80px;
+        }
+        
+        
+        
+    
+   #write{
+        transition-duration: 0.5s;
+        margin-top: 50px;
+        margin-right: 100px;
+    }
+    #write:hover{
+        transform: rotate(20deg);
+    }
+</style>
+
+	<!--[if IE]>
+		<script type="text/javascript">
+			 var console = { log: function() {} };
+		</script>
+	<![endif]-->
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+	<script type="text/javascript" src="SCRIPT/vendors/jquery.slimscroll.min.js"></script>
+
+	<script type="text/javascript" src="SCRIPT/jquery.fullPage.js"></script>
+	
+
+	<script type="text/javascript">
+        var leave = false;
+		$(document).ready(function() {
+			$('#fullpage').fullpage({
+                anchors:['first', 'intro', 'intro2', 'address', 'album', 'activity', 'board', 'login'],
+				scrollOverflow: true,
+                resize: false,
+                keyboardScrolling: false,
+                scrollingSpeed: 500,
+                
+                afterRender: function(){
+                    $('.fp-controlArrow').remove();
+                }
+			});
+		});
+	</script>
+
+</head>
+<body>
+
+<div id='fullpage'>
+        
+            <div class='section'> <!--MAIN PAGE -->
+            <div class='right'><img src='image/write.png' id='write' width=256px height=256px/></div>
+                <div id='iwop'><span>I</span>nternet<br/><span>W</span>orld<br/><span>O</span>peration<br/><span>P</span>eople<span id='fb_iwop'>[아이-왑]</span><a href=' https://www.facebook.com/sunrinIwop'><img width=42px height=44px src='image/fb.png' id='fb'/></a></div>
+                <div style='text-align:center'><img src='image/arrow.png' style='margin-bottom: 20px'/><div id='space'></div></div>
+        </div>
+    
+    <div class='section'> <!-- INTRO PAGE -->
+        <br />
+            <br />
+            <br />
+            <br />
+            <br />
+        <div style='text-align:center'><img src='image/intro_logo.png' />
+        <div id='intro_text'>
+            
+            <h2>IWOP(아이왑)은 Internet World Operation People Operation People의 약자로 선린인터넷고</h2>
+            <h2>등학교의 유일한 웹 동아리입니다. 역사도 지존 짱 길고요 선배님들도 쩔어욧</h2>
+            <h2>올해(2014)로 16기를 맞이했습니다 그런데 드디어 홈페이지가 생겼네요 하핳하하핳</h2>
+            <br/>
+            <h3>부장: 15기 조재형 (문의: 010-6272-4208)/부부장: 15기 유현진, 15기 윤제권</h3>
+            <h3>홈페이지 코딩: 15기 <strike>김종이</strike>김남환/디자인 및 레이아웃: 15기 김혜인</h3>
+        </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+    </div>
+    </div>
+    <div class='section'> <!-- INTRO PAGE_2 -->
+        <table>
+            <tr>
+                <td colspan="2">위치</td>
+                <td></td>
+                <td colspan="2">로고</td>
+            </tr>
+            <tr>
+                <td><img src=image/intro_1.png /></td>
+                <td>선린인터넷고등학교<br/>컴퓨터 제 8실<br/><br/>청소좀<br/>해라
+                <td>로고 디자인<br/>15기 유현진<br/>어쩌구<br/>저쩌구</td>
+                <td><img src=image/intro_2.png /></td>
+            </tr>
+            
+            <tr>
+                <td colspan="2">무엇을 배우나요?</td>
+                <td></td>
+                <td colspan="2">동아리티</td>
+            </tr>
+            <tr>
+                <td><img src=image/intro_3.png /></td>
+                <td>HTML5, CSS3,<br/>JavaScript, jQuery<br/>PHP 등의 웹언어<br/>웹 디자인<br/>기획
+                <td>빨강&회색의<br/>돋보이는 어그로<br/><br/><br/><br/><br/>내년에 바뀌니까<br/>걱정하지 마세요!</td>
+                <td><img src=image/intro_4.png /></td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class='section'> <!-- ADDRESS PAGE -->
+        <div class='slide' data-anchor='1'>
+        <table>
+            <tr>
+                <td colspan="3"><img src=image/addr.png /><span class='btn'>등록</span> <span class='btn'>수정</span> <span class='btn'>삭제</span></td>
+                <td>
+                    <select>
+                        <option value="16">16기</option>
+                        <option value="15">15기</option>
+                        <option value="14">14기</option>
+                        <option value="etc">....</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>이름</td>
+                <td>기수</td>
+                <td>전화번호</td>
+                <td>이메일</td>
+            </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>
+            <tr> <td>asdf</td> <td>16기</td> <td>010-0084-5564</td> <td>asdf@iwop.net</td> </tr>  
+            
+        </table>
+        </div>
+        <div class='slide' data-anchor='2'>
+            얏호!
+        </div>
+    </div>
+    
+    <div class='section'>
+        <table>
+            <tr>
+                <td class='left bottom'><span class='btn' style='margin-left:0px'>등록</span>
+                <td><img src=image/album.png /></td>
+                <td class='right bottom'><input type=text placeholder='Search'/></td>
+            </tr>
+            
+            <tr>
+                <td><img src='image/intro_1.png' /></td>
+                <td><img src='image/intro_2.png' /></td>
+                <td><img src='image/intro_3.png' /></td>
+            </tr>
+            
+            <tr>
+                <td>이거 사실코알라</td>
+                <td>맛있는 코알라</td>
+                <td>먹고싶다 코알라</td>
+            </tr>
+            
+            <tr>
+                <td><img src='image/intro_1.png' /></td>
+                <td><img src='image/intro_2.png' /></td>
+                <td><img src='image/intro_3.png' /></td>
+            </tr>
+            
+            <tr>
+                <td>코알라</td>
+                <td>맛있는 코알라</td>
+                <td>코코코알라</td>
+            </tr>
+            
+            
+        </table>
+    </div>
+    
+    <div class='section'> <!-- ACTIVITY -->
+        <table>
+            <tr><td><span id='title'>동아리티</span> 2014.06.11 (fri)|15기 고발합니다<br /><img src="image/intro_4.png" /></td>
+                <td>
+                    15기 오리지널코알라 · 06.11 10:53am
+                    <pre>프사있음?</pre>
+                    
+                    15기 오리지널코알라 · 06.11 10:53am
+                    <pre>아설마</pre>
+                    
+                    15기 오리지널코알라 · 06.11 10:53am
+                    <pre>아닐거라고 믿어</pre>
+                </td>
+            </tr>
+        <tr>
+            <td>
+            <pre>
+이거 우리 동아리티인데
+내년에 바뀌게될거야 ㄱㅊ</pre>
+            </td>
+            <td>
+                <input type=text placeholder="덧글을 작성해 주세요!" /> <span class='btn'>작성</span>
+            </td>
+        </table>
+    </div> 
+    
+    <div class='section'> <!-- BOARD -->
+        <table>
+            <tr>
+                <td colspan="3"><img src=image/addr.png /><span class='btn'>등록</span> <span class='btn'>수정</span> <span class='btn'>삭제</span></td>
+                <td>
+                    <select>
+                        <option value="16">뭘</option>
+                        <option value="15">선택하란</option>
+                        <option value="14">거져</option>
+                        <option value="etc">????</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>No.</td>
+                <td>제목</td>
+                <td>작성자</td>
+                <td>작성일</td>
+            </tr>
+            <tr> <td>9</td> <td>ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</td> <td>멘붕</td> <td>141108</td> </tr>
+            <tr> <td>8</td> <td>디콘이 끝났어요</td> <td>디콘꺼져</td> <td>141108</td> </tr>
+            <tr> <td>7</td> <td>근데 이제</td> <td>으악악악</td> <td>141108</td> </tr>
+            <tr> <td>6</td> <td>아이왑페이지 만드나요!</td> <td>디콘꺼져</td> <td>141108</td> </tr>
+            <tr> <td>5</td> <td>쉬</td> <td>철야전문가</td> <td>141106</td> </tr>
+            <tr> <td>4</td> <td>고</td> <td>철야전문가</td> <td>141106</td> </tr>
+            <tr> <td>3</td> <td>싶</td> <td>철야전문가</td> <td>141106</td> </tr>
+            <tr> <td>2</td> <td>다</td> <td>철야전문가</td> <td>141106</td> </tr>
+            <tr> <td>1</td> <td>ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ</td> <td>멘붕</td> <td>141105</td> </tr>  
+            
+        </table>
+    </div>
+    
+    <div class='section'> <!--LOGIN -->
+        이 페이지를 보려면 로그인을 해 주세요
+            <form action="login.php" method="post">
+                <div class='box'>
+                    <label for='id' style='margin-right: 37px'>아이디</label>
+                    <input type='text' name='id' id='id'/><br /><br />
+                    <label for='pw' style='margin-right: 10px'>비밀번호</label>
+                    <input type='password' name='pw' id='pw'/> <br /><br />
+                    <input type='submit' id='dologin' value='로그인' />
+                <input type='button' id='register'  value='회원가입'/>
+                </div>
+                
+            </form>
+        
+    </div>
+        </div>
+
+</body>
+</html>

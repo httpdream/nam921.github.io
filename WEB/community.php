@@ -78,14 +78,26 @@ $(document).ready(function(){
         $(this).css('color', '#262626');
     });
     
-<?
+    $('#free').click(function(){
+        $('iframe').attr('src', 'community_free.php?page=1');
+    });
+    
+    $('#sc_shot').click(function(){
+        $('iframe').attr('src', 'community_scshot.php?page=1');
+    });
+    
+    $('#howto').click(function(){
+        $('iframe').attr('src', 'community_howto.php?page=1');
+    });
+    
+<?php
     $comm = $_GET['comm'];
     if($comm == "free")
-        echo "$('iframe').attr('src', 'community_free.php');";
+        echo "$('iframe').attr('src', 'community_free.php?page=1');";
     else if($comm == "sc_shot")
-        echo "$('iframe').attr('src', 'community_scshot.php');";
+        echo "$('iframe').attr('src', 'community_scshot.php?page=1');";
     else if($comm == "howto")
-        echo "$('iframe').attr('src', 'community_howto.html');";
+        echo "$('iframe').attr('src', 'community_howto.php?page=1');";
 ?>
     
                   
@@ -110,7 +122,7 @@ $(document).ready(function(){
     <li id="howto">공략게시판<br/></li>
 </ul>
 </div>
-<iframe src="community_free.html" frameborder=0 width="1000px" height="100%"></iframe>
+<iframe src="community_free.php?page=0" frameborder=0 width="1000px" height="100%"></iframe>
 </body>
 </html>
 

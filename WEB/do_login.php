@@ -1,9 +1,8 @@
 <meta charset="utf-8">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<?
+<?php
 session_start();
-$conn = mysql_connect('localhost', 'root', 'root');
-mysql_selectdb('web');
+include "db_info.php";
 $id = $_POST['id'];
 $password = md5($_POST['pw']);
 

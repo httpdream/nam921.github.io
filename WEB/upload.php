@@ -1,20 +1,19 @@
-<?
+<?php
 session_start();
 ?>
 <!DOCTYPE html>
 <html>
     <meta charset="utf-8">
     
-<?
+<?php
 $title = $_POST['title'];
-$nickname = $_SESSION['login_id'];
+$nickname = $_SESSION['login_nick'];
 $content = $_POST['content'];
 $date = date("YmdHis");
 $time = date("ymd");
 
 
-        $conn = mysql_connect('localhost', 'root', 'root');
-mysql_selectdb('web');
+        include "db_info.php";
 $query = "insert into board (title, nickname, content, time) values('$title', '$nickname', '$content', '$time')";
 
 $result = mysql_query($query);

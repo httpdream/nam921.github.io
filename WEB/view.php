@@ -11,10 +11,9 @@ GAME HOMEPAGE
     <body>
         <table border=1>
             <tr><td>번호</td><td>제목</td><td>닉네임</td></td><td>작성시각</td></tr>
-        <?
+        <?php
             $num = 1;
-             $mysql = mysql_connect('localhost', 'root', 'apmsetup');
-             mysql_select_db('web', $mysql);
+             include "db_info.php";
              mysql_query('charset utf-8');
              
              $result = mysql_query('select* from board');

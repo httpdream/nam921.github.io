@@ -1,18 +1,20 @@
-<?
+<?php
 session_start();
 $register = '회원가입';
 $login = '로그인';
 $en_login = 'LOGIN';
     
-if(isset($_SESSION['login_id'])){
+if(isset($_SESSION['login_nick'])){
     $register = '정보관리';
     $login = '로그아웃';
     $en_login = 'LOGOUT';
 }
+
 ?>
 <html>
 <head>
     <meta charset="utf-8">
+    <title>인간의 시간</title>
 <style>
     @font-face{
                 font-family: 'eng_font';
@@ -23,7 +25,14 @@ if(isset($_SESSION['login_id'])){
         background-size: 100% 100%;
         margin-left: -10px;
         color: transparent;
+        opacity: 0.8;
+        transition: all 0.5s;
     }
+    
+    #logo:hover{
+        opacity: 1;
+    }
+    
     body{
         
     }
@@ -165,7 +174,7 @@ if(isset($_SESSION['login_id'])){
     }
 </style>
 </head>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="SCRIPT/jquery-1.10.2.min.js"></script>
 
 <script>
     var hide = 1;
@@ -281,8 +290,12 @@ $(window).resize(function(){
         $('iframe').attr('src', 'intro.html');
     });
     
+    $('#logo').click(function(){
+        $('iframe').attr('src', 'intro.html');
+    });
+    
     $('#play').click(function(){
-        location.href="http://nam921.github.io/GAME/";
+        location.href="../GAME/";
     });
     
     $('#comm').click(function(){
@@ -319,7 +332,7 @@ $(window).resize(function(){
     });
     
     $('#q').click(function(){
-        $('iframe').attr('src', 'question.html');
+        $('iframe').attr('src', 'question.php');
     });
     
     $('#faq').click(function(){
@@ -358,7 +371,42 @@ $(window).resize(function(){
     changesize();
                   
     
-    
+<?php
+$link = 'intro.html';
+if(isset($_GET['link'])){
+    switch($_GET['link']){
+        case "comm_free":
+        $link = 'community.php?comm=free';
+        break;
+        case "comm_scshot":
+        $link = 'community.php?comm=sc_shot';
+        break;
+        case "comm_howto":
+        $link = 'community.php?comm=howto';
+        break;
+        case "ranking":
+        $link = 'ranking.html';
+        break;
+        case "qna":
+        $link = 'qna.html';
+        break;
+        case "path_login":
+        $link = 'path_login.php';
+        break;
+        case "path_register":
+        $link = 'path_register.php';
+        break;
+        case "question":
+        $link = 'question.php';
+        break;
+        case "faq":
+        $link = 'faq.html';
+        break;
+    }
+}
+
+   echo "$('iframe').attr('src', '$link');";
+?>
 });
     
     

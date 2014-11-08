@@ -1,0 +1,123 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>인간의 시간</title>
+    
+<style>
+    
+    @font-face{
+    font-family: 'NanumGothic';
+    src: url('font/nanumbarungothic.ttf');
+}
+    
+
+
+@font-face{
+    font-family: 'Aleo';
+    src: url('font/aleo.otf');
+}
+
+@font-face{
+    font-family: 'NanumBrush';
+    src: url('font/nanumbrush.ttf');
+}
+    
+    
+    #iwop{
+        font-family: 'Aleo';
+        font-size: 112px;
+        color: white;
+        margin-left: 50px;
+    }
+    
+    span{
+        color: #45413e;
+    }
+    
+    #fb_iwop{
+        font-family: 'NanumBrush';
+        font-size:32px;
+        color: white;
+        position: relative;
+        top: -50px;
+    }
+    
+    #fb{
+        position: relative;
+        left: -100px;
+    }
+    
+    #section0{
+        background-image:url(IMAGE/bg_index.png) ;
+        
+        background-color: #1cbbb4;
+    }
+    
+    .center{
+        text-align: center;
+    }
+    
+    .left{
+        float:left;
+        text-align: left;
+    }
+    
+    .right{
+        float:right;
+        text-align: right;
+    }
+    
+   
+</style>
+</head>
+    <link rel="stylesheet" type="text/css" href="CSS/jquery.fullPage.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+	<script type="text/javascript" src="SCRIPT/vendors/jquery.slimscroll.min.js"></script>
+
+	<script type="text/javascript" src="SCRIPT/jquery.fullPage.js"></script>
+	
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#fullpage').fullpage({
+				anchors: ['firstPage', 'secondPage', '3rdPage', '4thPage'],
+				sectionsColor: ['#4A6FB1', '#939FAA', '#323539'],
+				scrollOverflow: true
+			});
+		});
+	</script>
+
+    
+    <body>
+<div id='fullpage'>
+        
+            <div class='section' id='section0'>
+            <div id='right'><img src='image/write.png' id='write' width=256px height=256px/></div>
+                <div id='iwop'><span>I</span>nternet<br/><span>W</span>orld<br/><span>O</span>peration<br/><span>P</span>eople<span id='fb_iwop'>[아이-왑]</span><a href=' https://www.facebook.com/sunrinIwop'><img width=42px height=44px src='image/fb.png' id='fb'/></a></div>
+                <div style='text-align:center'><img src='image/arrow.png' style='margin-bottom: 20px'/><div id='space'></div></div>
+        </div>
+    <div class='section' id='section1'>
+        <div style='text-align:center'><img src='image/intro_logo.png' />
+        <div id='intro'>
+            <h2>IWOP(아이왑)은 Internet World Operation People Operation People의 약자로 선린인터넷고</h2>
+            <h2>등학교의 유일한 웹 동아리입니다. 역사도 지존 짱 길고요 선배님들도 쩔어욧</h2>
+            <h2>올해(2014)로 16기를 맞이했습니다 근데 드디어 홈페이지가 생겼네요 하핳하하핳</h2>
+            <br/>
+            <h3>부장: 15기 조재형 (문의: 010-6272-4208)/부부장: 15기 유현진, 15기 윤제권</h3>
+            <h3>홈페이지 코딩: 15기 <strike>김종이</strike>김남환/디자인 및 레이아웃: 15기 김혜인</h3>
+        </div>
+    </div>
+    </div>
+    <div class='section' id='section1'>
+        <div class='left'><img src='image/intro_1.png'/>선린인터넷고등학교<br/>컴퓨터 제8실</div>
+        <div class='right'><img src='image/intro_2.png'/>로고디자인<br/>어쩌ㅜ저쩌구</div>
+    </div>
+        </div>
+        
+
+</body>
+</html>
+

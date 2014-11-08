@@ -40,6 +40,16 @@ var keyCode = {
     55: 'SEVEN',
     56: 'EIGHT',
     57: 'NINE',
+    96: 'KEY_ZERO',
+    97: 'KEY_ONE',
+    98: 'KEY_TWO',
+    99: 'KEY_THREE',
+    100: 'KEY_FOUR',
+    101: 'KEY_FIVE',
+    102: 'KEY_SIX',
+    103: 'KEY_SEVEN',
+    104: 'KEY_EIGHT',
+    105: 'KEY_NINE',
 
     //Alahabet
     65: 'A',
@@ -92,9 +102,9 @@ function ALTIS(id, width, height, visible) {
     this.Audio = new Array();
 
     if(visible == true)
-        document.body.innerHTML += '<canvas id = ' + id + ' width=' + width + ' height=' + height + ' style="position: absoulte;">캔버스도 안되</canvas>';
+        document.body.innerHTML += '<canvas id = ' + id + ' width=' + width + ' height=' + height + ' style="position: absolute;">캔버스도 안되</canvas>';
     else
-        document.body.innerHTML += '<canvas id = ' + id + ' width=' + width + ' height=' + height + ' style="position: absoulte; display:none;">캔버스도 안되</canvas>';
+        document.body.innerHTML += '<canvas id = ' + id + ' width=' + width + ' height=' + height + ' style="position: absolute; display:none;">캔버스도 안되</canvas>';
     
     this.Canvas = document.getElementById(id);
     this.Context = this.Canvas.getContext("2d");
@@ -108,7 +118,7 @@ Array.prototype.Last = function(){
 
 ALTIS.prototype.loadAudio = function(src, name){
     var audio = new Audio(src);
-    audio.addEventListener('ended',function(){this.currentTime=0;this.play();},false);
+    
     this.Audio.push({ audio: audio, name: name });  
 }
 
@@ -118,7 +128,16 @@ ALTIS.prototype.playAudio = function(name){
         if(name == this.Audio[i].name){
             var Audio = this.Audio[i].audio;
             Audio.play();
-            Audio.volume = 0.9;
+            Audio.volume = 1;
+        }
+    }
+}
+
+ALTIS.prototype.Autoplay = function(name){
+    for(var i=0; i<this.Audio.length; i++){
+        if(name == this.Audio[i].name){
+            var Audio = this.Audio[i].audio;
+            Audio.addEventListener('ended',function(){this.currentTime=0;this.play();},false);
         }
     }
 }
@@ -138,11 +157,7 @@ ALTIS.prototype.controlVolume = function(name, volume){
         if(name == this.Audio[i].name){
             var Audio = this.Audio[i].audio;
             var Audio_volume = Audio.volume;
-            Audio_volume += volume;
-            console.log(Audio_volume);
-            
-            if(-1 < Audio_volume && Audio_volume <= 1)
-                Audio.volume += volume;
+            Audio.volume = volume;
         }
     }
 }
@@ -189,7 +204,18 @@ ALTIS.prototype.setSprite = function (src_name, sprite_name) {
             break;
         }
     }
-    if (!find) console.log('헐 못찾음');
+    
+}
+
+ALTIS.prototype.cancelFullscreen = function(){
+    if (this.Canvas.cancelFullScreen) {
+      this.Canvas.cancelFullScreen();
+    } else if (this.Canvas.mozCancelFullScreen) {
+      this.Canvas.mozCancelFullScreen();
+    } else if (this.Canvas.webkitCancelFullScreen) {
+      this.Canvas.webkitCancelFullScreen();
+    }
+    //this.Canvas.webkit
 }
 
 ALTIS.prototype.fullScreen = function(){
@@ -203,6 +229,7 @@ ALTIS.prototype.fullScreen = function(){
  	if(this.Canvas.webkitRequestFullScreen) {
        //this.Canvas.webkitRequestFullScreen();
         this.Canvas.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        
     }
     
     else {
@@ -214,7 +241,7 @@ ALTIS.prototype.getSprite = function (src_name) {
     var sprt;
     for (var i = 0; i < this.Sprite.length; i++) {
         if (src_name == this.Sprite[i].name) {
-            sprt = this.Sprite[i];
+            sprt = this.Sprite[i].current;
         }
     }
     return sprt;
@@ -226,12 +253,22 @@ ALTIS.prototype.addText = function (text, font, x, y, color) {
     this.Context.fillText(text, x, y);
 }
 
+ALTIS.prototype.addTextCenter = function (text, font, x, y, color, opacity) {
+    this.Context.fillStyle = color;
+    this.Context.globalAlpha = opacity;
+    this.Context.font = font;
+    this.Context.textAlign = 'center';
+    this.Context.fillText(text, x, y);
+    this.Context.textAlign = 'left';
+    if(opacity) this.Context.globalAlpha = 1;
+}
+
 ALTIS.prototype.addTextAlpha = function (text, font, x, y, color, opacity) {
     this.Context.globalAlpha = opacity;
     this.Context.fillStyle = color;
     this.Context.font = font;
     this.Context.fillText(text, x, y);
-    this.Context.globalAlpha = 1;
+    if(opacity) this.Context.globalAlpha = 1;
 }
 
 ALTIS.prototype.underline = function(text, x, y, font, size, color, thickness ,offset){
@@ -263,7 +300,20 @@ ALTIS.prototype.addRect = function (x, y, width, height, color, alpha, path) {
     this.Context.fillStyle = color;
     this.Context.fillRect(x, y, width, height);
     if(!path) path = '#000';
+    this.Context.lineWidth = 1;
     this.Context.strokeStyle = path;
+    this.Context.strokeRect(x, y, width, height);
+    this.Context.globalAlpha = 1;
+    
+}
+
+ALTIS.prototype.addRectS = function (x, y, width, height, color, alpha, path, length) {
+    this.Context.globalAlpha = alpha;
+    this.Context.fillStyle = color;
+    this.Context.fillRect(x, y, width, height);
+    if(!path) path = '#000';
+    this.Context.strokeStyle = path;
+    this.Context.lineWidth = length;
     this.Context.strokeRect(x, y, width, height);
     this.Context.globalAlpha = 1;
 }
@@ -321,8 +371,10 @@ ALTIS.prototype.addImage = function (src_name, width, height) {
     }
 
     return {
-        Context: this.Context, play: function (to_x, to_y) {
+        Context: this.Context, play: function (to_x, to_y, opacity) {
+            this.Context.globalAlpha = opacity;
             this.Context.drawImage(found, to_x, to_y, width, height);
+            if(opacity) this.Context.globalAlpha = 1;
         }
     };
 }
@@ -345,6 +397,24 @@ ALTIS.prototype.showSprite = function (src_name, x, y, other_frame) {
     }
 }
 
+
+ALTIS.prototype.addkeyTdown = function (key) {
+    var code;
+    for (var i in keyCode) {
+        if (keyCode.hasOwnProperty(i))
+            if (key == keyCode[i]) code = i;
+    }
+    
+    
+    
+    
+
+    window.addEventListener('keydown', function (e) {
+        if (e.keyCode == code){
+            e.preventDefault();
+        }
+    }, false);
+}
 
 ALTIS.prototype.addKeyDown = function (key, callback) {
     var code;
@@ -400,5 +470,5 @@ ALTIS.prototype.setHeight = function(h){
 }
 
 ALTIS.prototype.clear = function () {
-    this.Context.clearRect(0, 0, 5000, 5000);
+    this.Context.clearRect(0, 0, 2000, 2000);
 }

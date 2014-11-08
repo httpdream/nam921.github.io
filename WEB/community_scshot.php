@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 
 <!DOCTYPE html>
 <html>
@@ -36,13 +39,14 @@
             
             #btn{
                 position: relative;
-                left:  584px;
+                left:  530px;
                 width: 100px;
                 background-color: #262626;
                 color:white;
                 padding:10px 20px 10px 20px;
                 cursor:pointer;
                 font-family: "NanumBarunGothic";
+                <?php if(!isset($_SESSION['login_nick'])) echo 'display:none;'; ?>
             }
             
             #title{
@@ -87,7 +91,22 @@
                 font-family: arial;
             }
             
-           
+            .section1{
+                width: 150px;
+            }
+            .section2{
+                width: 450px;
+            }
+            .section3{
+                width: 150px;
+            }
+            .section4{
+                width: 150px;
+            }
+            .center{
+                text-align: center;
+            }
+            
             .section{
                 width: 200px;
                 height: 200px;
@@ -103,9 +122,6 @@
             .center{
                 text-align: center;
             }
-            .end{
-                color: #262626;
-            }
         </style>
         
         <script>
@@ -116,60 +132,71 @@
     
     <body>
         <span id="title">스샷게시판</span>
-        <span ><a href="write.html" id="btn">글쓰기</a></span>
-        <br/><br/><br/><br/>
-        
+        <span ><a href="write_scshot.html" id="btn">글쓰기</a></span>
+        <br/>
         
         <table>
             
             <tbody>
                 
                 
-                <tr>
-                    <td class='section'><img src='IMAGE/question.png'  class='section'/></td>
-                    <td class='section'><img src='IMAGE/faq.png' class='section'/></td>
-                    <td class='section'><img src='IMAGE/intro.png' class='section'/></td>
-                </tr>
-                <tr>
-                    <td>질문해라</td>
-                    <td>뭐가 궁금한가</td>
-                    <td>우리인트로</td>
-                </tr>
                 
-                <tr>
-                    <td class='section'><img src='IMAGE/intro1.png'  class='section'/></td>
-                    <td class='section'><img src='IMAGE/intro2.png' class='section'/></td>
-                    <td class='section'><img src='IMAGE/intro3.png' class='section'/></td>
-                </tr>
-                <tr>
-                    <td>스토리</td>
-                    <td>캐릭터정보</td>
-                    <td>플레이하는법</td>
-                </tr>
-                
-                <tr class="end">
-                    <td colspan=4 class="end">1</td>
-                </tr>
-                
+                <?php
+             include "db_info.php";
+             mysql_query('charset utf-8');
+             
+$result='addr';
+             if(isset($_GET['page'])){
+                 $f = $_GET['page'];
+                 $prev = ($f-1)*6;
+                 $next = $f*6;
+                $result = mysql_query("select* from board_scshot order by idx desc limit $prev,6");
+             }
+
+            else $result = mysql_query('select* from board_scshot order by idx desc');
+
+$count = 0;
+
+             while($row = mysql_fetch_row($result)){
+                 if($count%3==0)
+                    echo "<tr>";
+                 echo "<td class='section'><a href='view_scshot.php?id=$row[0]'><img src=files/$row[4]  class='section'/><br/>$row[1]<br />$row[2]</a><td/>
+                 ";
+                 $count++;
+                 if($count==6)
+                    echo "</tr>";
+             }
+             
+        ?>
                 
             </tbody>
         </table>
-        <div class="center">
-        <span class="arrow">◄</span>
-        <span class="bottom">
-            <a href='community.php?page=1'>1 </a>
-                 2 
-                 3 
-                 4 
-                 5 
-                 6 
-                 7 
-                 8 
-                 9 
-                 10 
-        </span>
-        <span class="arrow">►</span>
-        </div>
-    </body>
+                
+                <div class="center">
+            <a href='community_scshot.php?page=<?php
+if(isset($_GET['page'])){ if($_GET['page']>1) echo ($_GET['page']-1); else echo '1';}
+else echo '1';
+?>
+                     '><span class="arrow">◄</span></a>
+        
+        <span>
+            
+            <?php
+$result = mysql_query("select* from board_scshot");
+$row = ceil(mysql_num_rows($result)/6);
 
+for($i = 1; $i<=$row; $i++)
+    echo "<a href='community_scshot.php?page=$i'> $i </a>";
+            ?>
+            
+        </span>
+            
+            <a href='community_scshot.php?page=<?php
+if(isset($_GET['page'])) echo ($_GET['page']+1);
+else echo '2';
+?>
+                     '><span class="arrow">►</span></a>
+        </div>
+            
+    </body>
 </html>

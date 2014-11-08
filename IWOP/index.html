@@ -1,0 +1,282 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>인간의 시간</title>
+    
+<style>
+    
+    @font-face{
+    font-family: 'NanumGothic';
+    src: url('font/nanumbarungothic.ttf');
+}
+    
+
+
+@font-face{
+    font-family: 'Aleo';
+    src: url('font/aleo.otf');
+}
+
+@font-face{
+    font-family: 'NanumBrush';
+    src: url('font/nanumbrush.ttf');
+}
+    
+    #logo{
+        background-image:url(IMAGE/logo.png) ;
+        background-size: 100% 100%;
+        margin-top: 20px;
+        opacity: 0.8;
+        padding: 10px;
+        color: transparent;
+        transition: opacity 0.5s;
+    }
+    #logo:hover{
+        opacity: 1;
+    }
+    
+    #header{
+
+        position:fixed;
+        height:144px;
+        width:1280px;
+        top:0px;
+        z-index:9;
+        background-color: #45413e;
+        margin: 0 auto;
+    }
+    ul{
+        list-style: none;
+    }
+    ul li{
+        font-family: 'NanumGothic';
+        float:left;
+        
+        
+        margin:35px;
+        
+        font-size:32px;
+        color:white;
+        cursor: pointer;
+        transition: color 0.5s;
+    }
+    
+    
+    
+    #fullpage{
+        position:absolute;
+        top:144px;
+        transition: all 0.5s;
+        width: 1280px;
+    }
+    
+    .sub_comm{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    .sub_qna{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    .sub_login{
+        transition: opacity 0.5s;
+        opacity: 0;
+        display: none;
+    }
+    
+    ol li{
+        color: white;
+        font-family: "eng_font";
+        color:#cacaca;
+        
+        list-style-type: none;
+        transition: color 0.5s;
+        cursor: pointer;
+    }
+    
+    #free{
+        position:absolute;
+        top: 70px;
+        left: 520px;
+    }
+    
+    
+    #sc_shot{
+        position:absolute;
+        top: 70px;
+        left: 605px;
+    }
+    
+    
+    #howto{
+        position:absolute;
+        top: 70px;
+        left: 692px;
+    }
+    
+    
+    #bar1{
+        position:absolute;
+        top: 70px;
+        left: 600px;
+    }
+    
+    #bar2{
+        position:absolute;
+        top: 70px;
+        left: 690px;
+    }
+    
+    #q{
+        position:absolute;
+        top: 70px;
+        left: 749px;
+    }
+    
+    #bar3{
+        position:absolute;
+        top: 70px;
+        left: 812px;
+    }
+    
+    #faq{
+        position:absolute;
+        top: 70px;
+        left: 827px;
+    }
+    
+    #_login{
+        position:absolute;
+        top: 70px;
+        left: 1158px;
+    }
+    
+    #bar4{
+        position:absolute;
+        top: 70px;
+        left: 1153px;
+    }
+    
+    #register{
+        position:absolute;
+        top: 70px;
+        left: 1087px;
+    }
+    
+    #hide{
+        position:absolute;
+        left: 1200px;
+        top: 50px;
+    }
+    
+    #right{
+        text-align: right;
+    }
+    
+    
+    
+    iframe{
+        position: absolute;
+        top:144px;
+        width: 1280px;
+        border: none;
+    }
+    
+    .hover{
+        background: #1CBBB4;
+        height: 10px;
+        display: none;
+        vertical-align: top;
+        position:relative;
+        top: -90px;
+    }
+</style>
+</head>
+
+    
+    <script src="SCRIPT/jquery-1.10.2.min.js"></script>
+<script>
+    function onsize(){
+        var width = $(window).innerWidth();
+        var height = $(window).innerHeight();
+        $('iframe').css('height', (height-148)+'px');
+        if(width>1280){
+        $('iframe').css('left', ((width-1280)/2)+'px');
+        $('#header').css('left', ((width-1280)/2)+'px');
+        }
+        else{
+            $('iframe').css('left', 0+'px');
+            $('#header').css('left', 0+'px');
+        }
+    }
+    
+    $(document).ready(function(){
+        onsize();
+        $(window).resize(function(){
+            onsize();
+        });
+        
+        $('#intro,#address,#album,#activity,#board,#login').hover(function(){ //hoverin
+            $(this).append("<div class='hover'></div>");
+            $('.hover').fadeIn(300);
+        },function(){ //hoverout
+            
+                $('.hover').remove();
+        });
+        
+        $('#logo').click(function(){
+            $('iframe').attr('src', 'what.html#first');
+        });
+        
+        $('#intro').click(function(){
+            $('iframe').attr('src', 'what.html#intro');
+        });
+        
+        $('#address').click(function(){
+            $('iframe').attr('src', 'what.html#address');
+        });
+        
+        $('#album').click(function(){
+            $('iframe').attr('src', 'what.html#album');
+        });
+        
+        $('#activity').click(function(){
+            $('iframe').attr('src', 'what.html#activity');
+        });
+        
+        $('#board').click(function(){
+            $('iframe').attr('src', 'what.html#board');
+        });
+        
+        $('#login').click(function(){
+            $('iframe').attr('src', 'what.html#login');
+        });
+        
+    });
+</script>
+
+    
+    <body>
+<div id="header">
+    
+<ul>
+    <li id="logo">LOGOLOG</li>
+    <li id="intro">소개</li>
+    <li id="address">주소록</li>
+    <li id="album">앨범</li>
+    <li id="activity">활동</li>
+    <li id="board">게시판</li>
+    <li id="login">로그인</li>
+</ul>
+    <div id='top'></div>
+</div>
+        <iframe src='what.html'/>
+
+</body>
+</html>
+

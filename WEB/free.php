@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <script>
     
-<?
+<?php
 //$id = $_POST['id'];
 //$nick = $_POST['nick'];
 //$pw = $_POST['password'];
@@ -13,8 +13,7 @@ $pw='3654';
 $nick='asdfffgf';
 $gender='1';
 
-$conn = mysql_connect('localhost', 'root', 'apmsetup');
-mysql_selectdb('web');
+include "db_info.php";
 $query = "insert into user values('$id', '$pw', '$nick')";
 
 $result = mysql_query($query);
